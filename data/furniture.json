@@ -1,0 +1,49 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "name": "Chair",
+      "description": "A comfortable chair",
+      "price": 100,
+      "categoryId": 1,
+      "imageUrl": "https://res.cloudinary.com/ddtbqmlzn/image/upload/v1730370046/chair_ranlea.png",
+      "averageRating": 0
+    },
+    {
+      "id": 2,
+      "name": "Chair",
+      "description": "A comfortable chair",
+      "price": 100,
+      "categoryId": 1,
+      "imageUrl": "https://res.cloudinary.com/ddtbqmlzn/image/upload/v1730370046/chair_ranlea.png",
+      "averageRating": 0
+    },
+    {
+      "id": 3,
+      "name": "Chair",
+      "description": "A comfortable chair",
+      "price": 100,
+      "categoryId": 1,
+      "imageUrl": "https://res.cloudinary.com/ddtbqmlzn/image/upload/v1730370046/chair_ranlea.png",
+      "averageRating": 0
+    },
+    {
+      "id": 4,
+      "name": "Chair",
+      "description": "A comfortable chair",
+      "price": 100,
+      "categoryId": 1,
+      "imageUrl": "https://res.cloudinary.com/ddtbqmlzn/image/upload/v1730370046/chair_ranlea.png",
+      "averageRating": 0
+    },
+    {
+      "id": 5,
+      "name": "Chair",
+      "description": "A comfortable chair",
+      "price": 100,
+      "categoryId": 1,
+      "imageUrl": "https://res.cloudinary.com/ddtbqmlzn/image/upload/v1730370046/chair_ranlea.png",
+      "averageRating": 0
+    }
+  ]
+}
