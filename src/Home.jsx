@@ -11,7 +11,7 @@ function Home(){
         <>
         {/* hero */}
         <Header />
-        <section className="relative rounded-s flex items-start pt-[120px] pl-[200px] h-screen w-screen bg-orange-200">
+        <section className="relative rounded-s flex items-start pt-[120px] pl-[200px] h-screen w-screen bg-orange-200 z-0">
             <div className="min-[420px]:mt-[17rem] min-[420px]:ml-[-4rem] md:m-0 landingText text-center">
                 <h1 className="text-3xl">european luxury</h1>
                 <p>made for you</p>
