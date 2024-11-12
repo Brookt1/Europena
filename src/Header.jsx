@@ -4,16 +4,6 @@ import { NavLink } from "react-router-dom";
 function Header() {
 
 
-    const showSidebar = () => {
-        const sidebar = document.querySelector('.sidebar');
-        sidebar.style.display = 'unset';
-    }
-    
-    const hideSidebar = () => {
-        const sidebar = document.querySelector('.sidebar');
-        sidebar.style.display = 'none';
-    }
-
     const [visible, setVisible] = useState(false);
 
 
