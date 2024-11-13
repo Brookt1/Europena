@@ -12,10 +12,6 @@ function Shop(){
     const ITEMS_PER_PAGE = 8;
     const Products = useContext(ShopContext);
     const [showProducts, setShowProducts] = useState([]);
-
-    useEffect(()=> {
-        setShowProducts(Products.slice(0,8));
-    });
     
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -23,6 +19,7 @@ function Shop(){
     useEffect(() => {
         const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
         setShowProducts(Products.slice(startIdx, startIdx + ITEMS_PER_PAGE));
+        console.log(startIdx);
     }, [Products, currentPage]);
 
     // Calculate total pages
@@ -84,7 +81,7 @@ function Shop(){
                 {/* Product Items */}
                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {showProducts.map((product) =>(
-                        <ShopItemCard key={product.id} image={product.imageUrl} name={product.name} price={product.price} />
+                        <Link to={`/product/${Number(product.id)}`}><ShopItemCard key={product.id} image={product.imageUrl} name={product.name} price={product.price} /></Link>
                     ))}
                 </div> 
             </div>

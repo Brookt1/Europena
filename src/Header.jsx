@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import logo from "./assets/logo.jpg";
 function Header() {
 
 
@@ -11,10 +12,7 @@ function Header() {
         <>
         <div className="flex items-center justify-between px-6">
             {/* Logo */}
-            <div className="flex">
-                <img className="h-[90px] w-[140px]" src="./src/assets/logo.jpg" alt="logo" />
-            </div>
-
+            <img className="h-[90px] w-[140px]" src={logo} alt="logo" />
             {/* Text */}
             <h1 className="font-bold md:ml-[-40px] text-2xl md:text-3xl text-center flex-1">european</h1>
 

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+
 import PropTypes from 'prop-types' 
 
 function ItemCard(props) {
@@ -10,10 +10,10 @@ function ItemCard(props) {
         <img src={props.image} alt="Product Image" className="w-full h-full object-cover object-center" />
         </div>
       <div className="p-2">
-        <Link to="item.html">
+        
           <h1 className="font-semibold text-center">{props.name}</h1>
           <p className="text-center text-gray-500">{props.price} ETB</p>
-        </Link>
+        
       </div>
     </div>
   );

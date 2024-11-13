@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useContext } from "react";
 import {ShopContext} from "./context/ShopContext";
 import { useEffect } from "react";
+import ReviewCard from "./ReviewCard";
 
 function ProductDetail() {
     
@@ -56,18 +57,17 @@ function ProductDetail() {
         review: (
             <>
                 <div className="space-y-4 mb-4">
-                    <p className="text-gray-700">"Amazing sound quality and build!" - Reviewer 1</p>
-                    <p className="text-gray-700">"Perfect for road trips." - Reviewer 2</p>
-                    <p className="text-gray-700">"High-quality product, worth the price." - Reviewer 3</p>
-                    <p className="text-gray-700">"The vintage style is a great touch." - Reviewer 4</p>
-                    <p className="text-gray-700">"Couldn’t be happier with the purchase." - Reviewer 5</p>
+                    <ReviewCard />
+                    <ReviewCard />
+                    <ReviewCard />
+                    
                 </div>
                 <form className="space-y-4">
                     <input className="w-full p-2 border rounded" type="text" placeholder="Your Name" required />
                     <input className="w-full p-2 border rounded" type="email" placeholder="Your Email" required />
                     <textarea className="w-full p-2 border rounded" rows="4" placeholder="Your Review" required></textarea>
                     <button className="px-4 py-2 bg-green-950 text-white rounded" type="submit">Submit Review</button>
-                </form>
+                </form>     
             </>
         ),
        };
@@ -116,7 +116,7 @@ function ProductDetail() {
                 </p>
                 
                 <form className="flex md:ml-12 gap-4 pt-4">
-                    <label><input className="w-14 h-14 p-2 text-xl border-gray-600 border-solid border-[1px]" type="number" placeholder="1"/></label>
+                    <label><input className="w-14 h-14 p-2 text-xl border-gray-600 border-solid border-[1px] rounded-full" type="number" placeholder="1"/></label>
                     <button className="flex gap-4 text-lg bg-green-950 text-gray-400 p-4 w-[500px] justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                             <path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/>
@@ -135,7 +135,7 @@ function ProductDetail() {
         
         <section className="px-32 py-4">
             {/* Tab buttons with underline on active tab */}
-            <div className="flex justify-center space-x-8 border-b-2 pb-2">
+            <div className="flex justify-center space-x-8  pb-2">
             {["description", "additional-info", "review"].map((tab) => (
                     <button
                         key={tab}

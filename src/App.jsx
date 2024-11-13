@@ -16,7 +16,7 @@ function App() {
       element: <Shop />
     },
     {
-      path: '/product/:productId',
+      path: 'product/:productId',
       element: <ProductDetail />
     }
   ]);
