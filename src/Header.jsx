@@ -64,7 +64,7 @@ function Header() {
         {/* navbar */}
         <nav className="mt-[-25px]">
             {/* Hidden side bar nav menu */}
-            <div className={`fixed top-0 right-0 h-screen w-[250px] z-[999] bg-white shadow-[-10px_0_10px_rgba(0,0,0,0.1)] ${visible ? 'w-full' : 'w-0'}`}>
+            <div className={`fixed top-0 right-0 h-screen z-[999] bg-white shadow-[-10px_0_10px_rgba(0,0,0,0.1)] ${visible ? 'w-full' : 'w-0'}`}>
                 <div className="flex flex-col text-gray-600">
                     <div onClick={()=>setVisible(false)} className="flex items-center gap-4 p-3">
                         <svg className="h-4 rotate-180" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">

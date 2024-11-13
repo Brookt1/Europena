@@ -1,31 +1,42 @@
 import { Link } from "react-router-dom";
-import {useState, useEffect} from 'react';
 import Header from "./Header";
 import Footer from "./Footer";
 import ShopItemCard from "./ShopItemCard";
 import shophero from "./assets/shophero.jpg";
+import { useContext, useEffect, useState } from "react";
+import { ShopContext } from "./context/ShopContext";
+
 
 function Shop(){
-    const BASE_URL = "https://furnitureapi-ykrq.onrender.com/api/furniture"
-    const [Products, setProducts] = useState([]);
+    
+    const ITEMS_PER_PAGE = 8;
+    const Products = useContext(ShopContext);
+    const [showProducts, setShowProducts] = useState([]);
 
+    useEffect(()=> {
+        setShowProducts(Products.slice(0,8));
+    });
+    
+    const [currentPage, setCurrentPage] = useState(1);
+
+    // Update displayed products when the current page or total products change
     useEffect(() => {
-        fetch(`${BASE_URL}`)
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then((data) => {
-                setProducts(data);
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
-    }, []);
-    
-    
+        const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+        setShowProducts(Products.slice(startIdx, startIdx + ITEMS_PER_PAGE));
+    }, [Products, currentPage]);
+
+    // Calculate total pages
+    const totalPages = Math.ceil(Products.length / ITEMS_PER_PAGE);
+
+    // Event handler for page change
+    const handlePageChange = (page) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
+
+
     
     return (
         <>
@@ -72,18 +83,50 @@ function Shop(){
             
                 {/* Product Items */}
                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {Products.map((product) =>(
+                    {showProducts.map((product) =>(
                         <ShopItemCard key={product.id} image={product.imageUrl} name={product.name} price={product.price} />
                     ))}
                 </div> 
             </div>
+
+            {/* Pagination Buttons */}
+            <div className="flex justify-center gap-2 p-2">
+                {/* Previous button */}
+                <button
+                    className={`w-20 h-10 ${currentPage === 1 ? "text-gray-400 cursor-not-allowed" : "hover:border-black"}`}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </button>
+
+                {/* Page number buttons */}
+                {[...Array(totalPages)].map((_, index) => (
+                    <button
+                        key={index + 1}
+                        className={`w-10 h-10 border-solid ${currentPage === index + 1 ? "border-black font-bold" : "border-gray-500 text-gray-500 hover:text-black hover:border-black"}`}
+                        onClick={() => handlePageChange(index + 1)}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+
+                {/* Next button */}
+                <button
+                    className={`w-20 h-10 ${currentPage === totalPages ? "text-gray-400 cursor-not-allowed" : "hover:border-black"}`}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                >
+                    Next
+                </button>
+            </div>
         
-            {/* Page Number Buttons */}
+            {/* Page Number Buttons
             <div className="flex justify-center gap-2 p-2">
                 <button className="w-10 h-10 border-solid border-black border-2">1</button>
                 <button className="w-10 h-10 border-solid border-gray-500 border-2 text-gray-500 hover:text-black hover:border-black">2</button>
                 <button className="w-20 h-10 border-solid bg-gray-200 font-semibold border-2 hover:bg-white hover:border-black">Next</button>
-            </div>
+            </div> */}
         </section>
         <Footer />
         </>

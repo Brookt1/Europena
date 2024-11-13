@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./Home.jsx";
 import Shop from "./Shop.jsx";
+import ProductDetail from "./ProductDetail.jsx"
 import NotFound from "./NotFound.jsx";
 function App() {
 
@@ -13,6 +14,10 @@ function App() {
     {
       path: '/shop',
       element: <Shop />
+    },
+    {
+      path: '/product/:productId',
+      element: <ProductDetail />
     }
   ]);
 

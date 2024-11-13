@@ -1,16 +1,20 @@
-import { useEffect,useState } from "react";
+import { useContext, useEffect,useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
 import HomeCards from "./HomeCards";
 import servicePic from "./assets/servicePic.jpg"
+import { ShopContext } from "./context/ShopContext.jsx";
 
 function Home(){
 
+    const products = useContext(ShopContext);
+
     return(
         <>
-        {/* hero */}
+        
         <Header />
+        {/* hero */}
         <section className="relative rounded-s flex items-start pt-[120px] pl-[200px] h-screen w-screen bg-orange-200 z-0">
             <div className="min-[420px]:mt-[17rem] min-[420px]:ml-[-4rem] md:m-0 landingText text-center">
                 <h1 className="text-3xl">european luxury</h1>
@@ -24,23 +28,23 @@ function Home(){
 
         <section>
             <div className="flex flex-wrap lg:flex-nowrap justify-between p-8 gap-4">
-                <HomeCards class="w-full lg:w-[45rem] h-[25rem] bg-emerald-900 rounded-md" />
-                <HomeCards class="w-full lg:w-[25rem] h-[25rem] bg-orange-200 rounded-md" />
+                <Link to={`/product/${products[0]?.id}`}><HomeCards image={products[0]?.imageUrl} class="w-full lg:w-[45rem] h-[25rem] bg-emerald-900 rounded-md" /></Link>
+                <Link to={`/product/${products[0]?.id}`}><HomeCards image={products[1]?.imageUrl} class="w-full lg:w-[25rem] h-[25rem] bg-orange-200 rounded-md" /></Link>
             </div>
             <h1 className="font-bold p-4 text-2xl">Trending This Week</h1>
             
             <div className="flex flex-col justify-between p-8 gap-4  lg:flex-row">
                 {/* Right Column larger image */}
 
-                <HomeCards class="w-full h-[40rem] bg-orange-200 rounded-md mb-4 lg:w-[35rem]" />
+                <HomeCards image={products[2]?.imageUrl} class="w-full h-[40rem] bg-orange-200 rounded-md mb-4 lg:w-[35rem]" />
                 
                 {/* Left Column with 2x2 smaller image */}
                 
                 <div className="grid grid-cols-2 gap-4 lg:w-[30rem] lg:mr-8">
-                    <HomeCards class="h-[19rem] lg:w-[15rem] bg-orange-200 rounded-md" />
-                    <HomeCards class="h-[19rem] lg:w-[15rem] bg-orange-200 rounded-md" />
-                    <HomeCards class="h-[20rem] lg:w-[15rem] bg-orange-200 rounded-md" />
-                    <HomeCards class="h-[20rem] lg:w-[15rem] bg-orange-200 rounded-md" />
+                    <HomeCards image={products[2]?.imageUrl} class="h-[19rem] lg:w-[15rem] bg-orange-200 rounded-md" />
+                    <HomeCards image={products[3]?.imageUrl} class="h-[19rem] lg:w-[15rem] bg-orange-200 rounded-md" />
+                    <HomeCards image={products[4]?.imageUrl} class="h-[20rem] lg:w-[15rem] bg-orange-200 rounded-md" />
+                    <HomeCards image={products[0]?.imageUrl} class="h-[20rem] lg:w-[15rem] bg-orange-200 rounded-md" />
                 </div>
             </div>
         </section>
