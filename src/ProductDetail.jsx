@@ -12,31 +12,37 @@ function ProductDetail() {
     const Products = useContext(ShopContext);
 
     const [productData, setProductData] = useState(false);
+    
 
     const fetchProductData = async () => {
 
-        Products.map((product)=>{
-            if (product.id === productId){
-                setProductData(product)
-                return null;
+        const product = Products.find((item) => item.id === Number(productId.productId));
+            if (product){
+                setProductData(product);
+                console.log(product);
             }
-        })
+            else{
+                console.log('no');
+            }
+        
     }
 
     useEffect(()=>{
         fetchProductData();
-    })
+    },[productId, Products])
 
+    
+    
     
     const [activeTab, setActiveTab] = useState("description");
 
        const tabContent = {
         description: (
             <p className="text-gray-700">
-            Embodying the raw, wayward spirit of rock ‘n’ roll, the Kilburn portable active stereo speaker takes the
-            unmistakable look and sound of Marshall, unplugs the chords, and takes the show on the road.
+            {productData.description}
             <br />
-            Weighing in under 7 pounds, the Kilburn is a lightweight piece of vintage styled engineering...
+            A sleek, minimalist chair designed for contemporary spaces, combining clean lines with ergonomic comfort. Crafted with a durable metal frame and a soft, cushioned seat,
+             it’s perfect for a modern home office or dining area. Available in neutral tones to complement any décor.
         </p>
         ),
         "additional-info": (
@@ -74,19 +80,21 @@ function ProductDetail() {
             <Header/>
             <section className="grid grid-cols-1 gap-6 py-16 px-8 md:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1">
             {/* product Image section */}
-            <div className="bg-orange-200 rounded-xl h-auto md:h-fit">
+            <img src={productData.imageUrl} className="w-full h-full object-cover object-center" />
+            
+            {/* <div className="bg-orange-200 rounded-xl h-auto md:h-fit">
                 <img className="rounded-xl" src="./src/images/servicePic.jpg" alt="Main product image"/>
                 <div className="p-4 gap-4 grid grid-cols-3">
-                    {/* alternate images */}
+                    alternate images
                     <div className="h-fit"><img src="./src/images/lamp.avif" alt="Alternate image"/></div>
                     <div className="h-fit"><img src="./src/images/lamp.avif" alt="Alternate image"/></div>
                     <div className="h-fit"><img src="./src/images/lamp.avif" alt="Alternate image"/></div>
                 </div>
-            </div>
+            </div> */}
             
             {/* Product price and description */}
             <div className="flex flex-col justify-start h-auto">
-                <h1 className="text-3xl font-semibold mt-4 lg:ml-12 sm:ml-0">Some Random</h1>
+                <h1 className="text-3xl font-semibold mt-4 lg:ml-12 sm:ml-0">{productData.name}</h1>
                 {/* Dynamic product review here */}
                 <div className="flex items-center text-gray-600 gap-4 lg:ml-12 sm:ml-0 py-4">
                     {/* average rating */}
@@ -97,12 +105,13 @@ function ProductDetail() {
                     <p className="tracking-widest text-lg">(290,291)</p>
                 </div>
                 
-                <h1 className="text-2xl text-gray-600 lg:ml-12 sm:ml-0">$120</h1>
+                <h1 className="text-2xl text-gray-600 lg:ml-12 sm:ml-0">{productData.price} ETB</h1>
                 
                 <p className="p-4 text-gray-500 lg:ml-8 sm:ml-0">
-                    Embodying the raw, wayward spirit of rock ‘n’ roll, the Kilburn portable active stereo speaker takes the unmistakable look and sound of Marshall, unplugs the chords, and takes the show on the road.
+                    {productData.description}
                     <br/>
-                    Weighing in under 7 pounds, the Kilburn is a lightweight piece of vintage styled engineering. Setting the bar as one of the loudest speakers in its className, the Kilburn is a compact, stout-hearted hero with a well-balanced audio which boasts a clear midrange and extended highs for a sound that is both articulate and pronounced. The analogue knobs allow you to fine tune the controls to your personal preferences while the guitar-influenced leather strap enables easy and stylish travel.
+                    A sleek, minimalist chair designed for contemporary spaces, combining clean lines with ergonomic comfort. Crafted with a durable metal frame and a soft, cushioned seat, 
+                    it’s perfect for a modern home office or dining area. Available in neutral tones to complement any décor.
                     
                 </p>
                 
