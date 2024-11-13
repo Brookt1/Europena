@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
 import HomeCards from "./HomeCards";
-import servicePic from "./assets/servicePic.jpg"
+import suspension from "./assets/Suspension.png"
 import { ShopContext } from "./context/ShopContext.jsx";
 
 function Home(){
@@ -21,7 +21,7 @@ function Home(){
                 <p>made for you</p>
                 <button className="mt-12 w-[130px] p-[6px] border-solid border-2 rounded-md border-black hover:bg-gray-950 hover:text-white "><Link to='/shop'>Shop Now</Link></button>
             </div>
-            <img className="min-[420px]:h-[400px] md:h-auto absolute top-0 right-4" src="./src/assets/Suspension.png" alt="Luxury Suspension" />
+            <img className="min-[420px]:h-[400px] md:h-auto absolute top-0 right-4" src={suspension} alt="Luxury Suspension" />
         </section> 
 
         {/* Trending Items */}
