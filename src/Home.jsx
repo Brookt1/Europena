@@ -15,8 +15,8 @@ function Home(){
         
         <Header />
         {/* hero */}
-        <section className="relative rounded-s flex items-start pt-[120px] pl-[200px] h-screen w-screen bg-orange-200 z-0">
-            <div className="min-[420px]:mt-[17rem] min-[420px]:ml-[-4rem] md:m-0 landingText text-center">
+        <section className="mt-[3rem] md:mt-0 relative rounded-s flex items-start pt-[120px] pl-[200px] h-screen w-screen bg-orange-200 z-0 min-[350px]:w-screen">
+            <div className="mt-[15rem] ml-[-6rem] md:m-0 landingText text-center">
                 <h1 className="text-3xl">european luxury</h1>
                 <p>made for you</p>
                 <button className="mt-12 w-[130px] p-[6px] border-solid border-2 rounded-md border-black hover:bg-gray-950 hover:text-white "><Link to='/shop'>Shop Now</Link></button>

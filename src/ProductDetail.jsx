@@ -39,12 +39,15 @@ function ProductDetail() {
 
        const tabContent = {
         description: (
-            <p className="text-gray-700">
-            {productData.description}
-            <br />
-            A sleek, minimalist chair designed for contemporary spaces, combining clean lines with ergonomic comfort. Crafted with a durable metal frame and a soft, cushioned seat,
-             it’s perfect for a modern home office or dining area. Available in neutral tones to complement any décor.
-        </p>
+            <div className="">
+                <p className="text-gray-700">
+                {productData.description}
+                <br />
+                A sleek, minimalist chair designed for contemporary spaces, combining clean lines with ergonomic comfort. Crafted with a durable metal frame and a soft, cushioned seat,
+                it’s perfect for a modern home office or dining area. Available in neutral tones to complement any décor.
+            </p>
+            </div>
+            
         ),
         "additional-info": (
             <ul className="text-gray-700 list-disc pl-6">
@@ -135,7 +138,7 @@ function ProductDetail() {
         
         <section className="px-32 py-4">
             {/* Tab buttons with underline on active tab */}
-            <div className="flex justify-center space-x-8  pb-2">
+            <div className="flex justify-center min-[500px]:space-x-8  pb-2">
             {["description", "additional-info", "review"].map((tab) => (
                     <button
                         key={tab}
@@ -149,7 +152,7 @@ function ProductDetail() {
                 ))}
             </div>
                 {/* Tab content */}
-            <div className="tab-content mt-4">{tabContent[activeTab]}</div>
+            <div className="tab-content mt-4 w-72 min-[600px]:w-full min-[500px]:ml-0 ml-[-4rem] min-[]">{tabContent[activeTab]}</div>
             
         </section>
         <Footer/>

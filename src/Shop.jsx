@@ -39,7 +39,7 @@ function Shop(){
         <>
         <Header />
         {/* Hero Section */}
-        <section className="my-6 h-[20vh] rounded-2xl bg-center flex items-center justify-center text-center" style={{backgroundImage: `url(${shophero})` }}>
+        <section className="mt-[3rem] md:mt-0 my-6 h-[20vh] rounded-2xl bg-center flex items-center justify-center text-center" style={{backgroundImage: `url(${shophero})` }}>
             <div>
                 <h1 className="pb-2 text-4xl text-zinc-800 font-bold">Shop</h1>
                 <Link to="/" className="text-gray-600 hover:underline">Home</Link> <span> &gt; shop </span>

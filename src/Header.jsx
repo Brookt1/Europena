@@ -10,14 +10,15 @@ function Header() {
 
     return (
         <>
-        <div className="flex items-center justify-between px-6">
+        <div className="flex flex-row items-center justify-between px-6 md:flex-row">
             {/* Logo */}
-            <img className="h-[90px] w-[140px]" src={logo} alt="logo" />
+            <Link to='/'><img className="h-[90px] w-[140px]" src={logo} alt="logo" /></Link>
             {/* Text */}
-            <h1 className="font-bold md:ml-[-40px] text-2xl md:text-3xl text-center flex-1">european</h1>
-
+            
+            <h1 className="font-bold md:ml-[-40px] text-2xl md:text-3xl text-center flex-1 hidden min-[600px]:inline">european</h1>
             {/* Icons */}
             <div className="flex items-center space-x-4">
+            
                 {/* Search Icon */}
                 <a href="#">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
