@@ -19,10 +19,10 @@ function ItemCard(props) {
   );
 }
 
-ItemCard.PropTypes = {
+ItemCard.propTypes = {
     image: PropTypes.string,
     name: PropTypes.string,
-    price: PropTypes.string
+    price: PropTypes.number
 }
 
 export default ItemCard
