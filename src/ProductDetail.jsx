@@ -9,33 +9,33 @@ import ReviewCard from "./ReviewCard";
 
 function ProductDetail() {
     
-    const productId = useParams();
-    const Products = useContext(ShopContext);
+    const productId = useParams().productId;
 
-    const [productData, setProductData] = useState(false);
-    
+    const { getProductById, loading, error } = useContext(ShopContext);
+    const [productData, setProduct] = useState(null);
 
-    const fetchProductData = async () => {
+    useEffect(() =>{
+
+        const fetchProduct = async () => {
+
+            const data = await getProductById(productId);       
+                setProduct(data);
+        }
         
-        const product = Products.find((item) => item.id === Number(productId.productId));
-            if (product){
-                setProductData(product);
-                console.log(product);
-            }
-            else{
-                console.log('no');
-            }
-        
-    }
+        fetchProduct();
+    }, [productId, getProductById]);
 
-    useEffect(()=>{
-        fetchProductData();
-    },[productId, Products])
+  
+
 
     
     
     
     const [activeTab, setActiveTab] = useState("description");
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+    if (!productData) return <p>No product found</p>;
 
        const tabContent = {
         description: (
@@ -76,14 +76,12 @@ function ProductDetail() {
        };
 
 
-
-
     return(
         <>
             <Header/>
             <section className="grid grid-cols-1 gap-6 py-16 px-8 md:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1">
             {/* product Image section */}
-            <img src={productData.images[0]["url"]} className="w-full h-full object-cover object-center" />
+            <img src={productData.images[0].url} className="w-full h-full object-cover object-center" />
             
             {/* <div className="bg-orange-200 rounded-xl h-auto md:h-fit">
                 <img className="rounded-xl" src="./src/images/servicePic.jpg" alt="Main product image"/>

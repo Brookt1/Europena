@@ -10,7 +10,9 @@ import { ShopContext } from "./context/ShopContext";
 function Shop(){
     
     const ITEMS_PER_PAGE = 8;
-    const Products = useContext(ShopContext);
+    const {products, loading, error} = useContext(ShopContext);
+
+
     const [showProducts, setShowProducts] = useState([]);
     
     const [currentPage, setCurrentPage] = useState(1);
@@ -86,12 +88,12 @@ function Shop(){
     // Update displayed products when the current page or total products change
     useEffect(() => {
         const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-        setShowProducts(copyProducts.slice(startIdx, startIdx + ITEMS_PER_PAGE));
+        setShowProducts(products.slice(startIdx, startIdx + ITEMS_PER_PAGE));
         console.log(startIdx);
-    }, [copyProducts, currentPage]);
+    }, [products, currentPage]);
 
     // Calculate total pages
-    const totalPages = Math.ceil(copyProducts.length / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
 
     // Event handler for page change
     const handlePageChange = (page) => {
@@ -99,6 +101,8 @@ function Shop(){
             setCurrentPage(page);
         }
     };
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
 
 
 
@@ -196,7 +200,8 @@ function Shop(){
                 {/* Product Items */}
                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {showProducts.map((product) =>(
-                        <Link to={`/product/${Number(product.id)}`}><ShopItemCard key={product.id} image={product.images[0]["url"]} name={product.name} price={product.price} /></Link>
+                        
+                        <Link key={product.id} to={`/product/${Number(product.id)}`}><ShopItemCard image={product.images[0]["url"]} name={product.name} price={product.price} /></Link>
                     ))}
                 </div> 
             </div>
