@@ -16,7 +16,7 @@ function ProductDetail() {
     
 
     const fetchProductData = async () => {
-
+        
         const product = Products.find((item) => item.id === Number(productId.productId));
             if (product){
                 setProductData(product);
@@ -83,7 +83,7 @@ function ProductDetail() {
             <Header/>
             <section className="grid grid-cols-1 gap-6 py-16 px-8 md:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1">
             {/* product Image section */}
-            <img src={productData.imageUrl} className="w-full h-full object-cover object-center" />
+            <img src={productData.images[0]["url"]} className="w-full h-full object-cover object-center" />
             
             {/* <div className="bg-orange-200 rounded-xl h-auto md:h-fit">
                 <img className="rounded-xl" src="./src/images/servicePic.jpg" alt="Main product image"/>
