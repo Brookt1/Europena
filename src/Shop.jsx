@@ -17,6 +17,74 @@ function Shop(){
     
     const [currentPage, setCurrentPage] = useState(1);
 
+    const [copyProducts, setCopyProducts] = useState([]);
+
+    
+
+
+    
+
+
+    // Setting up category and Filters
+
+    const BASE_URL = "https://furnitureapi-ykrq.onrender.com/api/categories"
+    const [Category, setCategory] = useState([]);
+
+    useEffect(() => {
+        fetch(`${BASE_URL}`)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then((data) => {
+                setCategory(data);
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
+    }, []);
+
+
+    const [filter, setFilter] = useState();
+    const [categoryId, setCategoryId] = useState();
+
+    const changeFilter = (e) => {
+        setFilter(e.target.value);
+    };
+
+    useEffect(() => { 
+        if (filter) { 
+            // Find the category based on the selected filter.
+            const category = Category.find((item) => item.name === filter); 
+            if (category) { 
+                setCategoryId(category.id); 
+            } else { 
+                console.log('Category not found'); 
+                setCategoryId(null); 
+            } 
+        } 
+    }, [filter]);
+
+    useEffect(() => { 
+        if (categoryId !== null) { 
+            // Filter products based on the selected category ID.
+            const filteredProducts = Products.filter((product) => product.categoryId === categoryId); 
+            setCopyProducts(filteredProducts); 
+        } else { 
+            setCopyProducts([]); 
+        } 
+    }, [categoryId]);
+
+
+    
+
+    useEffect(()=>{
+        console.log(copyProducts);
+    },[copyProducts])
+
+
     // Update displayed products when the current page or total products change
     useEffect(() => {
         const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -36,6 +104,9 @@ function Shop(){
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
+
+
+    
 
 
     
@@ -61,20 +132,64 @@ function Shop(){
                     <hr />
                     <ul className="p-2">
                         <li className="flex space-x-2 items-center pb-4 text-gray-700">
-                            <div className="h-[14px] w-[14px] border-solid border-2 border-zinc-600 rounded-full hover:border-green-400 cursor-pointer"></div>
-                            <span className="cursor-pointer">All</span>
+                            {/* <div className="h-[14px] w-[14px] border-solid border-2 border-zinc-600 rounded-full hover:border-green-400 cursor-pointer"></div> */}
+                                <label className="relative flex items-center cursor-pointer" htmlFor="all">
+                                    <input
+                                    name="filter"
+                                    value={'all'}
+                                    type="radio"
+                                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-green-900 transition-all"
+                                    id="all"
+                                    onChange={changeFilter}
+                                    />
+                                    <span className="absolute bg-green-900 w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+                                </label>
+                                <label htmlFor="all">All</label>
                         </li>
                         <li className="flex space-x-2 items-center pb-4 text-gray-700">
-                            <div className="h-[14px] w-[14px] border-solid border-2 border-zinc-600 rounded-full hover:border-green-400 cursor-pointer"></div>
-                            <span className="cursor-pointer">Decor</span>
+                            {/* <div className="h-[14px] w-[14px] border-solid border-2 border-zinc-600 rounded-full hover:border-green-400 cursor-pointer"></div> */}
+                            <label className="relative flex items-center cursor-pointer" htmlFor="Chair">
+                                    <input
+                                    name="filter"
+                                    value={'Chair'}
+                                    type="radio"
+                                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-green-900 transition-all"
+                                    id="Chair"
+                                    onChange={changeFilter}
+                                    />
+                                    <span className="absolute bg-green-900 w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+                            </label>
+                            <label htmlFor="Chair">Chair</label>
                         </li>
                         <li className="flex space-x-2 items-center pb-4 text-gray-700">
-                            <div className="h-[14px] w-[14px] border-solid border-2 border-zinc-600 rounded-full hover:border-green-400 cursor-pointer"></div>
-                            <span className="cursor-pointer">Lighting</span>
+                            {/* <div className="h-[14px] w-[14px] border-solid border-2 border-zinc-600 rounded-full hover:border-green-400 cursor-pointer"></div> */}
+                            <label className="relative flex items-center cursor-pointer" htmlFor="Bed">
+                                    <input
+                                    name="filter"
+                                    value={'Bed'}
+                                    type="radio"
+                                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-green-900 transition-all"
+                                    id="Bed"
+                                    onChange={changeFilter}
+                                    />
+                                    <span className="absolute bg-green-900 w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+                            </label>
+                            <label htmlFor="Bed">Bed</label>
                         </li>
                         <li className="flex space-x-2 items-center pb-4 text-gray-700">
-                            <div className="h-[14px] w-[14px] border-solid border-2 border-zinc-600 rounded-full hover:border-green-400 cursor-pointer"></div>
-                            <span className="cursor-pointer">Sofa</span>
+                            {/* <div className="h-[14px] w-[14px] border-solid border-2 border-zinc-600 rounded-full hover:border-green-400 cursor-pointer"></div> */}
+                            <label className="relative flex items-center cursor-pointer" htmlFor="Cabinet">
+                                    <input
+                                    name="filter"
+                                    value={'Cabinet'}
+                                    type="radio"
+                                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-green-900 transition-all"
+                                    id="Cabinet"
+                                    onChange={changeFilter}
+                                    />
+                                    <span className="absolute bg-green-900 w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+                            </label>
+                            <label htmlFor="Cabinet">Cabinet</label>
                         </li>
                     </ul>
                 </div>
