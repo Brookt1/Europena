@@ -10,7 +10,7 @@ import { ShopContext } from "./context/ShopContext";
 function Shop(){
     
     const ITEMS_PER_PAGE = 8;
-    const Products = useContext(ShopContext);
+    const {products, loading, error} = useContext(ShopContext);
     const [showProducts, setShowProducts] = useState([]);
     
     const [currentPage, setCurrentPage] = useState(1);
@@ -68,7 +68,7 @@ function Shop(){
     useEffect(() => { 
         if (categoryId !== null) { 
             // Filter products based on the selected category ID.
-            const filteredProducts = Products.filter((product) => product.categoryId === categoryId); 
+            const filteredProducts = products.filter((product) => product.categoryId === categoryId); 
             setCopyProducts(filteredProducts); 
         } else { 
             setCopyProducts([]); 
@@ -99,6 +99,10 @@ function Shop(){
             setCurrentPage(page);
         }
     };
+
+    if (loading) return (<p>Loading...</p>)
+    if (error) return (<p>Error: {error}</p>)
+
 
 
 
@@ -232,13 +236,6 @@ function Shop(){
                     Next
                 </button>
             </div>
-        
-            {/* Page Number Buttons
-            <div className="flex justify-center gap-2 p-2">
-                <button className="w-10 h-10 border-solid border-black border-2">1</button>
-                <button className="w-10 h-10 border-solid border-gray-500 border-2 text-gray-500 hover:text-black hover:border-black">2</button>
-                <button className="w-20 h-10 border-solid bg-gray-200 font-semibold border-2 hover:bg-white hover:border-black">Next</button>
-            </div> */}
         </section>
         <Footer />
         </>

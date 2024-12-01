@@ -1,41 +1,64 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import axios from 'axios';
 import Footer from "./Footer";
 import Header from "./Header";
-import { useState } from "react";
-import { useContext } from "react";
+import { useState, useContext, useEffect} from "react";
 import {ShopContext} from "./context/ShopContext";
-import { useEffect } from "react";
 import ReviewCard from "./ReviewCard";
+import ItemCard from "./ShopItemCard";
 
 function ProductDetail() {
     
-    const productId = useParams();
-    const Products = useContext(ShopContext);
+    const productId = useParams().productId;
+    const [quantity, setQuantity] = useState(1);
+    const BASE_URL = 'https://furnitureapi-ykrq.onrender.com/api/cart';
 
-    const [productData, setProductData] = useState(false);
     
+    const addToCart = async (quantity) => {
+        try {
+            console.log("Product ID:", productId);
+            console.log("Quantity:", quantity);
 
-    const fetchProductData = async () => {
-        
-        const product = Products.find((item) => item.id === Number(productId.productId));
-            if (product){
-                setProductData(product);
-                console.log(product);
-            }
-            else{
-                console.log('no');
-            }
-        
-    }
+            const response = await axios.post(BASE_URL, { furnitureId: 3, quantity });
+            console.log("Response:", response.data);
+            await getCart();
+            alert("Item added to cart successfully!");
+          } catch (error) {
+            console.error("Error adding item to cart:", error);
+            alert("Failed to add item to cart. Please try again.");
+          }
+        };
+      
 
-    useEffect(()=>{
-        fetchProductData();
-    },[productId, Products])
+    const { getCart, getProductById,getCategoryProducts, loading, error } = useContext(ShopContext);
+    const [productData, setProduct] = useState(null);
+
+    useEffect(() =>{
+
+        const fetchProduct = async () => {
+            try {
+              const data = await getProductById(productId);
+              setProduct(data);
+            } catch (error) {
+              console.error("Error fetching product:", error);
+            }
+          };
+          
+        
+        fetchProduct();
+    }, [productId, getProductById]);
+
+  
+
 
     
     
     
     const [activeTab, setActiveTab] = useState("description");
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+    if (!productData) return <p>No product found</p>;
 
        const tabContent = {
         description: (
@@ -76,14 +99,12 @@ function ProductDetail() {
        };
 
 
-
-
     return(
         <>
             <Header/>
             <section className="grid grid-cols-1 gap-6 py-16 px-8 md:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1">
             {/* product Image section */}
-            <img src={productData.images[0]["url"]} className="w-full h-full object-cover object-center" />
+            <img src={productData.images[0].url} className="w-full h-full object-cover object-center" />
             
             {/* <div className="bg-orange-200 rounded-xl h-auto md:h-fit">
                 <img className="rounded-xl" src="./src/images/servicePic.jpg" alt="Main product image"/>
@@ -118,13 +139,20 @@ function ProductDetail() {
                     
                 </p>
                 
-                <form className="flex md:ml-12 gap-4 pt-4">
-                    <label><input className="w-14 h-14 p-2 text-xl border-gray-600 border-solid border-[1px] rounded-full" type="number" placeholder="1"/></label>
-                    <button className="flex gap-4 text-lg bg-green-950 text-gray-400 p-4 w-[500px] justify-center">
+                <form className="flex md:ml-12 gap-4 pt-4" onSubmit={(e) => {
+                e.preventDefault(); 
+                addToCart(quantity);
+                }} >
+                    <label><input className="max-w-[5rem] h-16 p-2 text-xl border-gray-600 border-solid border-[1px] rounded-md" type="number" min='1' placeholder="1" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} /></label>
+                    <button className="flex gap-4 text-lg bg-green-950 text-gray-400 p-4 w-[500px] justify-center" type="submit"
+                    //   onClick={() => addToCart(quantity)}
+                      >
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                             <path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/>
                         </svg>
+                        {/* <Link to={`/cart/${Number(productData.id)}`}> */}
                         <p>Add to cart</p>
+                        {/* </Link> */}
                     </button>
                 </form>
 
@@ -153,7 +181,12 @@ function ProductDetail() {
             </div>
                 {/* Tab content */}
             <div className="tab-content mt-4 w-72 min-[600px]:w-full min-[500px]:ml-0 ml-[-4rem] min-[]">{tabContent[activeTab]}</div>
-            
+            <div className="p-4">
+                <h1 className="text-center text-3xl font-extralight">Related <span className="font-bold">Products</span></h1>
+                <div>
+                    <ItemCard />
+                </div>
+            </div>
         </section>
         <Footer/>
         </>

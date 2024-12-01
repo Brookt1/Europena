@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import propTypes from 'prop-types'
 
 function HomeCards(props){
 
@@ -11,9 +11,9 @@ function HomeCards(props){
     );
 }
 
-HomeCards.PropTypes = {
-    class: PropTypes.string,
-    image: PropTypes.string
+HomeCards.propTypes = {
+    class: propTypes.string,
+    image: propTypes.string
 }
 
 export default HomeCards

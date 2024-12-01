@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./Home.jsx";
 import Shop from "./Shop.jsx";
 import ProductDetail from "./ProductDetail.jsx"
+import Cart from "./Cart.jsx"
 import NotFound from "./NotFound.jsx";
 function App() {
 
@@ -18,6 +19,10 @@ function App() {
     {
       path: 'product/:productId',
       element: <ProductDetail />
+    },
+    {
+      path: '/cart/:productId',
+      element: <Cart />
     }
   ]);
 
