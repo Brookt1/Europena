@@ -1,6 +1,7 @@
 import Header from "./Header";
 import CartItem from "./CartItem";
 import Footer from "./Footer";
+import { Link } from "react-router-dom";
 
 
 function OrderPage(){
@@ -25,7 +26,7 @@ function OrderPage(){
             <div className="mt-4">
                 <CartItem />
                 <div className="w-full text-end">
-                    <button className="bg-green-800 p-2 mt-8 "><span className="font-semibold">ORDER NOW</span></button>
+                    <Link to='/orders'><button className="bg-green-800 p-2 mt-8 "><span className="font-semibold">ORDER NOW</span></button></Link>
                 </div>
             </div>
         </div>

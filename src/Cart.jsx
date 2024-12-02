@@ -128,7 +128,7 @@ const removeItem = async (itemId) => {
   
           {/* Quantity */}
           <div className="min-w-[120px]">
-            <input type="number"
+            Quantity: <input type="number"
              min={1} defaultValue={item.quantity} 
              className='border max-w-10 sm:max-w-20 px-1 py-1'
              onChange={(e) =>
