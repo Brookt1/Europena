@@ -1,9 +1,9 @@
 import Header from "./Header";
 import Footer from "./Footer";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { ShopContext } from "./context/ShopContext";
 import { useContext, useState, useEffect } from "react";
-
+import CartItem from "./CartItem"
 
 function Cart() {
   const { cart, getCart, loading, error } = useContext(ShopContext);
@@ -122,7 +122,7 @@ const removeItem = async (itemId) => {
           {/* Product Details */}
           <div className="flex-1 space-y-2 min-w-[200px]">
             <h1 className="text-2xl">{item.furniture.name}</h1>
-            <p>{item.id}</p>
+            <p>{item.furniture.description}</p>
             <p className="text-2xl text-green-950">{item.furniture.price} ETB</p>
           </div>
   
@@ -155,6 +155,15 @@ const removeItem = async (itemId) => {
           </div>
         </div>
         )}
+        <div className="p-6 flex justify-end my-20">
+          <div className="w-full sm:w-[450px]">
+            <CartItem />
+            <div className="w-full text-end">
+              <Link to='/order-page'><button className="bg-green-800 p-2 mt-8 "><span className="font-semibold">PROCEED TO CHECKOUT</span></button></Link>
+            </div>
+          </div>
+        </div>
+
         </section>
 
       <Footer />

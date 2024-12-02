@@ -4,6 +4,7 @@ import Shop from "./Shop.jsx";
 import ProductDetail from "./ProductDetail.jsx"
 import Cart from "./Cart.jsx"
 import NotFound from "./NotFound.jsx";
+import OrderPage from "./OrderPage.jsx";
 function App() {
 
   const router = createBrowserRouter([
@@ -23,6 +24,10 @@ function App() {
     {
       path: '/cart/:productId',
       element: <Cart />
+    },
+    {
+      path: '/order-page',
+      element: <OrderPage />
     }
   ]);
 
