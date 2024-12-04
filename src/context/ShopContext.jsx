@@ -35,11 +35,21 @@ const ShopContextProvider = (props) => {
         }
     }, []);
 
+    const getCart =useCallback( async () => {
+        let cart = null 
+        await fetchData(`${BASE_URL}/cart`, (data)=>{
+            cart = data;
+            setCart(data);
+            setCartSize(cart.length);
+        });
+        return cart
+    }, [fetchData]);
+
     // Fetch all products
     useEffect(() => {
         fetchData(`${BASE_URL}/furniture`, setProducts);
         getCart();
-    }, [fetchData]);
+    }, [fetchData, setProducts, getCart]);
 
     // Fetch a single product by ID
     const getProductById = useCallback(async (productId) => {
@@ -50,23 +60,14 @@ const ShopContextProvider = (props) => {
         return product;
     }, [fetchData]);
 
-    const getCategories = async () => {
+    const getCategories = useCallback(async () => {
         await fetchData(`${BASE_URL}/categories`, setCategories);
-    };
+    }, [fetchData]);
 
-    const getCategoryProducts = async (categoryId) => {
+    const getProductsByCategory = useCallback(async (categoryId) => {
         await fetchData(`${BASE_URL}/categories/${categoryId}`, setCategoryProducts);
-    };
+    }, [fetchData]);
 
-    const getCart = async () => {
-        let cart = null 
-        await fetchData(`${BASE_URL}/cart`, (data)=>{
-            cart = data;
-            setCart(data);
-            setCartSize(cart.length);
-        });
-        return cart
-    };
 
     return (
         <ShopContext.Provider
@@ -80,7 +81,7 @@ const ShopContextProvider = (props) => {
                 error,
                 getProductById,
                 getCategories,
-                getCategoryProducts,
+                getProductsByCategory,
                 getCart,
             }}
         >
