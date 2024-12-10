@@ -28,7 +28,7 @@ function TrackOrder(){
 
     return(
         <>
-        <Header />
+        
       <section className="mt-4">
         <h1 className="text-3xl text-left px-6 font-extralight">
           MY <span className="text-green-950 font-bold">ORDERS</span>
@@ -60,7 +60,7 @@ function TrackOrder(){
         )}
         </section>
 
-      <Footer />
+      
 
         </>
     )

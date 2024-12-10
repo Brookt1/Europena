@@ -7,20 +7,20 @@ import { Link } from "react-router-dom";
 function OrderPage(){
     return(
         <>
-        <Header />
+        
         <div className="sm:flex md:grid md:grid-cols-2 p-4 mt-16">
             <div className="font-medium grid grid-cols-1">
                 <h1 className="text-2xl font-extralight"><span className="text-green-950 font-semibold">YOUR</span> INFORMATION</h1>
                 <div className="p-4">
-                <input placeholder="First Name" className="border m-2 p-1 rounded-md" type='text'></input>
-                <input placeholder="Last Name" className="border m-2 p-1 rounded-md" type='text'></input>
+                <input placeholder="First Name" className="border m-2 p-1 rounded-md" type='text' required></input>
+                <input placeholder="Last Name" className="border m-2 p-1 rounded-md" type='text' required></input>
                 </div>
                 <div className="p-4">
-                    <input placeholder="Email address" className="border m-2 p-1 rounded-md" type='email'></input>
+                    <input placeholder="Email address" className="border m-2 p-1 rounded-md" type='email' required></input>
                     <input placeholder="City" className="border m-2 p-1 rounded-md" type='text'></input>
                 </div>
                 <div className="p-4">
-                    <input placeholder="Phone Number" className="border m-2 p-1 rounded-md" type='tel'></input>
+                    <input placeholder="Phone Number" className="border m-2 p-1 rounded-md" type='tel' required></input>
                 </div>
             </div>
             <div className="mt-4">
@@ -30,7 +30,7 @@ function OrderPage(){
                 </div>
             </div>
         </div>
-        <Footer />
+        
         </>
     )
 }

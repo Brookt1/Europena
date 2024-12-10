@@ -11,6 +11,7 @@ const ShopContextProvider = (props) => {
     const [categoryProducts, setCategoryProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [token, setToken] = useState('');
 
     const [cart,setCart] = useState([]);
     const [cartSize, setCartSize] = useState();
@@ -51,6 +52,14 @@ const ShopContextProvider = (props) => {
         getCart();
     }, [fetchData, setProducts, getCart]);
 
+    // Store token
+
+    useEffect(()=> {
+        if(!token && localStorage.getItem('token')){
+            setToken(localStorage.getItem('token'))
+        }
+    })
+
     // Fetch a single product by ID
     const getProductById = useCallback(async (productId) => {
         let product = null;
@@ -79,6 +88,8 @@ const ShopContextProvider = (props) => {
                 cartSize,
                 loading,
                 error,
+                token,
+                setToken,
                 getProductById,
                 getCategories,
                 getProductsByCategory,

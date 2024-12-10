@@ -17,9 +17,8 @@ function ProductDetail() {
       console.log("Product ID:", productId);
       console.log("Quantity:", quantity);
 
-      const response = await axios.post(BASE_URL, { furnitureId: 3, quantity });
+      const response = await axios.post(BASE_URL, { furnitureId: Number(productId), quantity });
       console.log("Response:", response.data);
-      await getCart();
       alert("Item added to cart successfully!");
     } catch (error) {
       console.error("Error adding item to cart:", error);
@@ -27,7 +26,7 @@ function ProductDetail() {
     }
   };
 
-  const { getCart, getProductById, getCategoryProducts, loading, error } =
+  const {getProductById, loading, error } =
     useContext(ShopContext);
   const [productData, setProduct] = useState(null);
 
@@ -110,7 +109,7 @@ function ProductDetail() {
 
   return (
     <>
-      <Header />
+
       <section className="grid grid-cols-1 gap-6 py-16 px-8 md:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1">
         {/* product Image section */}
         <img
@@ -241,7 +240,7 @@ function ProductDetail() {
           </div>
         </div>
       </section>
-      <Footer />
+      
     </>
   );
 }

@@ -13,7 +13,7 @@ function Home(){
     return(
         <>
         
-        <Header />
+        
         {/* hero */}
         <section className=" relative rounded-s flex items-start pt-[120px] pl-[200px] h-screen w-screen bg-orange-200 z-0 min-[350px]:w-screen">
             <div className="mt-[15rem] ml-[-6rem] md:m-0 landingText text-center">
@@ -74,7 +74,7 @@ function Home(){
                 
             </div>
         </section>
-        <Footer />
+        
         
 
         </>

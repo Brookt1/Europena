@@ -102,7 +102,6 @@ const removeItem = async (itemId) => {
   if (!product) return <p>No Producst in Cart</p>;
   return (
     <>
-      <Header />
       <section className="mt-4">
         <h1 className="text-3xl text-left px-6 font-extralight">
           Your <span className="text-green-950 font-bold">Cart</span>
@@ -166,7 +165,7 @@ const removeItem = async (itemId) => {
 
         </section>
 
-      <Footer />
+      
     </>
   );
 }

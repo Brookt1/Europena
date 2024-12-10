@@ -78,7 +78,7 @@ function Shop() {
 
   return (
     <>
-      <Header />
+      
       {/* Hero Section */}
       <section
         className="mt-[3rem] md:mt-0 my-6 h-[20vh] rounded-2xl bg-center flex items-center justify-center text-center"
@@ -173,7 +173,7 @@ function Shop() {
           </button>
         </div>
       </section>
-      <Footer />
+      
     </>
   );
 }
