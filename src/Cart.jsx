@@ -1,45 +1,28 @@
-import Header from "./Header";
-import Footer from "./Footer";
 import { useParams, Link } from "react-router-dom";
 import { ShopContext } from "./context/ShopContext";
 import { useContext, useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import CartItem from "./CartItem"
 
 function Cart() {
-  const { cart, getCart, loading, error } = useContext(ShopContext);
+  const { cart,setCart, getCart, loading, error } = useContext(ShopContext);
   const [product, setProduct] = useState([]);
-  const productId = useParams().productId;
   const BASE_URL = 'https://furnitureapi-ykrq.onrender.com/api/cart';
 
 
 
-//   const fetchData = async () => { 
-//     console.log("Fetching data from:", BASE_URL);
-//     try {
-//         const response = await fetch(BASE_URL);
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-//         const data = await response.json();
-//         setProduct(data);
-//     } catch (err) {
-//         console.error("Error fetching data:", err);
-//     }
+// const fetchCart = async () => {
+//   try {
+//     const data = await getCart();
+//     setProduct(data);
+//   } catch (error) {
+//     console.error("Error fetching product:", error);
+//   }
 // };
 
-const fetchCart = async () => {
-  try {
-    const data = await getCart();
-    setProduct(data);
-  } catch (error) {
-    console.error("Error fetching product:", error);
-  }
-};
-
-  useEffect(() => {
-    // fetchData();
-    fetchCart();
-}, []);
+//   useEffect(() => {
+    
+// }, []);
 
 
 const quantityChange = async (itemId, newQuantity) => {
@@ -57,8 +40,8 @@ const quantityChange = async (itemId, newQuantity) => {
     }
 
     // Optimistically update the UI
-    setProduct((prevProduct) =>
-      prevProduct.map((item) =>
+    setCart((prevCart) =>
+      prevCart.map((item) =>
         item.id === itemId
           ? { ...item, quantity: newQuantity }
           : item
@@ -86,7 +69,7 @@ const removeItem = async (itemId) => {
     }
 
     // Optimistically update the UI
-    fetchCart();
+    //fetchCart();
 
     console.log("Removed item successfully");
   } catch (err) {
@@ -97,16 +80,17 @@ const removeItem = async (itemId) => {
 
 
 
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-  if (!product) return <p>No Producst in Cart</p>;
+  if (!cart) return <p>No Producst in Cart</p>;
   return (
     <>
       <section className="mt-4">
         <h1 className="text-3xl text-left px-6 font-extralight">
           Your <span className="text-green-950 font-bold">Cart</span>
         </h1>
-        {product.map((item)=>
+        {cart.map((item)=>
           <div className="m-4 flex flex-wrap items-center p-4 space-x-4 border-solid border-t-2 border-gray-300">
           
           {/* Product Image */}
@@ -154,6 +138,7 @@ const removeItem = async (itemId) => {
           </div>
         </div>
         )}
+        {cart.length === 0 ? <h1 className="p-4">Your Cart Is Empty</h1> : 
         <div className="p-6 flex justify-end my-20">
           <div className="w-full sm:w-[450px]">
             <CartItem />
@@ -162,6 +147,7 @@ const removeItem = async (itemId) => {
             </div>
           </div>
         </div>
+        }
 
         </section>
 

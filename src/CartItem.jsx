@@ -4,9 +4,8 @@ import { ShopContext } from './context/ShopContext';
 
 function CartItem(props) {
 
-  const {cart} = useContext(ShopContext);
+  const {cart, deliveryFee} = useContext(ShopContext);
   const [subTotal, setSubTotal] = useState(0);
-  const shipping = 200;
   
   const calculateTotal = () => {
     const total = cart.reduce((sum, item) => sum + (item.furniture.price * item.quantity), 0);
@@ -37,14 +36,14 @@ function CartItem(props) {
     {/* Shipping */}
     <div className="flex justify-between">
       <p>Shipping</p>
-      <p>{shipping} ETB</p>
+      <p>{deliveryFee} ETB</p>
     </div>
     <hr />
 
     {/* Total */}
     <div className="flex justify-between">
       <b>Total</b>
-      <b>{subTotal + shipping} ETB</b>
+      <b>{subTotal + deliveryFee} ETB</b>
     </div>
   </div>
 </div>

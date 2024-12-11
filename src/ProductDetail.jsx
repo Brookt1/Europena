@@ -1,11 +1,10 @@
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import Footer from "./Footer";
-import Header from "./Header";
 import { useState, useContext, useEffect } from "react";
 import { ShopContext } from "./context/ShopContext";
 import ReviewCard from "./ReviewCard";
 import ItemCard from "./ShopItemCard";
+import { toast } from "react-toastify";
 
 function ProductDetail() {
   const productId = useParams().productId;
@@ -19,10 +18,10 @@ function ProductDetail() {
 
       const response = await axios.post(BASE_URL, { furnitureId: Number(productId), quantity });
       console.log("Response:", response.data);
-      alert("Item added to cart successfully!");
+      toast.success("Item added to cart successfully!");
     } catch (error) {
       console.error("Error adding item to cart:", error);
-      alert("Failed to add item to cart. Please try again.");
+      toast.error("Failed to add item to cart. Please try again.");
     }
   };
 
