@@ -11,11 +11,13 @@ import Login from "./Login.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header.jsx";
+import SearchBar from "./SearchBar.jsx";
 
 function Layout() {
   return (
     <>
       <Header />
+      <SearchBar />
       <Outlet /> {/* This renders the current route's element */}
       <Footer />
     </>

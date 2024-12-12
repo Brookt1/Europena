@@ -21,6 +21,9 @@ const ShopContextProvider = (props) => {
 
   const deliveryFee = 200;
   
+  const [search, setSearch] = useState('')
+  const [showSearch, setShowSearch] = useState(false)
+
 
   // Reusable fetch function
   const fetchData = useCallback(async (url, setter) => {
@@ -142,6 +145,8 @@ const ShopContextProvider = (props) => {
         error,
         token,
         deliveryFee,
+        search, showSearch,
+        setSearch, setShowSearch,
         setToken,
         getProductById,
         getCategories,

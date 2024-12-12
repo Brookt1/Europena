@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import Header from "./Header";
-import Footer from "./Footer";
 import ShopItemCard from "./ShopItemCard";
 import ShopItemSkeleton from "./ShopItemSkeleton"; // Import Skeleton Component
 import shophero from "./assets/shophero.jpg";
@@ -22,6 +20,8 @@ function Shop() {
     getCategories,
     categoryProducts,
     getProductsByCategory,
+    search,
+    showSearch
   } = useContext(ShopContext);
   const [selectedCategory, setSelectedCategory] = useState(0);
 
@@ -33,11 +33,30 @@ function Shop() {
     if (selectedCategory === 0) {
       setShowProducts(products);
       setCurrentPage(1);
-    } else {
+    } 
+    else {
       getProductsByCategory(selectedCategory);
       setCurrentPage(1);
     }
   }, [products, selectedCategory, getProductsByCategory]);
+
+  const searchFilter = (items) => {
+    if (showSearch && search) {
+      return items.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    return items;
+  };
+
+  
+  useEffect(() => {
+    let activeProducts = selectedCategory === 0 ? products : categoryProducts.furniture || [];
+    activeProducts = searchFilter(activeProducts);
+  
+    setShowProducts(activeProducts);
+  }, [products, categoryProducts, selectedCategory, search, showSearch, currentPage]);
+  
 
   useEffect(() => {
     const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -56,15 +75,22 @@ function Shop() {
     setSelectedCategory(category);
   };
 
-  const totalPages =
-    selectedCategory === 0
-      ? Math.ceil(products.length / ITEMS_PER_PAGE)
-      : categoryProducts.furniture
-      ? Math.max(
-          1,
-          Math.ceil(categoryProducts.furniture.length / ITEMS_PER_PAGE)
-        )
-      : 1;
+  // const totalPages =
+  //   selectedCategory === 0
+  //     ? Math.ceil(products.length / ITEMS_PER_PAGE)
+  //     : categoryProducts.furniture
+  //     ? Math.max(
+  //         1,
+  //         Math.ceil(categoryProducts.furniture.length / ITEMS_PER_PAGE)
+  //       )
+  //     : 1;
+
+  const totalPages = Math.ceil(
+    (selectedCategory === 0
+      ? searchFilter(products).length
+      : searchFilter(categoryProducts.furniture || []).length) / ITEMS_PER_PAGE
+  );
+  
 
   // Event handler for page change
   const handlePageChange = (page) => {
@@ -72,6 +98,11 @@ function Shop() {
       setCurrentPage(page);
     }
   };
+
+
+  
+  
+
 
   if (error)
     return <p className="text-center mt-4 text-red-500">Error: {error}</p>;
