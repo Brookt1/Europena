@@ -3,13 +3,14 @@ import axios from "axios";
 import { useState, useContext, useEffect } from "react";
 import { ShopContext } from "./context/ShopContext";
 import ReviewCard from "./ReviewCard";
-import ItemCard from "./ShopItemCard";
+import RelatedProduct from "./RelatedProducts";
 import { toast } from "react-toastify";
 
 function ProductDetail() {
   const productId = useParams().productId;
   const [quantity, setQuantity] = useState(1);
   const BASE_URL = "https://furnitureapi-ykrq.onrender.com/api/cart";
+  const [image, setImage] = useState('')
 
   const addToCart = async (quantity) => {
     try {
@@ -34,6 +35,7 @@ function ProductDetail() {
       try {
         const data = await getProductById(productId);
         setProduct(data);
+        setImage(data.images[0]?.url);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -111,10 +113,22 @@ function ProductDetail() {
 
       <section className="grid grid-cols-1 gap-6 py-16 px-8 md:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1">
         {/* product Image section */}
-        <img
-          src={productData.images[0].url}
-          className="w-full h-full object-cover object-center"
-        />
+        <div className="pt-10 transition-opacity ease-in duration-500 opacity-100">
+          <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
+            <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row">
+              <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
+                {
+                  productData.images.map((item, index)=>(
+                    <img onClick={()=> setImage(item)} src={item.url} key={index} className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer" />
+                  ))
+                }
+              </div>
+              <div className="w-full sm:w-[80%]">
+                <img className="w-full h-auto" src={image} alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* <div className="bg-orange-200 rounded-xl h-auto md:h-fit">
                 <img className="rounded-xl" src="./src/images/servicePic.jpg" alt="Main product image"/>
@@ -230,14 +244,7 @@ function ProductDetail() {
         <div className="tab-content mt-4 w-72 min-[600px]:w-full min-[500px]:ml-0 ml-[-4rem] min-[]">
           {tabContent[activeTab]}
         </div>
-        <div className="p-4">
-          <h1 className="text-center text-3xl font-extralight">
-            Related <span className="font-bold">Products</span>
-          </h1>
-          <div>
-            <ItemCard />
-          </div>
-        </div>
+        <RelatedProduct category={productData.categoryId} />
       </section>
       
     </>

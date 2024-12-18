@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import axios from 'axios';
 
 export const ShopContext = createContext();
 
@@ -108,7 +109,7 @@ const ShopContextProvider = (props) => {
 
     try {
       // Post to backend
-      const response = await fetch(`${BASE_URL}/orders`, {
+      const response = await fetch(`${BASE_URL}/order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
