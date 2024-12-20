@@ -65,8 +65,8 @@ function Login() {
           toast.error(response.data.message);
         }
       } else {
-        console.log(BASE_URL + "/auth/login");
-        const response = await axios.post(BASE_URL + "/auth/login", {
+        console.log(base_url + "/auth/login");
+        const response = await axios.post(base_url + "/auth/login", {
           email,
           password,
         });
@@ -78,7 +78,7 @@ function Login() {
         }
       }
     } catch (error) {
-      console.log(error.response);
+      console.log(error.response.data);
       toast.error(error.response.data.message);
     }
   };
