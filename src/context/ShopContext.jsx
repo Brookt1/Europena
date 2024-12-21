@@ -146,7 +146,7 @@ const ShopContextProvider = (props) => {
         error,
         token,
         deliveryFee,
-        search, showSearch,
+        search, showSearch, BASE_URL,
         setSearch, setShowSearch,
         setToken,
         getProductById,

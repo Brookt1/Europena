@@ -9,7 +9,7 @@ function Login() {
     
     const [currentState, setCurrentState] = useState("Login");
     const {token, setToken, BASE_URL} = useContext(ShopContext);
-
+    const base_url = "https://furnitureapi-ykrq.onrender.com/api";
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -48,32 +48,44 @@ function Login() {
           return;
         }
 
-        try{
-          if(currentState === 'Sign Up') {
-            const response = await axios.post(BASE_URL + '/user/register', {name,email,password})
-            if(response.data.success){
-              setToken(response.data.token)
-              localStorage.setItem('token', response.data.token)
+        try {
+          if (currentState === "Sign Up") {
+            console.log(name, email, password);
+    
+            console.log(BASE_URL + "/auth/register -------------------");
+            const response = await axios.post(BASE_URL + "/auth/register", {
+              username: name,
+              email,
+              password,
+            });
+    
+            console.log(response.data.message, "from sign up");
+            if (response.data.success) {
+              setToken(response.data.token);
+              localStorage.setItem("token", response.data.token);
+              toast.success("Account Regiterd Successfully")
             } else {
-              toast.error(response.data.message)
+              toast.error(response.data.error);
+              toast.error("error")
             }
-
-
           } else {
-            const response = await axios.post(BASE_URL + '/user/login', {email,password})
-            if(response.data.success){
-              setToken(response.data.token)
-              localStorage.setItem('token', response.data.token)
+            console.log(base_url + "/auth/login");
+            const response = await axios.post(base_url + "/auth/login", {
+              email,
+              password,
+            });
+            if (response.data.success) {
+              setToken(response.data.token);
+              localStorage.setItem("token", response.data.token);
             } else {
-              toast.error(response.data.message)
+              toast.error(response.data.message);
             }
           }
-
         } catch (error) {
-          console.log(error)
-          toast.error(error.message)
+          console.log(error.response.data.message);
+          toast.error(error.response.data.message);
         }
-    }
+      };
 
     useEffect(()=> {
       if(token) {
@@ -118,7 +130,7 @@ function Login() {
         <p className="cursor-pointer">Forgot your password?</p>
         {
             currentState === 'Login'
-            ? <p onClick={()=> setCurrentState('Sing Up')} className="cursor-pointer">Create Account</p>
+            ? <p onClick={()=> setCurrentState("Sign Up")} className="cursor-pointer">Create Account</p>
             : <p onClick={()=> setCurrentState('Login')} className="cursor-pointer">Login Here</p>
         }
       </div>
