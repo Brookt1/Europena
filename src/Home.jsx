@@ -4,7 +4,7 @@ import HomeCards from "./HomeCards";
 import fridge from "./assets/Fridge.png";
 import sofa from "./assets/sofa.png";
 import light from "./assets/light.png";
-import door from "./assets/Door.jpeg";
+import door from "./assets/door.jpeg";
 import cabinet from "./assets/cabinet.png";
 import decor from "./assets/Decor.jpeg";
 import sink from "./assets/sink.png";
@@ -98,7 +98,8 @@ function Home() {
         {/* Featured Categories Section */}
         <section className="py-16 px-6 md:px-16">
           <h2 className="text-3xl md:text-4xl font-extralight text-center mb-8">
-            Explore Our <span className="text-green-950 font-bold">Categories</span>
+            Explore Our{" "}
+            <span className="text-green-950 font-bold">Categories</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="relative group h-64">
@@ -145,30 +146,28 @@ function Home() {
         {/* Trending Products Section */}
         <section className="py-16 bg-gray-100 px-6 md:px-16">
           <h2 className="text-3xl md:text-4xl font-extralight text-center mb-8">
-          Trending <span className="text-green-950 font-bold">Products</span> 
+            Trending <span className="text-green-950 font-bold">Products</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="h-64 w-full rounded-lg overflow-hidden shadow-lg mb-4 group flex items-center justify-center bg-white">
+              <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
                 <img
                   src={fridge}
                   alt="Product 1"
-                  className="max-h-full max-w-full transform scale-100 group-hover:scale-110 transition duration-300 ease-in-out"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 ease-in-out"
                 />
               </div>
-              <p className="font-semibold text-xl text-black">
-                Smart Fridge
-              </p>
+              <p className="font-semibold text-xl text-black">Smart Fridge</p>
               <button className="mt-4 px-4 py-1 bg-black text-white font-medium rounded-md hover:bg-opacity-80">
                 View Product
               </button>
             </div>
             <div className="text-center">
-              <div className="h-64 w-full rounded-lg overflow-hidden shadow-lg mb-4 group flex items-center justify-center bg-white">
+              <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
                 <img
                   src={door}
-                  alt="Product 1"
-                  className="max-h-full max-w-full transform scale-100 group-hover:scale-110 transition duration-300 ease-in-out"
+                  alt="Product 2"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 ease-in-out"
                 />
               </div>
               <p className="font-semibold text-xl">Designer Door</p>
@@ -177,11 +176,11 @@ function Home() {
               </button>
             </div>
             <div className="text-center">
-              <div className="h-64 w-full rounded-lg overflow-hidden shadow-lg mb-4 group flex items-center justify-center bg-white">
+              <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
                 <img
                   src={sink}
-                  alt="Product 1"
-                  className="max-h-full max-w-full transform scale-100 group-hover:scale-110 transition duration-300 ease-in-out"
+                  alt="Product 3"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 ease-in-out"
                 />
               </div>
               <p className="font-semibold text-xl">Luxury Sink</p>
@@ -190,11 +189,11 @@ function Home() {
               </button>
             </div>
             <div className="text-center">
-              <div className="h-64 w-full rounded-lg overflow-hidden shadow-lg mb-4 group flex items-center justify-center bg-white">
+              <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
                 <img
                   src={cabinet}
-                  alt="Product 1"
-                  className="max-h-full max-w-full transform scale-100 group-hover:scale-110 transition duration-300 ease-in-out"
+                  alt="Product 4"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 ease-in-out"
                 />
               </div>
               <p className="font-semibold text-xl">Elegant Cabinet</p>
@@ -208,7 +207,8 @@ function Home() {
         {/* Why Choose Us Section */}
         <section className="py-16 px-6 md:px-16">
           <h2 className="text-3xl md:text-4xl font-extralight text-center mb-8">
-            Why Choose European <span className="text-green-950 font-bold">Luxury</span>?
+            Why Choose European{" "}
+            <span className="text-green-950 font-bold">Luxury</span>?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
@@ -236,7 +236,8 @@ function Home() {
         {/* Video Section */}
         <section className="py-16 bg-black text-white text-center">
           <h2 className="text-3xl md:text-4xl font-extralight mb-8">
-            Experience the Luxury <span className="text-green-950 font-bold">Lifestyle</span>
+            Experience the Luxury{" "}
+            <span className="text-green-950 font-bold">Lifestyle</span>
           </h2>
           <div className="relative w-full max-w-4xl mx-auto">
             <video
@@ -256,7 +257,8 @@ function Home() {
         {/* Testimonials Section */}
         <section className="py-16 px-6 md:px-16">
           <h2 className="text-3xl md:text-4xl font-extralight text-center mb-8">
-            What Our <span className="text-green-950 font-bold">Clients</span> Say
+            What Our <span className="text-green-950 font-bold">Clients</span>{" "}
+            Say
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-6 bg-white rounded-lg shadow-lg">
