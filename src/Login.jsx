@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useEffect } from "react";
+import axiosInstance from "./axiosInstance";
 
 function Login() {
   const [currentState, setCurrentState] = useState("Login");
@@ -50,7 +51,7 @@ function Login() {
         console.log(name, email, password);
 
         console.log(BASE_URL + "/auth/register -------------------");
-        const response = await axios.post(BASE_URL + "/auth/register", {
+        const response = await axiosInstance.post("/auth/register", {
           username: name,
           email,
           password,
@@ -68,8 +69,7 @@ function Login() {
           toast.error("error");
         }
       } else {
-        console.log(BASE_URL + "/auth/login");
-        const response = await axios.post(BASE_URL + "/auth/login", {
+        const response = await axiosInstance.post("/auth/login", {
           email,
           password,
         });
@@ -85,8 +85,8 @@ function Login() {
         }
       }
     } catch (error) {
-      console.log(error.response.data.message);
-      toast.error(error.response.data.message);
+      console.log(error);
+      // toast.error(error);
     }
   };
 

@@ -1,23 +1,25 @@
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
 import { useState, useContext, useEffect } from "react";
 import { ShopContext } from "./context/ShopContext";
 import ReviewCard from "./ReviewCard";
 import RelatedProduct from "./RelatedProducts";
 import { toast } from "react-toastify";
-
+import axiosInstance from "./axiosInstance";
 function ProductDetail() {
   const productId = useParams().productId;
   const [quantity, setQuantity] = useState(1);
-  const BASE_URL = "https://furnitureapi-ykrq.onrender.com/api/cart";
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState("");
 
   const addToCart = async (quantity) => {
     try {
       console.log("Product ID:", productId);
       console.log("Quantity:", quantity);
 
-      const response = await axios.post(BASE_URL, { furnitureId: Number(productId), quantity });
+      const response = await axiosInstance.post("/cart", {
+        furnitureId: Number(productId),
+        quantity,
+      });
+
       console.log("Response:", response.data);
       toast.success("Item added to cart successfully!");
     } catch (error) {
@@ -26,8 +28,7 @@ function ProductDetail() {
     }
   };
 
-  const {getProductById, loading, error } =
-    useContext(ShopContext);
+  const { getProductById, loading, error } = useContext(ShopContext);
   const [productData, setProduct] = useState(null);
 
   useEffect(() => {
@@ -110,18 +111,20 @@ function ProductDetail() {
 
   return (
     <>
-
       <section className="grid grid-cols-1 gap-6 py-16 px-8 md:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1">
         {/* product Image section */}
         <div className="pt-10 transition-opacity ease-in duration-500 opacity-100">
           <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
             <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row">
               <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
-                {
-                  productData.images.map((item, index)=>(
-                    <img onClick={()=> setImage(item)} src={item.url} key={index} className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer" />
-                  ))
-                }
+                {productData.images.map((item, index) => (
+                  <img
+                    onClick={() => setImage(item)}
+                    src={item.url}
+                    key={index}
+                    className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer"
+                  />
+                ))}
               </div>
               <div className="w-full sm:w-[80%]">
                 <img className="w-full h-auto" src={image} alt="" />
@@ -176,6 +179,7 @@ function ProductDetail() {
             className="flex md:ml-12 gap-4 pt-4"
             onSubmit={(e) => {
               e.preventDefault();
+
               addToCart(quantity);
             }}
           >
@@ -246,7 +250,6 @@ function ProductDetail() {
         </div>
         <RelatedProduct category={productData.categoryId} />
       </section>
-      
     </>
   );
 }
