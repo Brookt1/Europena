@@ -2,13 +2,33 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { ShopContext } from "./context/ShopContext";
 import ReviewCard from "./ReviewCard";
+import ReviewForm from "./ReviewForm";
 import RelatedProduct from "./RelatedProducts";
 import { toast } from "react-toastify";
 import axiosInstance from "./axiosInstance";
+
 function ProductDetail() {
   const productId = useParams().productId;
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState("");
+  const [reviews, setReviews] = useState([]);
+
+  const fetchreviews = async (productId) => {
+    try {
+      const response = await fetch(
+        `https://furnitureapi-ykrq.onrender.com/api/furniture/${productId}/reviews`
+      );
+      if (!response.ok) throw new Error("Failed to fetch reviews");
+      const data = await response.json();
+      setReviews(data);
+    } catch (error) {
+      toast.error("Error fetching reviews!");
+    }
+  };
+
+  useEffect(() => {
+    fetchreviews(productId);
+  }, [productId]);
 
   const addToCart = async (quantity) => {
     try {
@@ -74,12 +94,23 @@ function ProductDetail() {
     ),
     review: (
       <>
-        <div className="space-y-4 mb-4">
-          <ReviewCard />
-          <ReviewCard />
-          <ReviewCard />
-        </div>
-        <form className="space-y-4">
+        <div>
+          <div className="space-y-4 mb-4">
+            {reviews.length > 0 ? (
+              reviews.map((review) => (
+                <ReviewCard
+                  key={review.id}
+                  userName={review.userName}
+                  date={new Date(review.createdAt).toLocaleDateString()}
+                  rating={review.rating}
+                  reviewText={review.text}
+                />
+              ))
+            ) : (
+              <p>No reviews yet.</p>
+            )}
+          </div>
+          {/* <form className="space-y-4">
           <input
             className="w-full p-2 border rounded"
             type="text"
@@ -104,7 +135,10 @@ function ProductDetail() {
           >
             Submit Review
           </button>
-        </form>
+        </form> */}
+          <h3>Leave a Review</h3>
+          <ReviewForm productId={productId} />
+        </div>
       </>
     ),
   };
