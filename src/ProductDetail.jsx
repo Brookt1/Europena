@@ -1,23 +1,45 @@
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
 import { useState, useContext, useEffect } from "react";
 import { ShopContext } from "./context/ShopContext";
 import ReviewCard from "./ReviewCard";
+import ReviewForm from "./ReviewForm";
 import RelatedProduct from "./RelatedProducts";
 import { toast } from "react-toastify";
+import axiosInstance from "./axiosInstance";
 
 function ProductDetail() {
   const productId = useParams().productId;
   const [quantity, setQuantity] = useState(1);
-  const BASE_URL = "https://furnitureapi-ykrq.onrender.com/api/cart";
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState("");
+  const [reviews, setReviews] = useState([]);
+
+  const fetchreviews = async (productId) => {
+    try {
+      const response = await fetch(
+        `https://furnitureapi-ykrq.onrender.com/api/furniture/${productId}/reviews`
+      );
+      if (!response.ok) throw new Error("Failed to fetch reviews");
+      const data = await response.json();
+      setReviews(data);
+    } catch (error) {
+      toast.error("Error fetching reviews!");
+    }
+  };
+
+  useEffect(() => {
+    fetchreviews(productId);
+  }, [productId]);
 
   const addToCart = async (quantity) => {
     try {
       console.log("Product ID:", productId);
       console.log("Quantity:", quantity);
 
-      const response = await axios.post(BASE_URL, { furnitureId: Number(productId), quantity });
+      const response = await axiosInstance.post("/cart", {
+        furnitureId: Number(productId),
+        quantity,
+      });
+
       console.log("Response:", response.data);
       toast.success("Item added to cart successfully!");
     } catch (error) {
@@ -26,8 +48,7 @@ function ProductDetail() {
     }
   };
 
-  const {getProductById, loading, error } =
-    useContext(ShopContext);
+  const { getProductById, loading, error } = useContext(ShopContext);
   const [productData, setProduct] = useState(null);
 
   useEffect(() => {
@@ -73,12 +94,23 @@ function ProductDetail() {
     ),
     review: (
       <>
-        <div className="space-y-4 mb-4">
-          <ReviewCard />
-          <ReviewCard />
-          <ReviewCard />
-        </div>
-        <form className="space-y-4">
+        <div>
+          <div className="space-y-4 mb-4">
+            {reviews.length > 0 ? (
+              reviews.map((review) => (
+                <ReviewCard
+                  key={review.id}
+                  userName={review.userName}
+                  date={new Date(review.createdAt).toLocaleDateString()}
+                  rating={review.rating}
+                  reviewText={review.text}
+                />
+              ))
+            ) : (
+              <p>No reviews yet.</p>
+            )}
+          </div>
+          {/* <form className="space-y-4">
           <input
             className="w-full p-2 border rounded"
             type="text"
@@ -103,25 +135,30 @@ function ProductDetail() {
           >
             Submit Review
           </button>
-        </form>
+        </form> */}
+          <h3>Leave a Review</h3>
+          <ReviewForm productId={productId} />
+        </div>
       </>
     ),
   };
 
   return (
     <>
-
       <section className="grid grid-cols-1 gap-6 py-16 px-8 md:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1">
         {/* product Image section */}
         <div className="pt-10 transition-opacity ease-in duration-500 opacity-100">
           <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
             <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row">
               <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
-                {
-                  productData.images.map((item, index)=>(
-                    <img onClick={()=> setImage(item)} src={item.url} key={index} className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer" />
-                  ))
-                }
+                {productData.images.map((item, index) => (
+                  <img
+                    onClick={() => setImage(item)}
+                    src={item.url}
+                    key={index}
+                    className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer"
+                  />
+                ))}
               </div>
               <div className="w-full sm:w-[80%]">
                 <img className="w-full h-auto" src={image} alt="" />
@@ -176,6 +213,7 @@ function ProductDetail() {
             className="flex md:ml-12 gap-4 pt-4"
             onSubmit={(e) => {
               e.preventDefault();
+
               addToCart(quantity);
             }}
           >
@@ -246,7 +284,6 @@ function ProductDetail() {
         </div>
         <RelatedProduct category={productData.categoryId} />
       </section>
-      
     </>
   );
 }

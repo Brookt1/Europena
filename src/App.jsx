@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header.jsx";
 import SearchBar from "./SearchBar.jsx";
+import About from "./About.jsx";
 
 function Layout() {
   return (
@@ -38,6 +39,7 @@ function App() {
         { path: '/order-page', element: <OrderPage /> },
         { path: '/orders', element: <TrackOrder /> },
         { path: '/login', element: <Login /> },
+        { path: '/about', element: <About /> },
       ],
     },
   ]);

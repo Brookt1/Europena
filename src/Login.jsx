@@ -4,17 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useEffect } from "react";
+import axiosInstance from "./axiosInstance";
 
 function Login() {
   const [currentState, setCurrentState] = useState("Login");
   const { token, setToken, BASE_URL } = useContext(ShopContext);
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  const base_url = "https://furnitureapi-ykrq.onrender.com/api";
+
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -50,44 +50,53 @@ function Login() {
       if (currentState === "Sign Up") {
         console.log(name, email, password);
 
-        console.log(base_url + "/auth/register -------------------");
-        const response = await axios.post(base_url + "/auth/register", {
+        console.log(BASE_URL + "/auth/register -------------------");
+        const response = await axiosInstance.post("/auth/register", {
           username: name,
           email,
           password,
         });
 
-        // console.log(response.data.message, "from sign up");
-        if (response.data.success) {
-          setToken(response.data.token);
-          localStorage.setItem("token", response.data.token);
+        if (response.status === 201) {
+          setName("");
+          setEmail("");
+          setPassword("");
+          setCurrentState("Login");
+
+          toast.success("Account Regiterd Successfully");
         } else {
           toast.error(response.data.message);
+          toast.error("error");
         }
       } else {
-        console.log(base_url + "/auth/login");
-        const response = await axios.post(base_url + "/auth/login", {
+        const response = await axiosInstance.post("/auth/login", {
           email,
           password,
         });
-        if (response.data.success) {
+        console.log(response, "from login");
+
+        if (response.status === 201) {
+          console.log("setting token", token);
           setToken(response.data.token);
+          console.log("after setting token", token);
           localStorage.setItem("token", response.data.token);
         } else {
           toast.error(response.data.message);
         }
       }
     } catch (error) {
-      console.log(error.response.data);
-      toast.error(error.response.data.message);
+      console.log(error);
+      toast.error(error);
     }
   };
 
   useEffect(() => {
+    console.log("token is there", token);
     if (token) {
+      console.log("navigating to /");
       navigate("/");
     }
-  }, [token]);
+  }, [token, navigate]);
 
   return (
     <form
@@ -131,14 +140,25 @@ function Login() {
         <p className="cursor-pointer">Forgot your password?</p>
         {currentState === "Login" ? (
           <p
-            onClick={() => setCurrentState("Sign Up")}
+            onClick={() => {
+              setEmail("");
+              setPassword("");
+              setCurrentState("Sign Up");
+            }}
             className="cursor-pointer"
           >
             Create Account
           </p>
         ) : (
           <p
-            onClick={() => setCurrentState("Login")}
+            onClick={() => {
+              setName("");
+              setEmail("");
+              setPassword("");
+
+              setCurrentState("Login");
+            }}
+
             className="cursor-pointer"
           >
             Login Here
