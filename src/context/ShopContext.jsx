@@ -14,6 +14,8 @@ const ShopContextProvider = (props) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [token, setToken] = useState("");
+  const [username, setUsername] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   const [cart, setCart] = useState([]);
   const [cartSize, setCartSize] = useState();
@@ -147,6 +149,7 @@ const ShopContextProvider = (props) => {
         token,
         deliveryFee,
         search, showSearch, BASE_URL,
+        username, userEmail,
         setSearch, setShowSearch,
         setToken,
         getProductById,
@@ -154,6 +157,8 @@ const ShopContextProvider = (props) => {
         getProductsByCategory,
         getCart, setCart,
         checkout,
+        setUsername,
+        setUserEmail,
       }}
     >
       {props.children}

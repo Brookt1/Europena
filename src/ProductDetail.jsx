@@ -15,13 +15,12 @@ function ProductDetail() {
 
   const fetchreviews = async (productId) => {
     try {
-      const response = await fetch(
-        `https://furnitureapi-ykrq.onrender.com/api/furniture/${productId}/reviews`
-      );
+      const response = await axiosInstance.post(`/furniture/${productId}/reviews`);
       if (!response.ok) throw new Error("Failed to fetch reviews");
       const data = await response.json();
       setReviews(data);
     } catch (error) {
+      console.log(error)
       toast.error("Error fetching reviews!");
     }
   };
@@ -48,7 +47,7 @@ function ProductDetail() {
     }
   };
 
-  const { getProductById, loading, error } = useContext(ShopContext);
+  const { getProductById, loading, error, BASE_URL } = useContext(ShopContext);
   const [productData, setProduct] = useState(null);
 
   useEffect(() => {

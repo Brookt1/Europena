@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { toast } from "react-toastify";
+import { ShopContext } from "./context/ShopContext";
 
 function ReviewForm({ productId }) {
   const [name, setName] = useState("");
@@ -7,6 +8,8 @@ function ReviewForm({ productId }) {
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
+  const {username, userEmail} = useContext(ShopContext);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,10 +20,12 @@ function ReviewForm({ productId }) {
     }
 
     const reviewData = {
-      userName: name,
-      email,
-      text: review,
-      rating, // Include the selected rating
+      // userName: name,
+      // email,
+      id: productId,
+      rating: rating,
+      comment: review,
+      
     };
 
     try {
@@ -63,7 +68,7 @@ function ReviewForm({ productId }) {
         className="w-full p-2 border rounded"
         type="text"
         placeholder="Your Name"
-        value={name}
+        value={username}
         onChange={(e) => setName(e.target.value)}
         required
       />
@@ -71,7 +76,7 @@ function ReviewForm({ productId }) {
         className="w-full p-2 border rounded"
         type="email"
         placeholder="Your Email"
-        value={email}
+        value={userEmail}
         onChange={(e) => setEmail(e.target.value)}
         required
       />

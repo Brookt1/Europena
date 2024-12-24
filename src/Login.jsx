@@ -6,12 +6,14 @@ import axios from "axios";
 import { useEffect } from "react";
 import axiosInstance from "./axiosInstance";
 
+
 function Login() {
   const [currentState, setCurrentState] = useState("Login");
   const { token, setToken, BASE_URL } = useContext(ShopContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {setUsername, setUserEmail} = useContext(ShopContext);
 
   const navigate = useNavigate();
 
@@ -80,6 +82,8 @@ function Login() {
           setToken(response.data.token);
           console.log("after setting token", token);
           localStorage.setItem("token", response.data.token);
+          setUsername(response.data.name)
+          setUserEmail(response.data.email)
         } else {
           toast.error(response.data.message);
         }
