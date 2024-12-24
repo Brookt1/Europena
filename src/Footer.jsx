@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="pt-8">
-      <div className="block w-full h-auto bg-emerald-900">
+    <footer className="border border-solid">
+      <div className="block w-full h-auto bg-black">
         <div className="container mx-auto p-4">
           <div className="flex flex-wrap justify-between">
             {/* About Us Section */}

@@ -1,5 +1,5 @@
 
-import PropTypes from 'prop-types' 
+import propTypes from 'prop-types' 
 
 function ItemCard(props) {
 
@@ -20,9 +20,9 @@ function ItemCard(props) {
 }
 
 ItemCard.propTypes = {
-    image: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number
+    image: propTypes.string,
+    name: propTypes.string,
+    price: propTypes.number
 }
 
 export default ItemCard

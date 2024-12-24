@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-
+/src/copy.jsx
 *.local
 
 # Editor directories and files
