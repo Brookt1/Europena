@@ -13,21 +13,21 @@ function ProductDetail() {
   const [image, setImage] = useState("");
   const [reviews, setReviews] = useState([]);
 
-  const fetchreviews = async (productId) => {
-    try {
-      const response = await axiosInstance.post(`/furniture/${productId}/reviews`);
-      if (!response.ok) throw new Error("Failed to fetch reviews");
-      const data = await response.json();
-      setReviews(data);
-    } catch (error) {
-      console.log(error)
-      toast.error("Error fetching reviews!");
-    }
-  };
+  // const fetchreviews = async (productId) => {
+  //   try {
+  //     const response = await axiosInstance.get(`/furniture/${productId}`);
+  //     if (!response.ok) throw new Error("Failed to fetch reviews");
+  //     const data = await response.json();
+  //     setReviews(data);
+  //   } catch (error) {
+  //     console.log(error)
+  //     toast.error("Error fetching reviews!");
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchreviews(productId);
-  }, [productId]);
+  // useEffect(() => {
+  //   fetchreviews(productId);
+  // }, [productId]);
 
   const addToCart = async (quantity) => {
     try {
@@ -63,6 +63,9 @@ function ProductDetail() {
 
     fetchProduct();
   }, [productId, getProductById]);
+
+  // If the review Is returned with the product this should be enough right?
+  setReviews(productData.review)
 
   const [activeTab, setActiveTab] = useState("description");
 

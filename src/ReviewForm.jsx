@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ShopContext } from "./context/ShopContext";
-
+import axiosInstance from "./axiosInstance";
 function ReviewForm({ productId }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -30,17 +30,23 @@ function ReviewForm({ productId }) {
 
     try {
       setLoading(true);
-      const response = await fetch(
-        `https://furnitureapi-ykrq.onrender.com/api/furniture/${productId}/reviews`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(reviewData),
-        }
-      );
+      // const response = await fetch(
+      //   `https://furnitureapi-ykrq.onrender.com/api/furniture/${productId}/reviews`,
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //     body: JSON.stringify(reviewData),
+      //   }
+      // );
+
+      const response = await axiosInstance.post("/review", {
+        id: productId,
+        rating: rating,
+        comment: review,
+      });
 
       if (!response.ok) throw new Error("Failed to submit review");
 
