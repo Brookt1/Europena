@@ -67,17 +67,15 @@ function ProductDetail() {
   // If the review Is returned with the product this should be enough right?
 
   const [activeTab, setActiveTab] = useState("description");
-
   useEffect(() => {
     if (productData) {
-      setReviews(productData.review || []);
+      setReviews(productData.reviews || []);
     }
   }, [productData]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!productData) return <p>No product found</p>;
-
   const tabContent = {
     description: (
       <div className="">
