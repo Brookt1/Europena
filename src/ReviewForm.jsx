@@ -6,9 +6,9 @@ function ReviewForm({ productId }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [review, setReview] = useState("");
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(1);
   const [loading, setLoading] = useState(false);
-  const {username, userEmail} = useContext(ShopContext);
+  const { username, userEmail } = useContext(ShopContext);
 
 
   const handleSubmit = async (e) => {
@@ -22,10 +22,11 @@ function ReviewForm({ productId }) {
     const reviewData = {
       // userName: name,
       // email,
-      id: productId,
+      furnitureId: productId,
       rating: rating,
-      comment: review,
-      
+      content: review,
+
+
     };
 
     try {
@@ -43,12 +44,14 @@ function ReviewForm({ productId }) {
       // );
 
       const response = await axiosInstance.post("/review", {
-        id: productId,
+        furnitureId: productId,
         rating: rating,
-        comment: review,
+        content: review,
       });
 
-      if (!response.ok) throw new Error("Failed to submit review");
+      console.log("Review Response:", response);
+
+      if (response.status != 201) throw new Error("Failed to submit review");
 
       toast.success("Review submitted successfully!");
       setName("");
@@ -64,7 +67,7 @@ function ReviewForm({ productId }) {
 
   const handleStarClick = (index) => {
     const selectedRating = index + 1;
-    setRating(selectedRating); 
+    setRating(selectedRating);
     console.log("Selected Rating:", selectedRating);
   };
 
@@ -76,7 +79,6 @@ function ReviewForm({ productId }) {
         placeholder="Your Name"
         value={username}
         onChange={(e) => setName(e.target.value)}
-        required
       />
       <input
         className="w-full p-2 border rounded"
@@ -84,7 +86,7 @@ function ReviewForm({ productId }) {
         placeholder="Your Email"
         value={userEmail}
         onChange={(e) => setEmail(e.target.value)}
-        required
+
       />
       <textarea
         className="w-full p-2 border rounded"
@@ -101,9 +103,8 @@ function ReviewForm({ productId }) {
           <span
             key={index}
             onClick={() => handleStarClick(index)}
-            className={`cursor-pointer ${
-              index < rating ? "text-amber-400" : "text-gray-400"
-            }`}
+            className={`cursor-pointer ${index < rating ? "text-amber-400" : "text-gray-400"
+              }`}
           >
             ★
           </span>
@@ -111,9 +112,8 @@ function ReviewForm({ productId }) {
       </div>
 
       <button
-        className={`px-4 py-2 bg-green-950 text-white rounded ${
-          loading ? "opacity-50" : ""
-        }`}
+        className={`px-4 py-2 bg-green-950 text-white rounded ${loading ? "opacity-50" : ""
+          }`}
         type="submit"
         disabled={loading}
       >

@@ -65,9 +65,14 @@ function ProductDetail() {
   }, [productId, getProductById]);
 
   // If the review Is returned with the product this should be enough right?
-  setReviews(productData.review)
 
   const [activeTab, setActiveTab] = useState("description");
+
+  useEffect(() => {
+    if (productData) {
+      setReviews(productData.review || []);
+    }
+  }, [productData]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -98,7 +103,7 @@ function ProductDetail() {
       <>
         <div>
           <div className="space-y-4 mb-4">
-            {reviews.length > 0 ? (
+            {reviews !== null && reviews.length > 0 ? (
               reviews.map((review) => (
                 <ReviewCard
                   key={review.id}
@@ -114,6 +119,7 @@ function ProductDetail() {
           </div>
           {/* <form className="space-y-4">
           <input
+          
             className="w-full p-2 border rounded"
             type="text"
             placeholder="Your Name"
@@ -232,7 +238,7 @@ function ProductDetail() {
             <button
               className="flex gap-4 text-lg bg-green-950 text-gray-400 p-4 w-[500px] justify-center"
               type="submit"
-              //   onClick={() => addToCart(quantity)}
+            //   onClick={() => addToCart(quantity)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -265,18 +271,17 @@ function ProductDetail() {
           {["description", "additional-info", "review"].map((tab) => (
             <button
               key={tab}
-              className={`tab-btn px-4 py-2 text-lg ${
-                activeTab === tab
-                  ? "font-semibold border-b-2 border-green-900"
-                  : ""
-              }`}
+              className={`tab-btn px-4 py-2 text-lg ${activeTab === tab
+                ? "font-semibold border-b-2 border-green-900"
+                : ""
+                }`}
               onClick={() => setActiveTab(tab)}
             >
               {tab === "description"
                 ? "Description"
                 : tab === "additional-info"
-                ? "Additional Information"
-                : "Review"}
+                  ? "Additional Information"
+                  : "Review"}
             </button>
           ))}
         </div>

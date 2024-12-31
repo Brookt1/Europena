@@ -1,6 +1,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
+
+// const BASE_URL = "http://localhost:3000/api";
 const BASE_URL = "https://furnitureapi-ykrq.onrender.com/api";
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -28,7 +30,7 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     console.log(error);
-    console.log("Currently in interceptor");
+    console.log("Currently in interceptor");  
     if (error.response.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
