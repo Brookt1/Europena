@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import CartItem from "./CartItem"
 
 function Cart() {
-  const { cart,setCart, getCart, loading, error } = useContext(ShopContext);
+  const { cart,setCart, getCart, loading, error, token } = useContext(ShopContext);
   const [product, setProduct] = useState([]);
   const BASE_URL = 'https://furnitureapi-ykrq.onrender.com/api/cart';
 
@@ -31,6 +31,7 @@ const quantityChange = async (itemId, newQuantity) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ quantity: newQuantity }),
     });
@@ -61,6 +62,7 @@ const removeItem = async (itemId) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -76,9 +78,6 @@ const removeItem = async (itemId) => {
     console.error("Error removing item:", err);
   }
 };
-
-
-
 
 
   if (loading) return <p>Loading...</p>;

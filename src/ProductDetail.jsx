@@ -70,6 +70,7 @@ function ProductDetail() {
   useEffect(() => {
     if (productData) {
       setReviews(productData.reviews || []);
+      console.log("review"+   productData.reviews)
     }
   }, [productData]);
 

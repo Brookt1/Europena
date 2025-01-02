@@ -29,12 +29,33 @@ const ShopContextProvider = (props) => {
 
 
   // Reusable fetch function
-  const fetchData = useCallback(async (url, setter) => {
+  // const fetchData = useCallback(async (url, setter) => {
+  //   setLoading(true);
+  //   setError(null);
+  //   console.log("Fetching data from:", url);
+  //   try {
+  //     const response = await fetch(url);
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     setter(data);
+  //   } catch (err) {
+  //     setError(err.message);
+  //     console.error("Error fetching data:", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, []);
+
+  const fetchData = useCallback(async (url, setter, options = {}) => {
     setLoading(true);
     setError(null);
     console.log("Fetching data from:", url);
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        ...options, // Spread any additional options
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -47,22 +68,40 @@ const ShopContextProvider = (props) => {
       setLoading(false);
     }
   }, []);
+  
+
+  // const getCart = useCallback(async () => {
+  //   let cart = null;
+  //   await fetchData(`${BASE_URL}/cart`, (data) => {
+  //     cart = data;
+  //     setCart(data);
+  //     setCartSize(cart.length);
+  //   });
+  //   return cart;
+  // }, [fetchData]);
 
   const getCart = useCallback(async () => {
     let cart = null;
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+  
     await fetchData(`${BASE_URL}/cart`, (data) => {
       cart = data;
       setCart(data);
       setCartSize(cart.length);
-    });
+    }, { headers });
+  
     return cart;
   }, [fetchData]);
+  
 
   // Fetch all products
   useEffect(() => {
     fetchData(`${BASE_URL}/furniture`, setProducts);
     getCart();
-  }, [fetchData, setProducts, getCart]);
+  }, [fetchData, setProducts]);
 
   // Store token
 
@@ -111,15 +150,18 @@ const ShopContextProvider = (props) => {
 
     try {
       // Post to backend
+      console.log(orderData)
       const response = await fetch(`${BASE_URL}/order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(orderData),
       });
 
       if (!response.ok) {
+        console.log(response.error)
         throw new Error("Failed to process order");
       }
 
