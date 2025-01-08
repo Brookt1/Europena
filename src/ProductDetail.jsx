@@ -110,7 +110,7 @@ function ProductDetail() {
                   userName={review.reviewBy}
                   date={new Date(review.createdAt).toLocaleDateString()}
                   rating={review.rating}
-                  reviewText={review.text}
+                  reviewText={review.content}
                 />
               ))
             ) : (
