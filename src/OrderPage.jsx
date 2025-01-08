@@ -1,13 +1,14 @@
 import CartItem from "./CartItem";
-import { useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { ShopContext } from "./context/ShopContext";
 import { toast } from "react-toastify";
+import axiosInstance from "./axiosInstance";
 
 function OrderPage() {
-  const {checkout} = useContext(ShopContext);
-  
+  const { checkout } = useContext(ShopContext);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -25,11 +26,15 @@ function OrderPage() {
 
 
   const onSubmitHandler = async (event) => {
+
+    console.log(formData);
     event.preventDefault(); //  prevent default behavior.
 
     try {
-      await checkout(formData); // Call the checkout function with form data.
-      
+      // await checkout(formData); // Call the checkout function with form data.
+      const response = axiosInstance.post("/order", formData);
+      console.log(response);
+
     } catch (error) {
       console.error("Error during checkout:", error);
       toast.error(error.message)
@@ -98,9 +103,9 @@ function OrderPage() {
         <div className="mt-4">
           <CartItem />
           <div className="w-full text-end">
-              <button type="submit" className="bg-green-800 p-2 mt-8 ">
-                <span className="font-semibold">ORDER NOW</span>
-              </button>
+            <button type="submit" className="bg-green-800 p-2 mt-8 ">
+              <span className="font-semibold">ORDER NOW</span>
+            </button>
           </div>
         </div>
       </form>

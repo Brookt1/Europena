@@ -70,7 +70,8 @@ function ProductDetail() {
   useEffect(() => {
     if (productData) {
       setReviews(productData.reviews || []);
-      console.log("review"+   productData.reviews)
+
+      console.log(productData.reviews)
     }
   }, [productData]);
 
@@ -106,7 +107,7 @@ function ProductDetail() {
               reviews.map((review) => (
                 <ReviewCard
                   key={review.id}
-                  userName={review.userName}
+                  userName={review.reviewBy}
                   date={new Date(review.createdAt).toLocaleDateString()}
                   rating={review.rating}
                   reviewText={review.text}

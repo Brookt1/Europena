@@ -6,6 +6,8 @@ import axios from 'axios';
 export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
+
+  // const BASE_URL = "http://localhost:3000/api";
   const BASE_URL = "https://furnitureapi-ykrq.onrender.com/api";
 
   const [products, setProducts] = useState([]);
@@ -23,7 +25,7 @@ const ShopContextProvider = (props) => {
   const [orders, setOrders] = useState([]);
 
   const deliveryFee = 200;
-  
+
   const [search, setSearch] = useState('')
   const [showSearch, setShowSearch] = useState(false)
 
@@ -68,7 +70,7 @@ const ShopContextProvider = (props) => {
       setLoading(false);
     }
   }, []);
-  
+
 
   // const getCart = useCallback(async () => {
   //   let cart = null;
@@ -86,16 +88,16 @@ const ShopContextProvider = (props) => {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-  
+
     await fetchData(`${BASE_URL}/cart`, (data) => {
       cart = data;
       setCart(data);
       setCartSize(cart.length);
     }, { headers });
-  
+
     return cart;
   }, [fetchData]);
-  
+
 
   // Fetch all products
   useEffect(() => {
@@ -145,7 +147,7 @@ const ShopContextProvider = (props) => {
       totalAmount: cart.reduce(
         (sum, item) => sum + item.furniture.price * item.quantity,
         0
-      ) + deliveryFee ,
+      ) + deliveryFee,
     };
 
     try {
