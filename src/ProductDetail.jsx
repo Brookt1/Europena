@@ -29,6 +29,9 @@ function ProductDetail() {
   //   fetchreviews(productId);
   // }, [productId]);
 
+  const { getCart, getProductById, loading, error, BASE_URL } = useContext(ShopContext);
+  const [productData, setProduct] = useState(null);
+
   const addToCart = async (quantity) => {
     try {
       console.log("Product ID:", productId);
@@ -40,6 +43,7 @@ function ProductDetail() {
       });
 
       console.log("Response:", response.data);
+      await getCart();
       toast.success("Item added to cart successfully!");
     } catch (error) {
       console.error("Error adding item to cart:", error);
@@ -47,8 +51,7 @@ function ProductDetail() {
     }
   };
 
-  const { getProductById, loading, error, BASE_URL } = useContext(ShopContext);
-  const [productData, setProduct] = useState(null);
+  
 
   useEffect(() => {
     const fetchProduct = async () => {

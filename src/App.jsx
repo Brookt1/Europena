@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header.jsx";
 import SearchBar from "./SearchBar.jsx";
 import About from "./About.jsx";
+import ShopContextProvider from "./context/ShopContext.jsx";
 
 function Layout() {
   return (
@@ -46,8 +47,10 @@ function App() {
 
   return (
     <>
+    <ShopContextProvider>
       <RouterProvider router={router} />
       <ToastContainer />
+    </ShopContextProvider>
     </>
   );
 }

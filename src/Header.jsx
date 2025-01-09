@@ -7,7 +7,7 @@ function Header() {
 
 
     const [visible, setVisible] = useState(false);
-    const { cartSize, setCartSize, token, setToken, setShowSearch } = useContext(ShopContext);
+    const { cartSize, setCartSize, getCartSize, token, setToken, setShowSearch } = useContext(ShopContext);
     const navigate = useNavigate()
     const location = useLocation()
     
@@ -15,11 +15,13 @@ function Header() {
         navigate('/login')
         localStorage.removeItem('token')
         setToken('')
-        setCartSize(0)
+        // setCartSize(0)
         
     }
 
     console.log(token);
+    console.log("Header rendered with cartSize:", cartSize);
+    
 
     return (
         <>

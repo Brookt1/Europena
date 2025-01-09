@@ -20,7 +20,7 @@ const ShopContextProvider = (props) => {
   const [userEmail, setUserEmail] = useState("");
 
   const [cart, setCart] = useState([]);
-  const [cartSize, setCartSize] = useState();
+  const [cartSize, setCartSize] = useState(0);
 
   const [orders, setOrders] = useState([]);
 
@@ -92,12 +92,36 @@ const ShopContextProvider = (props) => {
     await fetchData(`${BASE_URL}/cart`, (data) => {
       cart = data;
       setCart(data);
-      setCartSize(cart.length);
+      setCartSize(getCartSize(data));
+      // setCartSize(cart.length);
     }, { headers });
 
     return cart;
   }, [fetchData]);
 
+  const getCartSize = (cartData = cart) => {
+    let count = 0;
+  
+    try {
+      for (const item of cartData) {
+        if (item.quantity > 0) {
+          count += item.quantity;
+        }
+      }
+    } catch (error) {
+      console.error("Error calculating cart size:", error);
+    }
+  
+    return count;
+  };
+  
+
+  useEffect(() => {
+    const size = getCartSize();
+    setCartSize(size);
+    console.log("Cart size updated:", size);
+    console.log("cart", cart)
+  }, [cart]);
 
   // Fetch all products
   useEffect(() => {
@@ -199,7 +223,7 @@ const ShopContextProvider = (props) => {
         getProductById,
         getCategories,
         getProductsByCategory,
-        getCart, setCart,
+        getCart, setCart, getCartSize,
         checkout,
         setUsername,
         setUserEmail,

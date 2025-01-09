@@ -73,7 +73,7 @@ function Cart() {
       }
 
       // Optimistically update the UI
-      //fetchCart();
+      getCart();
 
       console.log("Removed item successfully");
     } catch (err) {
