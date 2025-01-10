@@ -18,12 +18,12 @@ function Shop() {
     error,
     categories,
     getCategories,
-    categoryProducts,
+    categoryProducts, selectedCategory, setSelectedCategory,
     getProductsByCategory,
     search,
     showSearch
   } = useContext(ShopContext);
-  const [selectedCategory, setSelectedCategory] = useState(0);
+  // const [selectedCategory, setSelectedCategory] = useState(0);
 
   useEffect(() => {
     getCategories();

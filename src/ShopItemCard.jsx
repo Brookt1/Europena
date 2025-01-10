@@ -5,7 +5,7 @@ function ItemCard(props) {
 
   return (
     <div>
-      <div className="h-[15rem] bg-orange-100">
+      <div className="h-[15rem] bg-gray-100">
         {/* Image of item here */}
         <img src={props.image} alt="Product Image" className="w-full h-full object-cover object-center" />
         </div>

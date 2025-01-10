@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HomeCards from "./HomeCards";
 import fridge from "./assets/Fridge.png";
 import sofa from "./assets/sofa.png";
@@ -11,8 +11,18 @@ import sink from "./assets/sink.png";
 import { ShopContext } from "./context/ShopContext.jsx";
 
 function Home() {
-  const { products } = useContext(ShopContext);
+  const { products, setSelectedCategory } = useContext(ShopContext);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate()
+
+
+  const handleCategory = (id) => {
+    console.log("Category clicked:");
+    setSelectedCategory(id);
+    console.log("Category clicked with:", id);
+    navigate('/shop')
+    
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,6 +41,8 @@ function Home() {
   };
 
   const currentProduct = products[currentIndex];
+
+  
 
   return (
     <>
@@ -59,7 +71,7 @@ function Home() {
               <span className="text-amber-500">ETB</span>
             </p>
             <button className="mt-12 w-[130px] p-[6px] border-solid border-2 rounded-md border-black hover:bg-gray-950 hover:text-white">
-              <Link to="/shop">Shop Now</Link>
+              <Link to={`/product/${currentProduct?.id}`}>Shop Now</Link>
             </button>
           </div>
 
@@ -101,8 +113,10 @@ function Home() {
             Explore Our{" "}
             <span className="text-green-950 font-bold">Categories</span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="relative group h-64">
+          <div
+          onClick={() => handleCategory(1)} 
+          className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="relative group h-64 hover: cursor-pointer">
               {" "}
               {/* Set a fixed height */}
               <img
@@ -115,7 +129,9 @@ function Home() {
                 <h3 className="text-white text-xl font-semibold">Furniture</h3>
               </div>
             </div>
-            <div className="relative group h-64">
+            <div 
+            onClick={() => handleCategory(2)}
+            className="relative group h-64 hover: cursor-pointer">
               {" "}
               {/* Set a fixed height */}
               <img
@@ -128,7 +144,9 @@ function Home() {
                 <h3 className="text-white text-xl font-semibold">Lighting</h3>
               </div>
             </div>
-            <div className="relative group h-64">
+            <div
+            onClick={() => handleCategory(4)} 
+            className="relative group h-64 hover: cursor-pointer">
               {" "}
               <img
                 // src="https://www.coasterfurniture.com/wp-content/uploads/Art-Deco-furniture-in-gold.jpeg"
@@ -152,53 +170,53 @@ function Home() {
             <div className="text-center">
               <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
                 <img
-                  src={fridge}
+                  src={products[3]?.images[0].url}
                   alt="Product 1"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 ease-in-out"
+                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
                 />
               </div>
-              <p className="font-semibold text-xl text-black">Smart Fridge</p>
+              <p className="font-semibold text-xl text-black">{products[3]?.name}</p>
               <button className="mt-4 px-4 py-1 bg-black text-white font-medium rounded-md hover:bg-opacity-80">
-                View Product
+                <Link to={`/product/${products[3]?.id}`}>View Product</Link>
               </button>
             </div>
             <div className="text-center">
               <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
                 <img
-                  src={door}
+                  src={products[7]?.images[0].url}
                   alt="Product 2"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 ease-in-out"
+                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
                 />
               </div>
-              <p className="font-semibold text-xl">Designer Door</p>
+              <p className="font-semibold text-xl">{products[7]?.name}</p>
               <button className="mt-4 px-4 py-1 bg-black text-white font-medium rounded-md hover:bg-opacity-80">
-                View Product
+                <Link to={`/product/${products[7]?.id}`}>View Product</Link>
               </button>
             </div>
             <div className="text-center">
               <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
                 <img
-                  src={sink}
+                  src={products[6]?.images[0].url}
                   alt="Product 3"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 ease-in-out"
+                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
                 />
               </div>
-              <p className="font-semibold text-xl">Luxury Sink</p>
+              <p className="font-semibold text-xl">{products[6]?.name}</p>
               <button className="mt-4 px-4 py-1 bg-black text-white font-medium rounded-md hover:bg-opacity-80">
-                View Product
+                <Link to={`/product/${products[6]?.id}`}>View Product</Link>
               </button>
             </div>
             <div className="text-center">
               <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
                 <img
-                  src={cabinet}
+                  src={products[4]?.images[0].url}
                   alt="Product 4"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 ease-in-out"
+                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
                 />
               </div>
-              <p className="font-semibold text-xl">Elegant Cabinet</p>
+              <p className="font-semibold text-xl">{products[4]?.name}</p>
               <button className="mt-4 px-4 py-1 bg-black text-white font-medium rounded-md hover:bg-opacity-80">
-                View Product
+                <Link to={`/product/${products[4]?.id}`}>View Product</Link>
               </button>
             </div>
           </div>

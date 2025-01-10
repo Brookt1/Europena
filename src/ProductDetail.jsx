@@ -12,7 +12,7 @@ function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState("");
   const [reviews, setReviews] = useState([]);
-
+  const [CategoryName, setCategoryName] = useState();
   // const fetchreviews = async (productId) => {
   //   try {
   //     const response = await axiosInstance.get(`/furniture/${productId}`);
@@ -29,8 +29,9 @@ function ProductDetail() {
   //   fetchreviews(productId);
   // }, [productId]);
 
-  const { getCart, getProductById, loading, error, BASE_URL } = useContext(ShopContext);
+  const { getCart, getProductById, loading, error, BASE_URL, categories } = useContext(ShopContext);
   const [productData, setProduct] = useState(null);
+  
 
   const addToCart = async (quantity) => {
     try {
@@ -51,7 +52,6 @@ function ProductDetail() {
     }
   };
 
-  
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -66,6 +66,23 @@ function ProductDetail() {
 
     fetchProduct();
   }, [productId, getProductById]);
+
+  const getCategoryName = () => {
+    categories.forEach((category) => {
+      if (category.id === productData.categoryId) {
+        setCategoryName(category.name);
+        console.log("invoked", CategoryName)
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (productData) {
+      getCategoryName();
+    }
+  }, [productData, categories]);
+
+  
 
   // If the review Is returned with the product this should be enough right?
 
@@ -164,7 +181,7 @@ function ProductDetail() {
               <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
                 {productData.images.map((item, index) => (
                   <img
-                    onClick={() => setImage(item)}
+                    onClick={() => setImage(item.url)} 
                     src={item.url}
                     key={index}
                     className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer"
@@ -261,8 +278,8 @@ function ProductDetail() {
           <div className="md:ml-12 pt-6 flex gap-2">
             <h1 className="">Catagory:</h1>
             {/* Catagory of item here */}
-            <a href="" className="text-gray-400">
-              sofa
+            <a href="" className="font-bold text-green-900">
+              {CategoryName}
             </a>
           </div>
         </div>

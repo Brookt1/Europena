@@ -13,6 +13,7 @@ const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [categoryProducts, setCategoryProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [token, setToken] = useState("");
@@ -209,7 +210,7 @@ const ShopContextProvider = (props) => {
       value={{
         products,
         categories,
-        categoryProducts,
+        categoryProducts, selectedCategory,
         cart,
         cartSize,
         loading,
@@ -221,8 +222,8 @@ const ShopContextProvider = (props) => {
         setSearch, setShowSearch,
         setToken,
         getProductById,
-        getCategories,
-        getProductsByCategory,
+        getCategories, setSelectedCategory,
+        getProductsByCategory, setCategoryProducts,
         getCart, setCart, getCartSize,
         checkout,
         setUsername,
