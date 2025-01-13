@@ -3,6 +3,7 @@ import { ShopContext } from "./context/ShopContext";
 import { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import CartItem from "./CartItem"
+import { ClipLoader } from "react-spinners";
 
 function Cart() {
   const { cart, setCart, getCart, loading, error, token } = useContext(ShopContext);
@@ -82,7 +83,13 @@ function Cart() {
   };
 
 
-  if (loading) return <p>Loading...</p>;
+  // if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader color="#4caf50" size={60} />
+      </div>
+    );
   if (error) return <p>Error: {error}</p>;
   if (!cart) return <p>No Producst in Cart</p>;
   return (

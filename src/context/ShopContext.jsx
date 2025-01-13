@@ -124,6 +124,11 @@ const ShopContextProvider = (props) => {
     console.log("cart", cart)
   }, [cart]);
 
+
+  // useEffect(()=> {
+  //   fetchOrders
+  // },[fetchData]);
+
   // Fetch all products
   useEffect(() => {
     fetchData(`${BASE_URL}/furniture`, setProducts);
@@ -203,6 +208,8 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  
+
 
 
   return (
@@ -212,7 +219,7 @@ const ShopContextProvider = (props) => {
         categories,
         categoryProducts, selectedCategory,
         cart,
-        cartSize,
+        cartSize, orders,
         loading,
         error,
         token,

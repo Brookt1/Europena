@@ -6,6 +6,7 @@ import ReviewForm from "./ReviewForm";
 import RelatedProduct from "./RelatedProducts";
 import { toast } from "react-toastify";
 import axiosInstance from "./axiosInstance";
+import { ClipLoader } from "react-spinners";
 
 function ProductDetail() {
   const productId = useParams().productId;
@@ -95,7 +96,13 @@ function ProductDetail() {
     }
   }, [productData]);
 
-  if (loading) return <p>Loading...</p>;
+  // if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader color="#4caf50" size={60} />
+      </div>
+    );
   if (error) return <p>Error: {error}</p>;
   if (!productData) return <p>No product found</p>;
   const tabContent = {

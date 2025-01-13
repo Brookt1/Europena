@@ -8,6 +8,7 @@ import axiosInstance from "./axiosInstance";
 
 function OrderPage() {
   const { checkout } = useContext(ShopContext);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     firstName: "",
