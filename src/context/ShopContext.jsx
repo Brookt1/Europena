@@ -8,7 +8,7 @@ export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
 
   // const BASE_URL = "http://localhost:3000/api";
-  const BASE_URL = "https://furnitureapi-ykrq.onrender.com/api";
+  const BASE_URL = "https://furniture-backend.duckdns.org/api";
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -124,6 +124,20 @@ const ShopContextProvider = (props) => {
     console.log("cart", cart)
   }, [cart]);
 
+  const getOrders = useCallback(async () => {
+    let order = null;
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    await fetchData(`${BASE_URL}/order`, (data) => {
+      order = data;
+      setOrders(data);
+    }, { headers });
+
+    return order;
+  }, [fetchData]);
 
   // useEffect(()=> {
   //   fetchOrders
@@ -133,6 +147,7 @@ const ShopContextProvider = (props) => {
   useEffect(() => {
     fetchData(`${BASE_URL}/furniture`, setProducts);
     getCart();
+    getOrders();
   }, [fetchData, setProducts]);
 
   // Store token

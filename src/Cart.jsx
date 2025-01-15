@@ -10,8 +10,7 @@ function Cart() {
   const [product, setProduct] = useState([]);
 
   // const BASE_URL = "http://localhost:3000/api/cart";
-  const BASE_URL = 'https://furnitureapi-ykrq.onrender.com/api/cart';
-
+  const BASE_URL = 'https://furniture-backend.duckdns.org/api/cart';
 
 
   // const fetchCart = async () => {

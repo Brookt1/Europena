@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import axiosInstance from "./axiosInstance";
 
 function OrderPage() {
-  const { checkout } = useContext(ShopContext);
+  const { setCart } = useContext(ShopContext);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -27,20 +27,27 @@ function OrderPage() {
 
 
   const onSubmitHandler = async (event) => {
-
+    event.preventDefault(); // Prevent default behavior.
     console.log(formData);
-    event.preventDefault(); //  prevent default behavior.
-
+  
     try {
-      // await checkout(formData); // Call the checkout function with form data.
-      const response = axiosInstance.post("/order", formData);
+      const response = await axiosInstance.post("/order", formData); // Await the post request.
       console.log(response);
-
+  
+      if (response.status === 200 || response.status === 201) {
+        // Order was successfully created
+        setCart([]); // Clear the cart
+        toast.success("Order placed successfully!");
+        navigate("/orders")
+      } else {
+        throw new Error("Unexpected response status");
+      }
     } catch (error) {
       console.error("Error during checkout:", error);
-      toast.error(error.message)
+      toast.error("Failed to place order. Please try again.");
     }
   };
+  
 
   return (
     <>

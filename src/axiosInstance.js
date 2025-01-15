@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 // const BASE_URL = "http://localhost:3000/api";
-const BASE_URL = "https://furnitureapi-ykrq.onrender.com/api";
+const BASE_URL = "https://furniture-backend.duckdns.org/api";
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
 });
