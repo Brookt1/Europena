@@ -30,6 +30,7 @@ const ShopContextProvider = (props) => {
   const [search, setSearch] = useState('')
   const [showSearch, setShowSearch] = useState(false)
 
+  
 
   // Reusable fetch function
   // const fetchData = useCallback(async (url, setter) => {
@@ -223,7 +224,11 @@ const ShopContextProvider = (props) => {
     }
   };
 
-  
+  const logout = () => {
+    localStorage.removeItem('token')
+    setToken('')
+    
+}  
 
 
 
@@ -249,7 +254,7 @@ const ShopContextProvider = (props) => {
         getCart, setCart, getCartSize,
         checkout,
         setUsername,
-        setUserEmail,
+        setUserEmail, logout,
       }}
     >
       {props.children}

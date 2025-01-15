@@ -8,6 +8,7 @@ import OrderPage from "./OrderPage.jsx";
 import TrackOrder from "./TrackOrder.jsx";
 import Footer from "./Footer.jsx";
 import Login from "./Login.jsx";
+import MyProfile from "./MyProfile.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header.jsx";
@@ -41,6 +42,7 @@ function App() {
         { path: '/orders', element: <TrackOrder /> },
         { path: '/login', element: <Login /> },
         { path: '/about', element: <About /> },
+        { path: '/profile', element: <MyProfile /> },
       ],
     },
   ]);
