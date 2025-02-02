@@ -30,7 +30,7 @@ const ShopContextProvider = (props) => {
   const [search, setSearch] = useState('')
   const [showSearch, setShowSearch] = useState(false)
 
-  
+
 
   // Reusable fetch function
   // const fetchData = useCallback(async (url, setter) => {
@@ -103,7 +103,7 @@ const ShopContextProvider = (props) => {
 
   const getCartSize = (cartData = cart) => {
     let count = 0;
-  
+
     try {
       for (const item of cartData) {
         if (item.quantity > 0) {
@@ -113,10 +113,10 @@ const ShopContextProvider = (props) => {
     } catch (error) {
       console.error("Error calculating cart size:", error);
     }
-  
+
     return count;
   };
-  
+
 
   useEffect(() => {
     const size = getCartSize();
@@ -147,8 +147,8 @@ const ShopContextProvider = (props) => {
   // Fetch all products
   useEffect(() => {
     fetchData(`${BASE_URL}/furniture`, setProducts);
-    getCart();
-    getOrders();
+    // getCart();
+    // getOrders();
   }, [fetchData, setProducts]);
 
   // Store token
@@ -227,8 +227,8 @@ const ShopContextProvider = (props) => {
   const logout = () => {
     localStorage.removeItem('token')
     setToken('')
-    
-}  
+
+  }
 
 
 

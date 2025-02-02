@@ -31,7 +31,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '',
-      element: <Layout />, // Wrap all routes with the Layout
+      element: <Layout />,
       errorElement: <NotFound />,
       children: [ // Nested routes
         { path: '', element: <Home /> },
@@ -45,14 +45,15 @@ function App() {
         { path: '/profile', element: <MyProfile /> },
       ],
     },
-  ]);
+  ],
+  );
 
   return (
     <>
-    <ShopContextProvider>
-      <RouterProvider router={router} />
-      <ToastContainer />
-    </ShopContextProvider>
+      <ShopContextProvider>
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </ShopContextProvider>
     </>
   );
 }
