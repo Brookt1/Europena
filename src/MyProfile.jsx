@@ -56,8 +56,8 @@ function MyProfile() {
           className="w-24 h-24 rounded-full border border-gray-400"
         />
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">{username || "Guest User"}</h1>
-          <p className="text-gray-600">{userEmail || "guest@example.com"}</p>
+          <h1 className="text-3xl font-bold text-gray-800">{username}</h1>
+          <p className="text-gray-600">{userEmail}</p>
         </div>
       </div>
 

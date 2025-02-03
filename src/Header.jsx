@@ -89,9 +89,9 @@ function Header() {
                         </svg>
                         <p>Back</p>
                     </div>
-                    <NavLink className="py-2 pl-6 border" to='/'>Home</NavLink>
-                    <NavLink className="py-2 pl-6 border" to='/shop'>Shop</NavLink>
-                    <NavLink className="py-2 pl-6 border" to='/about'>About</NavLink>
+                    <NavLink className="py-2 pl-6 border" to='/' onClick={() => setVisible(false)}>Home</NavLink>
+                    <NavLink className="py-2 pl-6 border" to='/shop' onClick={() => setVisible(false)}>Shop</NavLink>
+                    <NavLink className="py-2 pl-6 border" to='/about' onClick={() => setVisible(false)}>About</NavLink>
                 </div>
             </div>
             
