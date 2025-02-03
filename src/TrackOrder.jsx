@@ -1,12 +1,16 @@
 import Header from "./Header";
 import Footer from "./Footer";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ShopContext } from "./context/ShopContext";
 import { ClipLoader } from "react-spinners";
 
 function TrackOrder() {
-  const { orders, loading, error } = useContext(ShopContext);
+  const { orders, getOrders, loading, error } = useContext(ShopContext);
 
+  useEffect(() => {
+    getOrders();
+  }, []);
+  
   if (loading)
     return (
       <div className="flex justify-center items-center h-screen">
@@ -16,6 +20,9 @@ function TrackOrder() {
 
   if (error) return <p>Error: {error}</p>;
 
+  
+  
+    
   return (
     <>
       <section className="mt-4">

@@ -251,7 +251,7 @@ const ShopContextProvider = (props) => {
         getProductById,
         getCategories, setSelectedCategory,
         getProductsByCategory, setCategoryProducts,
-        getCart, setCart, getCartSize,
+        getCart, setCart, getCartSize, getOrders,
         checkout,
         setUsername,
         setUserEmail, logout,

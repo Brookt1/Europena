@@ -12,6 +12,10 @@ function Cart() {
   // const BASE_URL = "http://localhost:3000/api/cart";
   const BASE_URL = 'https://furniture-backend.duckdns.org/api/cart';
 
+  useEffect(() => {
+    getCart();
+  }, []);
+  
 
   // const fetchCart = async () => {
   //   try {
