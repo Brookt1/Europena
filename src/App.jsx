@@ -21,7 +21,7 @@ function Layout() {
     <>
       <Header />
       <SearchBar />
-      <div className="h-[90px]"></div>
+      <div className="h-[110px]"></div>
       <Outlet /> {/* This renders the current route's element */}
       <Footer />
     </>
