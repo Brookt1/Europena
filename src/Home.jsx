@@ -1,112 +1,186 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import HomeCards from "./HomeCards";
-import fridge from "./assets/Fridge.png";
+
 import sofa from "./assets/sofa.png";
 import light from "./assets/light.png";
-import door from "./assets/door.jpeg";
-import cabinet from "./assets/cabinet.png";
+
 import decor from "./assets/Decor.jpeg";
-import sink from "./assets/sink.png";
+
 import { ShopContext } from "./context/ShopContext.jsx";
+
 
 function Home() {
   const { products, setSelectedCategory } = useContext(ShopContext);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const handleCategory = (id) => {
     console.log("Category clicked:");
     setSelectedCategory(id);
     console.log("Category clicked with:", id);
-    navigate('/shop')
-    
+    navigate("/shop");
   };
+  
 
+  const itemsPerGroup = 3;
+  // Manually assign 9 items (or use all available if fewer than 9)
+  const nineItems = products.length >= 9 ? products.slice(0, 9) : products;
+  const totalGroups = Math.ceil(nineItems.length / itemsPerGroup);
+
+  const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
+  const [isExiting, setIsExiting] = useState(false);
+
+  // Calculate current group of 3 items from the 9-item subset
+  const currentItems = [
+    nineItems[(currentGroupIndex * itemsPerGroup) % nineItems.length],
+    nineItems[(currentGroupIndex * itemsPerGroup + 1) % nineItems.length],
+    nineItems[(currentGroupIndex * itemsPerGroup + 2) % nineItems.length],
+  ];
+
+  console.log("Current Items:", currentItems);
+
+  // Automatic transition every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % 3);
-    }, 5000);
-
+      setIsExiting(true);
+      setTimeout(() => {
+        setCurrentGroupIndex((prev) => (prev + 1) % totalGroups);
+        setIsExiting(false);
+      }, 1000); // Animation duration
+    }, 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [currentGroupIndex, totalGroups]);
 
+  // Manual navigation handlers
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % 3);
+    setIsExiting(true);
+    setTimeout(() => {
+      setCurrentGroupIndex((prev) => (prev + 1) % totalGroups);
+      setIsExiting(false);
+    }, 1000);
   };
 
   const handlePrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + 3) % 3);
+    setIsExiting(true);
+    setTimeout(() => {
+      setCurrentGroupIndex((prev) => (prev - 1 + totalGroups) % totalGroups);
+      setIsExiting(false);
+    }, 1000);
   };
-
-  const currentProduct = products[currentIndex];
-
-  
 
   return (
     <>
-      {/* hero */}
-
-      {/* <section className=" relative rounded-s flex items-start pt-[120px] pl-[200px] h-screen w-screen bg-orange-200 z-0 min-[350px]:w-screen">
-        <div className="mt-[15rem] ml-[-6rem] md:m-0 landingText text-center">
-          <h1 className="text-3xl">european luxury</h1>
-          <p>made for you</p>
-          <button className="mt-12 w-[130px] p-[6px] border-solid border-2 rounded-md border-black hover:bg-gray-950 hover:text-white ">
-            <Link to="/shop">Shop Now</Link>
-          </button>
-        </div>
-        <img
-          className="min-[420px]:h-[400px] md:h-auto absolute top-0 right-4"
-          src={suspension}
-          alt="Luxury Suspension"
-        />
-      </section> */}
       <div className="home-page">
-        <section className="mt-4 md:mt-0 relative flex flex-col md:flex-row items-start md:items-center pt-[120px] px-4 md:pl-[200px] h-screen w-[95%] mx-auto bg-gray-100 z-0 rounded-s overflow-hidden">
-          <div className="mt-[15rem] md:ml-[-5rem] md:m-0 landingText text-center mx-auto md:text-left landingText md:pr-8">
-            <h1 className="text-3xl animate-fade-in">{currentProduct?.name}</h1>
-            <p className="animate-fade-in">
-              {currentProduct?.price?.toFixed(2)}{" "}
-              <span className="text-amber-500">ETB</span>
-            </p>
-            <button className="mt-12 w-[130px] p-[6px] border-solid border-2 rounded-md border-black hover:bg-gray-950 hover:text-white">
-              <Link to={`/product/${currentProduct?.id}`}>Shop Now</Link>
-            </button>
+        <div className="relative h-screen w-full overflow-hidden bg-gray-100">
+          {/* Desktop Layout */}
+          <div className="hidden md:block">
+            {/* Left Item */}
+            <div
+              key={`left-${currentItems[0]?.id}`}
+              className={`absolute top-10 left-10 ${
+                isExiting
+                  ? "animate-slide-out-bottom-left"
+                  : "animate-slide-in-top-left"
+              }`}
+            >
+              <img
+                src={currentItems[0]?.images[0]?.url}
+                alt={currentItems[0]?.name}
+                className="w-60 h-60 object-cover"
+              />
+              <p>{currentItems[0]?.name}</p>
+              <p className="text-amber-500">{currentItems[0]?.price}</p>
+              <button
+                onClick={() => navigate(`/product/${currentItems[0]?.id}`)}
+                className="mt-2 px-6 py-2 bg-white text-gray-800 border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 transition-colors duration-300"
+              >
+                Shop Now
+              </button>
+            </div>
+
+            {/* Middle Item */}
+            <div
+              key={`middle-${currentItems[1]?.id}`}
+              className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 ${
+                isExiting ? "animate-slide-out-right" : "animate-slide-in-left"
+              }`}
+            >
+              <img
+                src={currentItems[1]?.images[0]?.url}
+                alt={currentItems[1]?.name}
+                className="w-60 h-60 object-cover"
+              />
+              <p>{currentItems[0]?.name}</p>
+              <p className="text-amber-500">{currentItems[0]?.price}</p>
+              <button
+                onClick={() => navigate(`/product/${currentItems[0]?.id}`)}
+                className="mt-2 px-6 py-2 bg-white text-gray-800 border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 transition-colors duration-300"
+              >
+                Shop Now
+              </button>
+            </div>
+
+            {/* Right Item */}
+            <div
+              key={`right-${currentItems[2]?.id}`}
+              className={`absolute top-10 right-10 ${
+                isExiting
+                  ? "animate-slide-out-bottom-right"
+                  : "animate-slide-in-top-right"
+              }`}
+            >
+              <img
+                src={currentItems[2]?.images[0]?.url}
+                alt={currentItems[2]?.name}
+                className="w-60 h-60 object-cover"
+              />
+              <p>{currentItems[0]?.name}</p>
+              <p className="text-amber-500">{currentItems[0]?.price}</p>
+              <button
+                onClick={() => navigate(`/product/${currentItems[0]?.id}`)}
+                className="mt-2 px-6 py-2 bg-white text-gray-800 border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 transition-colors duration-300"
+              >
+                Shop Now
+              </button>
+            </div>
           </div>
 
-          {/* Display the current image with animation */}
-          <img
-            key={currentIndex}
-            className={`absolute md:relative ${
-              currentIndex === 0 ? "animate-slide-down" : "animate-slide-left"
-            } min-[420px]:h-[300px] md:h-[400px] lg:h-auto md:right-[150px]`}
-            style={{
-              objectFit: "contain",
-              maxWidth: "100%",
-              right: "-5%",
-            }}
-            src={products[currentIndex]?.images[0]?.url}
-            alt={products[currentIndex]?.name}
-          />
+          {/* Mobile Layout */}
+          <div className="md:hidden flex justify-center items-center h-full">
+            <div
+              className={`${
+                isExiting ? "animate-slide-out-right" : "animate-slide-in-left"
+              }`}
+            >
+              <img
+                src={currentItems[0]?.images[0]?.url}
+                alt={currentItems[0]?.name}
+                className="w-60 h-60 object-cover"
+              />
+              <button
+                onClick={() => navigate(`/shop/${currentItems[0]?.id}`)}
+                className="mt-2 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
+              >
+                Shop Now
+              </button>
+            </div>
+          </div>
 
           {/* Navigation Buttons */}
           <div className="absolute bottom-4 right-4 flex gap-4">
             <button
-              className="p-2  text-black rounded-md  hover:text-green-900"
               onClick={handlePrevious}
+              className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
             >
               Previous
             </button>
             <button
-              className="p-2  text-black rounded-md  hover:text-green-900"
               onClick={handleNext}
+              className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
             >
               Next
             </button>
           </div>
-        </section>
-
+        </div>
         {/* Featured Categories Section */}
         <section className="py-16 px-6 md:px-16">
           <h2 className="text-3xl md:text-4xl font-extralight text-center mb-8">
@@ -114,8 +188,9 @@ function Home() {
             <span className="text-green-950 font-bold">Categories</span>
           </h2>
           <div
-          onClick={() => handleCategory(1)} 
-          className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            onClick={() => handleCategory(1)}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
             <div className="relative group h-64 hover: cursor-pointer">
               {" "}
               {/* Set a fixed height */}
@@ -129,9 +204,10 @@ function Home() {
                 <h3 className="text-white text-xl font-semibold">Furniture</h3>
               </div>
             </div>
-            <div 
-            onClick={() => handleCategory(2)}
-            className="relative group h-64 hover: cursor-pointer">
+            <div
+              onClick={() => handleCategory(2)}
+              className="relative group h-64 hover: cursor-pointer"
+            >
               {" "}
               {/* Set a fixed height */}
               <img
@@ -145,8 +221,9 @@ function Home() {
               </div>
             </div>
             <div
-            onClick={() => handleCategory(4)} 
-            className="relative group h-64 hover: cursor-pointer">
+              onClick={() => handleCategory(4)}
+              className="relative group h-64 hover: cursor-pointer"
+            >
               {" "}
               <img
                 // src="https://www.coasterfurniture.com/wp-content/uploads/Art-Deco-furniture-in-gold.jpeg"
@@ -175,7 +252,9 @@ function Home() {
                   className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
                 />
               </div>
-              <p className="font-semibold text-xl text-black">{products[3]?.name}</p>
+              <p className="font-semibold text-xl text-black">
+                {products[3]?.name}
+              </p>
               <button className="mt-4 px-4 py-1 bg-black text-white font-medium rounded-md hover:bg-opacity-80">
                 <Link to={`/product/${products[3]?.id}`}>View Product</Link>
               </button>
@@ -342,7 +421,7 @@ function Home() {
             <HomeCards
               image={products[0]?.images[0].url}
               name={products[0]?.name}
-              class="w-full lg:w-[48rem] h-[25rem] "
+              class="w-full lg:w-[60rem] h-[25rem] "
             />
           </Link>
           <Link to={`/product/${products[1]?.id}`}>
