@@ -13,15 +13,13 @@ import { ShopContext } from "./context/ShopContext.jsx";
 function Home() {
   const { products, setSelectedCategory } = useContext(ShopContext);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const handleCategory = (id) => {
     console.log("Category clicked:");
     setSelectedCategory(id);
     console.log("Category clicked with:", id);
-    navigate('/shop')
-    
+    navigate("/shop");
   };
 
   useEffect(() => {
@@ -41,8 +39,6 @@ function Home() {
   };
 
   const currentProduct = products[currentIndex];
-
-  
 
   return (
     <>
@@ -109,116 +105,74 @@ function Home() {
 
         {/* Featured Categories Section */}
         <section className="py-16 px-6 md:px-16">
-          <h2 className="text-3xl md:text-4xl font-extralight text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-light text-center mb-8 tracking-wide">
             Explore Our{" "}
-            <span className="text-green-950 font-bold">Categories</span>
+            <span className="text-green-900 font-semibold">Categories</span>
           </h2>
-          <div
-          onClick={() => handleCategory(1)} 
-          className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="relative group h-64 hover: cursor-pointer">
-              {" "}
-              {/* Set a fixed height */}
-              <img
-                // src="https://www.migefurniture.com/wp-content/uploads/2020/10/CONTROL-BT-6.jpg"
-                src={sofa}
-                alt="Furniture"
-                className="rounded-lg shadow-lg w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-lg">
-                <h3 className="text-white text-xl font-semibold">Furniture</h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { id: 1, image: sofa, name: "Furniture" },
+              { id: 2, image: light, name: "Porcelain" },
+              { id: 4, image: decor, name: "Door" },
+            ].map((category) => (
+              <div
+                key={category.id}
+                onClick={() => handleCategory(category.id)}
+                className="relative group h-72 cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105"
+              >
+                {/* Category Image */}
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="rounded-xl shadow-lg w-full h-full object-cover transition-transform duration-300 ease-in-out"
+                />
+
+                {/* Overlay Effect */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>
+
+                {/* Category Text */}
+                <h3 className="absolute inset-0 flex items-center justify-center text-white text-2xl font-semibold tracking-wide opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300">
+                  {category.name}
+                </h3>
               </div>
-            </div>
-            <div 
-            onClick={() => handleCategory(2)}
-            className="relative group h-64 hover: cursor-pointer">
-              {" "}
-              {/* Set a fixed height */}
-              <img
-                // src="https://images-cdn.ubuy.co.in/66461fc2c3cd8447223d3264-led-golden-branch-crystal-chandelier.jpg"
-                src={light}
-                alt="Lighting"
-                className="rounded-lg shadow-lg w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-lg">
-                <h3 className="text-white text-xl font-semibold">Lighting</h3>
-              </div>
-            </div>
-            <div
-            onClick={() => handleCategory(4)} 
-            className="relative group h-64 hover: cursor-pointer">
-              {" "}
-              <img
-                // src="https://www.coasterfurniture.com/wp-content/uploads/Art-Deco-furniture-in-gold.jpeg"
-                src={decor}
-                alt="Decor"
-                className="rounded-lg shadow-lg w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-lg">
-                <h3 className="text-white text-xl font-semibold">Décor</h3>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 
-        {/* Trending Products Section */}
-        <section className="py-16 bg-gray-100 px-6 md:px-16">
-          <h2 className="text-3xl md:text-4xl font-extralight text-center mb-8">
-            Trending <span className="text-green-950 font-bold">Products</span>
+        <section className="py-16 bg-gray-50 px-6 md:px-16">
+          <h2 className="text-3xl md:text-4xl font-light text-center mb-8 tracking-wide">
+            Trending{" "}
+            <span className="text-green-900 font-semibold">Products</span>
           </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
-                <img
-                  src={products[3]?.images[0].url}
-                  alt="Product 1"
-                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
-                />
+            {products.slice(0, 4).map((product, index) => (
+              <div key={index} className="text-center">
+                <div className="relative h-96 w-full rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white group transition-transform duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                  {/* Image with Hover Overlay */}
+                  <img
+                    src={product?.images[0]?.url || "/default-image.jpg"}
+                    alt={product?.name}
+                    className="w-full h-full object-contain transition-transform duration-300 ease-in-out group-hover:scale-105"
+                  />
+                  {/* Subtle overlay effect */}
+                  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                </div>
+
+                {/* Product Name */}
+                <p className="font-medium text-lg text-gray-800 mt-3 tracking-wide">
+                  {product?.name}
+                </p>
+
+                {/* CTA Button */}
+                <Link to={`/product/${product?.id}`}>
+                  <button className="mt-4 px-5 py-2 bg-green-900 text-white font-medium rounded-lg shadow-md hover:bg-green-800 hover:shadow-lg transition-all duration-300">
+                    View Product
+                  </button>
+                </Link>
               </div>
-              <p className="font-semibold text-xl text-black">{products[3]?.name}</p>
-              <button className="mt-4 px-4 py-1 bg-black text-white font-medium rounded-md hover:bg-opacity-80">
-                <Link to={`/product/${products[3]?.id}`}>View Product</Link>
-              </button>
-            </div>
-            <div className="text-center">
-              <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
-                <img
-                  src={products[7]?.images[0].url}
-                  alt="Product 2"
-                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
-                />
-              </div>
-              <p className="font-semibold text-xl">{products[7]?.name}</p>
-              <button className="mt-4 px-4 py-1 bg-black text-white font-medium rounded-md hover:bg-opacity-80">
-                <Link to={`/product/${products[7]?.id}`}>View Product</Link>
-              </button>
-            </div>
-            <div className="text-center">
-              <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
-                <img
-                  src={products[6]?.images[0].url}
-                  alt="Product 3"
-                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
-                />
-              </div>
-              <p className="font-semibold text-xl">{products[6]?.name}</p>
-              <button className="mt-4 px-4 py-1 bg-black text-white font-medium rounded-md hover:bg-opacity-80">
-                <Link to={`/product/${products[6]?.id}`}>View Product</Link>
-              </button>
-            </div>
-            <div className="text-center">
-              <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg mb-4 bg-white group">
-                <img
-                  src={products[4]?.images[0].url}
-                  alt="Product 4"
-                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
-                />
-              </div>
-              <p className="font-semibold text-xl">{products[4]?.name}</p>
-              <button className="mt-4 px-4 py-1 bg-black text-white font-medium rounded-md hover:bg-opacity-80">
-                <Link to={`/product/${products[4]?.id}`}>View Product</Link>
-              </button>
-            </div>
+            ))}
           </div>
         </section>
 

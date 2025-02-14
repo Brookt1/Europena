@@ -11,6 +11,8 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   // Hide header when scrolling down, show when scrolling up
   useEffect(() => {
     const handleScroll = () => {
@@ -102,7 +104,11 @@ function Header() {
               </span>
             )}
           </div>
-          <div className="relative group">
+          <div
+            className="relative"
+            onMouseEnter={() => setIsDropdownOpen(true)}
+            onMouseLeave={() => setIsDropdownOpen(false)}
+          >
             <svg
               onClick={() => (token ? null : navigate("/login"))}
               className="w-6 h-6 text-gray-700 hover:text-black transition cursor-pointer"
@@ -115,8 +121,13 @@ function Header() {
             >
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z"></path>
             </svg>
+
             {token && (
-              <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2 hidden group-hover:block">
+              <div
+                className={`absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2 transition-opacity duration-300 ${
+                  isDropdownOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                }`}
+              >
                 <p
                   onClick={() => navigate("/profile")}
                   className="px-4 py-2 cursor-pointer hover:bg-gray-100"
@@ -180,10 +191,18 @@ function Header() {
           <NavLink to="/" className="py-2" onClick={() => setVisible(false)}>
             Home
           </NavLink>
-          <NavLink to="/shop" className="py-2" onClick={() => setVisible(false)}>
+          <NavLink
+            to="/shop"
+            className="py-2"
+            onClick={() => setVisible(false)}
+          >
             Shop
           </NavLink>
-          <NavLink to="/about" className="py-2" onClick={() => setVisible(false)}>
+          <NavLink
+            to="/about"
+            className="py-2"
+            onClick={() => setVisible(false)}
+          >
             About
           </NavLink>
         </div>

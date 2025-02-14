@@ -18,10 +18,12 @@ function Shop() {
     error,
     categories,
     getCategories,
-    categoryProducts, selectedCategory, setSelectedCategory,
+    categoryProducts,
+    selectedCategory,
+    setSelectedCategory,
     getProductsByCategory,
     search,
-    showSearch
+    showSearch,
   } = useContext(ShopContext);
   // const [selectedCategory, setSelectedCategory] = useState(0);
 
@@ -33,8 +35,7 @@ function Shop() {
     if (selectedCategory === 0) {
       setShowProducts(products);
       setCurrentPage(1);
-    } 
-    else {
+    } else {
       getProductsByCategory(selectedCategory);
       setCurrentPage(1);
     }
@@ -49,14 +50,20 @@ function Shop() {
     return items;
   };
 
-  
   useEffect(() => {
-    let activeProducts = selectedCategory === 0 ? products : categoryProducts.furniture || [];
+    let activeProducts =
+      selectedCategory === 0 ? products : categoryProducts.furniture || [];
     activeProducts = searchFilter(activeProducts);
-  
+
     setShowProducts(activeProducts);
-  }, [products, categoryProducts, selectedCategory, search, showSearch, currentPage]);
-  
+  }, [
+    products,
+    categoryProducts,
+    selectedCategory,
+    search,
+    showSearch,
+    currentPage,
+  ]);
 
   useEffect(() => {
     const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -90,7 +97,6 @@ function Shop() {
       ? searchFilter(products).length
       : searchFilter(categoryProducts.furniture || []).length) / ITEMS_PER_PAGE
   );
-  
 
   // Event handler for page change
   const handlePageChange = (page) => {
@@ -99,17 +105,11 @@ function Shop() {
     }
   };
 
-
-  
-  
-
-
   if (error)
     return <p className="text-center mt-4 text-red-500">Error: {error}</p>;
 
   return (
     <>
-      
       {/* Hero Section */}
       <section
         className="mt-[3rem] md:mt-0 my-6 h-[20vh] rounded-2xl bg-center flex items-center justify-center text-center"
@@ -128,11 +128,8 @@ function Shop() {
 
       <section>
         <div className="p-4 flex flex-col lg:flex-row lg:space-x-16">
-          {" "}
-          {/* Adjusted to stack on smaller screens */}
           {/* Product Categories */}
           <ProductCategories
-            categories={categories}
             selectedCategory={selectedCategory}
             handleCategorySelect={handleCategorySelect}
           />
@@ -204,7 +201,6 @@ function Shop() {
           </button>
         </div>
       </section>
-      
     </>
   );
 }
