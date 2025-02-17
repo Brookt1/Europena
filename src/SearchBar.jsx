@@ -1,23 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { ShopContext } from "./context/ShopContext";
-import { useLocation } from "react-router-dom";
 
 const SearchBar = () => {
-  const { search, setSearch, showSearch, setShowSearch } =
-    useContext(ShopContext);
-  const location = useLocation();
-  const [visible, setVisible] = useState(false);
-  
-  useEffect(() => {
-    if (location.pathname.includes("shop")) {
-      setVisible(true);
-    } else {
-      setVisible(false);
-    }
-  }, [location]);
+  const { search, setSearch, showSearch, setShowSearch } = useContext(ShopContext);
 
-  return showSearch && visible ? (
-    <>
+  return showSearch ? (
+    <div className="w-full mt-[110px] mb-[-110px]"> {/* Adjust top as needed */}
       <div className="border-t border-b bg-gray-50 text-center">
         <div className="inline-flex items-center justify-center border border-gray-300 shadow-md px-5 py-2 my-5 mx-3 rounded-full w-3/4 sm:w-1/2 bg-white">
           <input
@@ -50,15 +38,15 @@ const SearchBar = () => {
           <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
         </svg>
       </div>
-      {showSearch && search ? (
+      {showSearch && search && (
         <div className="mt-3 p-4 text-center">
           <h1 className="text-xl font-semibold text-gray-800">
             Showing results for "<span className="text-green-800">{search}</span>"
           </h1>
         </div>
-      ) : null}
-    </>
+      )}
+    </div>
   ) : null;
-}  
+};
 
 export default SearchBar;

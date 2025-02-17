@@ -51,11 +51,24 @@ function Shop() {
   };
 
   useEffect(() => {
+    // Get active products based on the selected category
     let activeProducts =
-      selectedCategory === 0 ? products : categoryProducts.furniture || [];
-    activeProducts = searchFilter(activeProducts);
-
-    setShowProducts(activeProducts);
+      selectedCategory === 0
+        ? products
+        : categoryProducts.furniture || [];
+  
+    // Apply search filter if the search bar is active and a search term exists
+    if (showSearch && search) {
+      activeProducts = activeProducts.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+  
+    // Pagination: calculate start index and slice the filtered results
+    const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+    const paginatedProducts = activeProducts.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+  
+    setShowProducts(paginatedProducts);
   }, [
     products,
     categoryProducts,
@@ -64,19 +77,7 @@ function Shop() {
     showSearch,
     currentPage,
   ]);
-
-  useEffect(() => {
-    const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-    if (selectedCategory === 0) {
-      setShowProducts(products.slice(startIdx, startIdx + ITEMS_PER_PAGE));
-    } else {
-      if (categoryProducts.furniture) {
-        setShowProducts(
-          categoryProducts.furniture.slice(startIdx, startIdx + ITEMS_PER_PAGE)
-        );
-      }
-    }
-  }, [currentPage, products, selectedCategory, categoryProducts]);
+  
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -112,7 +113,7 @@ function Shop() {
     <>
       {/* Hero Section */}
       <section
-        className="mt-[3rem] md:mt-0 my-6 h-[20vh] rounded-2xl bg-center flex items-center justify-center text-center"
+        className=" md:mt-0 my-6 h-[20vh] rounded-2xl bg-center flex items-center justify-center text-center"
         style={{ backgroundImage: `url(${shophero})` }}
       >
         <div>
