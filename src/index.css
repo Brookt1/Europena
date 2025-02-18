@@ -7,6 +7,10 @@
   font-family: Outfit;
 }
 
+.related-products img.object-cover {
+  object-fit: contain !important;
+}
+
 /* Hide scrollbar if needed */
 ::-webkit-scrollbar {
   display: none;

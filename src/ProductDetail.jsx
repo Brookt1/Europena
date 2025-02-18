@@ -118,15 +118,7 @@ function ProductDetail() {
         </p>
       </div>
     ),
-    "additional-info": (
-      <ul className="text-gray-700 list-disc pl-6">
-        <li>Height: 10 inches</li>
-        <li>Width: 6 inches</li>
-        <li>Weight: 7 pounds</li>
-        {/* Add more details as needed */}
-      </ul>
-    ),
-    review: (
+        review: (
       <>
         <div>
           <div className="space-y-4 mb-4">
@@ -238,11 +230,6 @@ function ProductDetail() {
 
           <p className="p-4 text-gray-500 lg:ml-8 sm:ml-0">
             {productData.description}
-            <br />A sleek, minimalist chair designed for contemporary spaces,
-            combining clean lines with ergonomic comfort. Crafted with a durable
-            metal frame and a soft, cushioned seat, it’s perfect for a modern
-            home office or dining area. Available in neutral tones to complement
-            any décor.
           </p>
 
           <form
@@ -296,7 +283,7 @@ function ProductDetail() {
       <section className="px-32 py-4">
         {/* Tab buttons with underline on active tab */}
         <div className="flex justify-center min-[500px]:space-x-8  pb-2">
-          {["description", "additional-info", "review"].map((tab) => (
+          {["description", "review"].map((tab) => (
             <button
               key={tab}
               className={`tab-btn px-4 py-2 text-lg ${activeTab === tab

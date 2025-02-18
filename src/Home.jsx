@@ -3,10 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import HomeCards from "./HomeCards";
 import fridge from "./assets/Fridge.png";
 import sofa from "./assets/sofa.png";
-import light from "./assets/light.png";
+import light from "./assets/light.jpg";
 import door from "./assets/door.jpeg";
 import cabinet from "./assets/cabinet.png";
-import decor from "./assets/Decor.jpeg";
+import decor from "./assets/decor.jpg";
 import sink from "./assets/sink.png";
 import { ShopContext } from "./context/ShopContext.jsx";
 
@@ -100,8 +100,8 @@ function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             { id: 1, image: sofa, name: "Furniture" },
-            { id: 2, image: light, name: "Porcelain" },
-            { id: 4, image: decor, name: "Door" },
+            { id: 12, image: decor, name: "Porcelain" },
+            { id: 9, image: light, name: "Door" },
           ].map((category) => (
             <div
               key={category.id}
