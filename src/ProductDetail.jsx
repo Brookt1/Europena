@@ -32,7 +32,7 @@ function ProductDetail() {
 
   const { getCart, getProductById, loading, error, BASE_URL, categories } = useContext(ShopContext);
   const [productData, setProduct] = useState(null);
-  
+
 
   const addToCart = async (quantity) => {
     try {
@@ -83,7 +83,7 @@ function ProductDetail() {
     }
   }, [productData, categories]);
 
-  
+
 
   // If the review Is returned with the product this should be enough right?
 
@@ -178,6 +178,7 @@ function ProductDetail() {
     ),
   };
 
+
   return (
     <>
       <section className="grid grid-cols-1 gap-6 py-16 px-8 md:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1">
@@ -188,7 +189,7 @@ function ProductDetail() {
               <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
                 {productData.images.map((item, index) => (
                   <img
-                    onClick={() => setImage(item.url)} 
+                    onClick={() => setImage(item.url)}
                     src={item.url}
                     key={index}
                     className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer"
@@ -316,7 +317,7 @@ function ProductDetail() {
         <div className="tab-content mt-4 w-72 min-[600px]:w-full min-[500px]:ml-0 ml-[-4rem] min-[]">
           {tabContent[activeTab]}
         </div>
-        <RelatedProduct category={productData.categoryId} />
+        <RelatedProduct subCategoryId={productData.subCategoryId} />
       </section>
     </>
   );

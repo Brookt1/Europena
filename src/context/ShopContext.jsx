@@ -178,7 +178,7 @@ const ShopContextProvider = (props) => {
   const getProductsByCategory = useCallback(
     async (categoryId) => {
       await fetchData(
-        `${BASE_URL}/categories/${categoryId}`,
+        `${BASE_URL}/categories/subcategory/${categoryId}`,
         setCategoryProducts
       );
     },
