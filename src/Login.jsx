@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useEffect } from "react";
 import axiosInstance from "./axiosInstance";
+import Button from "./components/Button";
+import Input from "./components/Input";
 
 
 function Login() {
@@ -103,79 +105,90 @@ function Login() {
   }, [token, navigate]);
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="flex flex-col items-center w-[90%] sm:w-96 m-auto mt-14 mb-12 gap-6 text-gray-800 bg-white shadow-md rounded-lg p-6"
-    >
-      <div className="flex flex-col items-center gap-2 mb-4">
-        <p className="text-3xl font-semibold text-gray-800">{currentState}</p>
-        <div className="h-1 w-8 bg-gray-800 rounded-full"></div>
-      </div>
-      {currentState === "Login" ? (
-        ""
-      ) : (
-        <input
-          onChange={(e) => setName(e.target.value)}
-          value={name}
-          type="text"
-          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:outline-none"
-          placeholder="Name"
-          required
-        />
-      )}
-
-      <input
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
-        type="email"
-        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:outline-none"
-        placeholder="Email"
-        required
-      />
-      <input
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-        type="password"
-        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:outline-none"
-        placeholder="Password"
-        required
-      />
-      <div className="w-full flex justify-between text-sm mt-[-8px]">
-        <p className="cursor-pointer">Forgot your password?</p>
-        {currentState === "Login" ? (
-          <p
-            onClick={() => {
-              setEmail("");
-              setPassword("");
-              setCurrentState("Sign Up");
-            }}
-            className="cursor-pointer"
-          >
-            Create Account
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white rounded-2xl shadow-xl p-8">
+        {/* Header */}
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            {currentState}
+          </h2>
+          <p className="text-gray-600">
+            {currentState === "Login" 
+              ? "Welcome back to European Luxury" 
+              : "Join our exclusive furniture collection"
+            }
           </p>
-        ) : (
-          <p
-            onClick={() => {
-              setName("");
-              setEmail("");
-              setPassword("");
+          <div className="h-1 w-12 bg-primary-500 rounded-full mx-auto mt-4"></div>
+        </div>
 
-              setCurrentState("Login");
-            }}
+        {/* Form */}
+        <form onSubmit={onSubmit} className="space-y-6">
+          {currentState === "Login" ? null : (
+            <Input
+              label="Full Name"
+              type="text"
+              placeholder="Enter your full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          )}
 
-            className="cursor-pointer"
+          <Input
+            label="Email Address"
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <Input
+            label="Password"
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              className="text-sm text-primary-600 hover:text-primary-500 transition-colors duration-200"
+            >
+              Forgot your password?
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail("");
+                setPassword("");
+                setName("");
+                setCurrentState(currentState === "Login" ? "Sign Up" : "Login");
+              }}
+              className="text-sm text-primary-600 hover:text-primary-500 transition-colors duration-200"
+            >
+              {currentState === "Login" ? "Create account" : "Already have an account?"}
+            </button>
+          </div>
+
+          <Button
+            type="submit"
+            variant="primary"
+            size="large"
+            className="w-full"
           >
-            Login Here
-          </p>
-        )}
+            {currentState === "Login" ? "Sign In" : "Create Account"}
+          </Button>
+        </form>
+
+        {/* Additional Info */}
+        <div className="text-center text-sm text-gray-500 mt-6">
+          <p>By continuing, you agree to our Terms of Service and Privacy Policy</p>
+        </div>
       </div>
-      <button
-        type="submit"
-        className="w-1/2 px-4 py-3 bg-green-900 text-white font-semibold hover:bg-gray-700 transition-all duration-300"
-      >
-        {currentState === "Login" ? "Sign In" : "Sign Up"}
-      </button>
-    </form>
+    </div>
   );
 }
 

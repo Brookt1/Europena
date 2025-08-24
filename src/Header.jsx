@@ -1,30 +1,32 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
-import logo from "./assets/logo.jpg";
+import { motion, AnimatePresence } from "framer-motion";
 import { ShopContext } from "./context/ShopContext";
+import Button from "./components/Button";
+import logo from "./assets/logo.jpg";
 
 function Header() {
+  const [menuVisible, setMenuVisible] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [menuVisible, setVisible] = useState(false);
-  const { cartSize, token, setToken, setShowSearch } = useContext(ShopContext);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  
   const navigate = useNavigate();
   const location = useLocation();
+  const { setShowSearch, getCartSize, token, setToken } = useContext(ShopContext);
+  
+  const cartSize = getCartSize();
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  // Hide header when scrolling down, show when scrolling up
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
+      
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling down and past a threshold – hide header
         setShowHeader(false);
       } else {
-        // Scrolling up – show header
         setShowHeader(true);
       }
+      
       setLastScrollY(currentScrollY);
     };
 
@@ -39,175 +41,256 @@ function Header() {
   };
 
   return (
-    // The header is always rendered in its position,
-    // but we apply a transition that moves it off-screen when not visible.
-    <header
-      className={`
-        fixed top-0 left-0 w-full z-50 bg-white shadow-md
-        transition-transform duration-300
-        ${showHeader ? "translate-y-0" : "-translate-y-full"}
-      `}
+    <motion.header
+      className={`fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-sm shadow-lg border-b border-gray-100 transition-all duration-300 ${
+        showHeader ? "translate-y-0" : "-translate-y-full"
+      }`}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
-        {/* Logo */}
-        <Link to="/">
-          <img className="h-[80px] w-auto" src={logo} alt="logo" />
+        <Link to="/" className="transition-transform duration-200 hover:scale-105">
+          <img className="h-[80px] w-auto" src={logo} alt="European Luxury Logo" />
         </Link>
 
-        {/* Navigation Links */}
         <nav className="hidden md:flex space-x-8 text-lg font-medium text-gray-700">
-          <NavLink to="/" className="hover:text-black transition">
+          <NavLink 
+            to="/"
+            className={({ isActive }) => 
+              `hover:text-primary-600 transition-colors duration-200 relative py-2 ${
+                isActive ? 'text-primary-600 font-semibold' : ''
+              }`
+            }
+          >
             Home
           </NavLink>
-          <NavLink to="/shop" className="hover:text-black transition">
+          <NavLink 
+            to="/shop"
+            className={({ isActive }) => 
+              `hover:text-primary-600 transition-colors duration-200 relative py-2 ${
+                isActive ? 'text-primary-600 font-semibold' : ''
+              }`
+            }
+          >
             Shop
           </NavLink>
-          <NavLink to="/about" className="hover:text-black transition">
+          <NavLink 
+            to="/about"
+            className={({ isActive }) => 
+              `hover:text-primary-600 transition-colors duration-200 relative py-2 ${
+                isActive ? 'text-primary-600 font-semibold' : ''
+              }`
+            }
+          >
             About
           </NavLink>
         </nav>
 
-        {/* Icons */}
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-4">
           {location.pathname.includes("shop") && (
-            <svg
+            <motion.button
               onClick={() => setShowSearch(true)}
-              className="cursor-pointer w-6 h-6 text-gray-700 hover:text-black transition"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              className="p-2 rounded-lg text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </motion.button>
           )}
+          
           <div className="relative">
-            <Link to="/cart/1">
-              <svg
-                className="w-6 h-6 text-gray-700 hover:text-black transition"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+            <Link 
+              to="/cart/1"
+              className="p-2 rounded-lg text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 relative"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M6 6h15l-1.5 9h-12l-1.5-9zm1 13a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm10 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"></path>
               </svg>
+              {cartSize > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-medium">
+                  {cartSize}
+                </span>
+              )}
             </Link>
-            {cartSize > 0 && (
-              <span className="absolute -top-1 -right-2 bg-black text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                {cartSize}
-              </span>
-            )}
           </div>
-          <div
-            className="relative"
-            onMouseEnter={() => setIsDropdownOpen(true)}
-            onMouseLeave={() => setIsDropdownOpen(false)}
-          >
-            <svg
-              onClick={() => (token ? null : navigate("/login"))}
-              className="w-6 h-6 text-gray-700 hover:text-black transition cursor-pointer"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+
+          {token ? (
+            <div
+              className="relative"
+              onMouseEnter={() => setIsDropdownOpen(true)}
+              onMouseLeave={() => setIsDropdownOpen(false)}
             >
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z"></path>
+              <button className="p-2 rounded-lg text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200">
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </button>
+              
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white shadow-xl rounded-lg py-2 border border-gray-100">
+                  <button 
+                    onClick={() => navigate("/profile")}
+                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-200"
+                  >
+                    My Profile
+                  </button>
+                  <button 
+                    onClick={() => navigate("/orders")}
+                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-200"
+                  >
+                    Orders
+                  </button>
+                  <hr className="my-1 border-gray-100" />
+                  <button 
+                    onClick={logout}
+                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Button 
+              variant="primary" 
+              size="small" 
+              onClick={() => navigate("/login")}
+            >
+              Sign In
+            </Button>
+          )}
+
+          <motion.button
+            onClick={() => setMenuVisible(true)}
+            className="md:hidden p-2 rounded-lg text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
             </svg>
+          </motion.button>
+        </div>
+      </div>
 
-            {token && (
-              <div
-                className={`absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2 transition-opacity duration-300 ${
-                  isDropdownOpen ? "opacity-100 visible" : "opacity-0 invisible"
-                }`}
-              >
-                <p
-                  onClick={() => navigate("/profile")}
-                  className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+      <AnimatePresence>
+        {menuVisible && (
+          <>
+            <motion.div
+              className="fixed inset-0 bg-black/50 z-40 md:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMenuVisible(false)}
+            />
+            
+            <motion.div 
+              className="fixed top-0 right-0 h-screen bg-white shadow-xl z-50 md:hidden overflow-hidden"
+              initial={{ width: 0 }}
+              animate={{ width: 320 }}
+              exit={{ width: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              <div className="flex flex-col text-gray-700 p-6 pt-8">
+                <motion.button
+                  onClick={() => setMenuVisible(false)}
+                  className="w-8 h-8 mb-8 self-end rounded-lg text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 flex items-center justify-center"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                 >
-                  My Profile
-                </p>
-                <p
-                  onClick={() => navigate("/orders")}
-                  className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </motion.button>
+                
+                <motion.div 
+                  className="space-y-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
                 >
-                  Orders
-                </p>
-                <p
-                  onClick={logout}
-                  className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                <NavLink 
+                  to="/" 
+                  className="block py-3 px-4 rounded-lg text-lg font-medium hover:bg-primary-50 hover:text-primary-600 transition-all duration-200" 
+                  onClick={() => setMenuVisible(false)}
                 >
-                  Logout
-                </p>
+                  Home
+                </NavLink>
+                <NavLink
+                  to="/shop"
+                  className="block py-3 px-4 rounded-lg text-lg font-medium hover:bg-primary-50 hover:text-primary-600 transition-all duration-200"
+                  onClick={() => setMenuVisible(false)}
+                >
+                  Shop
+                </NavLink>
+                <NavLink
+                  to="/about"
+                  className="block py-3 px-4 rounded-lg text-lg font-medium hover:bg-primary-50 hover:text-primary-600 transition-all duration-200"
+                  onClick={() => setMenuVisible(false)}
+                >
+                  About
+                </NavLink>
+                
+                {token && (
+                  <>
+                    <hr className="my-4 border-gray-200" />
+                    <NavLink
+                      to="/profile"
+                      className="block py-3 px-4 rounded-lg text-lg font-medium hover:bg-primary-50 hover:text-primary-600 transition-all duration-200"
+                      onClick={() => setMenuVisible(false)}
+                    >
+                      My Profile
+                    </NavLink>
+                    <NavLink
+                      to="/orders"
+                      className="block py-3 px-4 rounded-lg text-lg font-medium hover:bg-primary-50 hover:text-primary-600 transition-all duration-200"
+                      onClick={() => setMenuVisible(false)}
+                    >
+                      Orders
+                    </NavLink>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setMenuVisible(false);
+                      }}
+                      className="w-full text-left py-3 px-4 rounded-lg text-lg font-medium hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+                    >
+                      Logout
+                    </button>
+                  </>
+                )}
+                
+                {!token && (
+                  <>
+                    <hr className="my-4 border-gray-200" />
+                    <Button
+                      variant="primary"
+                      size="medium"
+                      onClick={() => {
+                        navigate("/login");
+                        setMenuVisible(false);
+                      }}
+                      className="w-full"
+                    >
+                      Sign In
+                    </Button>
+                  </>
+                )}
+                </motion.div>
               </div>
-            )}
-          </div>
-          {/* Mobile Menu Icon */}
-          <svg
-            onClick={() => setVisible(true)}
-            className="md:hidden w-6 h-6 text-gray-700 cursor-pointer"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </div>
-      </div>
-
-      {/* Mobile Menu (if visible) */}
-      <div
-        className={`
-          fixed top-0 right-0 h-screen bg-white shadow-lg transform transition-transform duration-300 overflow-hidden
-          ${menuVisible ? "w-64" : "w-0"}
-        `}
-      >
-        <div className="flex flex-col text-gray-700 p-5">
-          <svg
-            onClick={() => setVisible(false)}
-            className="w-6 h-6 mb-4 cursor-pointer"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-          <NavLink to="/" className="py-2" onClick={() => setVisible(false)}>
-            Home
-          </NavLink>
-          <NavLink
-            to="/shop"
-            className="py-2"
-            onClick={() => setVisible(false)}
-          >
-            Shop
-          </NavLink>
-          <NavLink
-            to="/about"
-            className="py-2"
-            onClick={() => setVisible(false)}
-          >
-            About
-          </NavLink>
-        </div>
-      </div>
-    </header>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 }
 

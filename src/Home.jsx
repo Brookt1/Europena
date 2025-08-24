@@ -1,6 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from 'framer-motion';
+import Header from "./Header";
 import HomeCards from "./HomeCards";
+import Button from "./components/Button";
 import fridge from "./assets/Fridge.png";
 import sofa from "./assets/sofa.png";
 import light from "./assets/light.jpg";
@@ -41,89 +44,125 @@ function Home() {
     <>
       {/* Hero Section */}
       <div className="home-page pt-4">
-        <section className="relative flex flex-col md:flex-row items-center justify-center pt-[120px] px-4 md:px-[200px] h-screen w-[95%] mx-auto bg-white z-0 rounded overflow-hidden">
+        <section className="relative flex flex-col md:flex-row items-center justify-center pt-[120px] px-4 md:px-[200px] h-screen w-[95%] mx-auto bg-gradient-to-br from-gray-50 to-white z-0 rounded-2xl overflow-hidden shadow-lg">
           {/* Text Container */}
-          <div className="landingText text-center mx-auto md:text-left md:pr-8">
-            <h1 className="text-4xl font-semibold tracking-wide animate-fade-in">
+          <div className="landingText text-center mx-auto md:text-left md:pr-8 space-y-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide text-gray-900 animate-fade-in">
               {currentProduct?.name}
             </h1>
-            <p className="mt-4 text-xl animate-fade-in">
-              {currentProduct?.price?.toFixed(2)}{" "}
-              <span className="text-amber-500">ETB</span>
+            <p className="mt-6 text-xl md:text-2xl text-gray-600 animate-fade-in">
+              <span className="text-3xl md:text-4xl font-bold text-primary-600">
+                {currentProduct?.price?.toFixed(2)}
+              </span>
+              <span className="text-accent-gold font-medium ml-2">ETB</span>
             </p>
-            <button className="mt-12 w-[130px] min-w-[100px] p-[6px] border-solid border-2 rounded-md border-black hover:bg-gray-950 hover:text-white flex items-center justify-center whitespace-nowrap">
-              <Link to={`/product/${currentProduct?.id}`}>Shop Now</Link>
-            </button>
+            <div className="mt-8">
+              <Button
+                variant="primary"
+                size="large"
+                onClick={() => navigate(`/product/${currentProduct?.id}`)}
+                className="px-10 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
+                Discover Now
+              </Button>
+            </div>
           </div>
 
-          {/* Product Image with Refined Animation and Shadow */}
-          <img
-            key={currentIndex}
-            className={`${
-              currentIndex === 0 ? "animate-slide-down" : "animate-slide-left"
-            } md:ml-8 `}
-            style={{
-              objectFit: "contain",
-              width: "750px", // Tripled size
-              height: "550px", // Tripled size
-              maxWidth: "100%",
-            }}
-            src={products[currentIndex]?.images[0]?.url}
-            alt={products[currentIndex]?.name}
-          />
+          {/* Product Image with Enhanced Animation and Modern Styling */}
+          <div className="relative md:ml-8 group">
+            <img
+              key={currentIndex}
+              className={`${
+                currentIndex === 0 ? "animate-slide-down" : "animate-slide-left"
+              } rounded-2xl shadow-2xl transition-all duration-500 hover:scale-105 hover:rotate-1`}
+              style={{
+                objectFit: "contain",
+                width: "750px",
+                height: "550px",
+                maxWidth: "100%",
+              }}
+              src={products[currentIndex]?.images[0]?.url}
+              alt={products[currentIndex]?.name}
+            />
+            
+            {/* Decorative Elements */}
+            <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary-100 rounded-full opacity-50 animate-pulse"></div>
+            <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-accent-gold/20 rounded-full opacity-60 animate-bounce"></div>
+          </div>
 
-          {/* Navigation Buttons */}
-          <div className="absolute bottom-4 right-4 flex gap-4">
-            <button
-              className="p-2 text-black rounded hover:text-green-900 transition-colors"
+          {/* Enhanced Navigation Buttons */}
+          <div className="absolute bottom-8 right-8 flex gap-4">
+            <Button
+              variant="secondary"
+              size="medium"
               onClick={handlePrevious}
+              className="backdrop-blur-sm bg-white/80 border-2 border-primary-200 hover:bg-primary-50"
             >
               Previous
-            </button>
-            <button
-              className="p-2 text-black rounded hover:text-green-900 transition-colors"
+            </Button>
+            <Button
+              variant="primary"
+              size="medium"
               onClick={handleNext}
+              className="backdrop-blur-sm shadow-lg"
             >
               Next
-            </button>
+            </Button>
           </div>
         </section>
       </div>
 
       {/* Featured Categories Section */}
-      <section className="py-16 px-6 md:px-16">
-        <h2 className="text-3xl md:text-4xl font-light text-center mb-8 tracking-wide">
-          Explore Our{" "}
-          <span className="text-green-900 font-semibold">Categories</span>
-        </h2>
+      <section className="py-20 px-6 md:px-16 bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-light text-center mb-4 tracking-wide text-gray-900">
+            Explore Our{" "}
+            <span className="text-primary-600 font-semibold bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent">
+              Categories
+            </span>
+          </h2>
+          <p className="text-center text-gray-600 text-lg mb-12 max-w-2xl mx-auto">
+            Discover our carefully curated collection of luxury furniture and home décor
+          </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { id: 1, image: sofa, name: "Furniture" },
-            { id: 12, image: decor, name: "Porcelain" },
-            { id: 9, image: light, name: "Door" },
-          ].map((category) => (
-            <div
-              key={category.id}
-              onClick={() => handleCategory(category.id)}
-              className="relative group h-72 cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105"
-            >
-              {/* Category Image */}
-              <img
-                src={category.image}
-                alt={category.name}
-                className="rounded-xl shadow-lg w-full h-full object-cover transition-transform duration-300 ease-in-out"
-              />
-
-              {/* Overlay Effect */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>
-
-              {/* Category Text */}
-              <h3 className="absolute inset-0 flex items-center justify-center text-white text-2xl font-semibold tracking-wide opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300">
-                {category.name}
-              </h3>
-            </div>
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { id: 1, image: sofa, name: "Furniture" },
+              { id: 12, image: decor, name: "Porcelain" },
+              { id: 9, image: light, name: "Door" },
+            ].map((category) => (
+              <div
+                key={category.id}
+                onClick={() => handleCategory(category.id)}
+                className="relative group h-80 cursor-pointer transition-all duration-500 ease-in-out transform hover:scale-105 hover:-translate-y-2 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl"
+              >
+                {/* Category Image */}
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                
+                {/* Enhanced Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent transition-opacity duration-300 group-hover:from-primary-900/80 group-hover:via-primary-600/40"></div>
+                
+                {/* Category Text */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <h3 className="text-2xl font-bold mb-2 group-hover:text-accent-gold transition-colors duration-300">
+                    {category.name}
+                  </h3>
+                  <p className="text-gray-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-150">
+                    Discover our premium collection
+                  </p>
+                </div>
+                
+                {/* Decorative Corner */}
+                <div className="absolute top-4 right-4 w-8 h-8 border-2 border-white/30 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200 group-hover:scale-110">
+                  <div className="w-full h-full rounded-full bg-accent-gold/20 animate-pulse"></div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -153,11 +192,14 @@ function Home() {
               </p>
 
               {/* CTA Button */}
-              <Link to={`/product/${product?.id}`}>
-                <button className="mt-4 px-5 py-2 bg-green-900 text-white font-medium rounded-lg shadow-md hover:bg-green-800 hover:shadow-lg transition-all duration-300">
-                  View Product
-                </button>
-              </Link>
+              <Button
+                variant="primary"
+                size="medium"
+                onClick={() => navigate(`/product/${product?.id}`)}
+                className="mt-6 px-8 py-3 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
+              >
+                View Product
+              </Button>
             </div>
           ))}
         </div>
@@ -300,41 +342,60 @@ function Home() {
             <HomeCards
               image={products[2]?.images[0].url}
               name={products[2]?.name}
-              class="w-[95%] mx-auto h-[40rem] lg:h-[35rem] lg:w-[90%]"
+              className="w-[95%] mx-auto h-[40rem] lg:h-[35rem] lg:w-[90%]"
             />
           </Link>
 
           
-          <div className="grid grid-cols-2 gap-4 w-full">
-            <Link to={`/product/${products[3]?.id}`}>
-              <HomeCards
-                image={products[3]?.images[0].url}
-                name={products[3]?.name}
-                class="h-[15rem] lg:h-[19rem] w-full"
-              />
-            </Link>
-            <Link to={`/product/${products[4]?.id}`}>
-              <HomeCards
-                image={products[4]?.images[0].url}
-                name={products[4]?.name}
-                class="h-[15rem] lg:h-[19rem] w-full"
-              />
-            </Link>
-            <Link to={`/product/${products[5]?.id}`}>
-              <HomeCards
-                image={products[5]?.images[0].url}
-                name={products[5]?.name}
-                class="h-[15rem] lg:h-[19rem] w-full"
-              />
-            </Link>
-            <Link to={`/product/${products[6]?.id}`}>
-              <HomeCards
-                image={products[6]?.images[0].url}
-                name={products[6]?.name}
-                class="h-[15rem] lg:h-[19rem] w-full"
-              />
-            </Link>
-          </div>
+          <motion.div
+            className="grid grid-cols-2 gap-4 w-full"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: {
+                transition: {
+                  staggerChildren: 0.1
+                }
+              }
+            }}
+          >
+            <motion.div variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}>
+              <Link to={`/product/${products[3]?.id}`}>
+                <HomeCards
+                  image={products[3]?.images[0].url}
+                  name={products[3]?.name}
+                  className="h-[15rem] lg:h-[19rem] w-full"
+                />
+              </Link>
+            </motion.div>
+            <motion.div variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}>
+              <Link to={`/product/${products[4]?.id}`}>
+                <HomeCards
+                  image={products[4]?.images[0].url}
+                  name={products[4]?.name}
+                  className="h-[15rem] lg:h-[19rem] w-full"
+                />
+              </Link>
+            </motion.div>
+            <motion.div variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}>
+              <Link to={`/product/${products[5]?.id}`}>
+                <HomeCards
+                  image={products[5]?.images[0].url}
+                  name={products[5]?.name}
+                  className="h-[15rem] lg:h-[19rem] w-full"
+                />
+              </Link>
+            </motion.div>
+            <motion.div variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}>
+              <Link to={`/product/${products[6]?.id}`}>
+                <HomeCards
+                  image={products[6]?.images[0].url}
+                  name={products[6]?.name}
+                  className="h-[15rem] lg:h-[19rem] w-full"
+                />
+              </Link>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 

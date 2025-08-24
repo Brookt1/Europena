@@ -1,10 +1,11 @@
 import CartItem from "./CartItem";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import { ShopContext } from "./context/ShopContext";
 import { toast } from "react-toastify";
 import axiosInstance from "./axiosInstance";
+import Button from "./components/Button";
+import Input from "./components/Input";
 
 function OrderPage() {
   const { setCart } = useContext(ShopContext);
@@ -50,74 +51,99 @@ function OrderPage() {
   
 
   return (
-    <>
-      <form onSubmit={onSubmitHandler} className="sm:flex md:grid md:grid-cols-2 p-4 mt-16">
-        <div className="font-medium grid grid-cols-1">
-          <h1 className="text-2xl font-extralight">
-            <span className="text-green-950 font-semibold">YOUR</span>{" "}
-            INFORMATION
-          </h1>
-          <div className="p-4">
-            <input
-              onChange={onChangeHandler}
-              name="firstName"
-              value={formData.firstName}
-              placeholder="First Name"
-              className="border m-2 p-1 rounded-md"
-              type="text"
-              required
-            ></input>
-            <input
-              onChange={onChangeHandler}
-              name="lastName"
-              value={formData.lastName}
-              placeholder="Last Name"
-              className="border m-2 p-1 rounded-md"
-              type="text"
-              required
-            ></input>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+        <form onSubmit={onSubmitHandler} className="grid lg:grid-cols-2 gap-12">
+          {/* Customer Information */}
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                <span className="text-primary-600">Your</span> Information
+              </h1>
+              <p className="text-gray-600">Please provide your details for delivery</p>
+              <div className="h-1 w-16 bg-primary-500 rounded-full mt-4"></div>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Input
+                  label="First Name"
+                  name="firstName"
+                  type="text"
+                  placeholder="Enter your first name"
+                  value={formData.firstName}
+                  onChange={onChangeHandler}
+                  required
+                />
+                <Input
+                  label="Last Name"
+                  name="lastName"
+                  type="text"
+                  placeholder="Enter your last name"
+                  value={formData.lastName}
+                  onChange={onChangeHandler}
+                  required
+                />
+              </div>
+              
+              <Input
+                label="Email Address"
+                name="email"
+                type="email"
+                placeholder="Enter your email address"
+                value={formData.email}
+                onChange={onChangeHandler}
+                required
+              />
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Input
+                  label="City"
+                  name="city"
+                  type="text"
+                  placeholder="Enter your city"
+                  value={formData.city}
+                  onChange={onChangeHandler}
+                />
+                <Input
+                  label="Phone Number"
+                  name="phone"
+                  type="tel"
+                  placeholder="Enter your phone number"
+                  value={formData.phone}
+                  onChange={onChangeHandler}
+                  required
+                />
+              </div>
+            </div>
           </div>
-          <div className="p-4">
-            <input
-              onChange={onChangeHandler}
-              name="email"
-              value={formData.email}
-              placeholder="Email address"
-              className="border m-2 p-1 rounded-md"
-              type="email"
-              required
-            ></input>
-            <input
-              onChange={onChangeHandler}
-              name="city"
-              value={formData.city}
-              placeholder="City"
-              className="border m-2 p-1 rounded-md"
-              type="text"
-            ></input>
+
+          {/* Order Summary */}
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Order Summary</h2>
+              <p className="text-gray-600">Review your items and total</p>
+            </div>
+            
+            <CartItem />
+            
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <Button
+                type="submit"
+                variant="primary"
+                size="large"
+                className="w-full text-lg font-semibold"
+              >
+                Place Order Now
+              </Button>
+              <p className="text-center text-sm text-gray-500 mt-4">
+                Your order will be processed securely
+              </p>
+            </div>
           </div>
-          <div className="p-4">
-            <input
-              onChange={onChangeHandler}
-              name="phone"
-              value={formData.phone}
-              placeholder="Phone Number"
-              className="border m-2 p-1 rounded-md"
-              type="tel"
-              required
-            ></input>
-          </div>
-        </div>
-        <div className="mt-4">
-          <CartItem />
-          <div className="w-full text-end">
-            <button type="submit" className="bg-green-800 p-2 mt-8 ">
-              <span className="font-semibold">ORDER NOW</span>
-            </button>
-          </div>
-        </div>
-      </form>
-    </>
+        </form>
+      </div>
+    </div>
   );
 }
 
