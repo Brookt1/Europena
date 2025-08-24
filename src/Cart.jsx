@@ -4,6 +4,7 @@ import { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import CartItem from "./CartItem"
 import { ClipLoader } from "react-spinners";
+import axiosInstance from "./axiosInstance";
 
 function Cart() {
   const { cart, setCart, getCart, loading, error, token, handleSessionExpiry } = useContext(ShopContext);
@@ -34,27 +35,10 @@ function Cart() {
 
   const quantityChange = async (itemId, newQuantity) => {
     if (newQuantity < 1) return; // Prevent invalid quantities
-    
     try {
-      const response = await fetch(`${BASE_URL}/${itemId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ quantity: newQuantity }),
-      });
-
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          toast.error("Session expired. Please login again.");
-          handleSessionExpiry();
-          navigate('/login');
-          return;
-        }
-        throw new Error(`Failed to update quantity: ${response.statusText}`);
-      }
-
+      await axiosInstance.put(`/cart/${itemId}`,
+        { quantity: newQuantity }
+      );
       // Immediately update the local cart state for better UX
       setCart((prevCart) =>
         prevCart.map((item) =>
@@ -63,12 +47,16 @@ function Cart() {
             : item
         )
       );
-
       // Also refresh cart from server to ensure consistency
       await getCart();
-      
       console.log("Quantity updated successfully");
     } catch (err) {
+      if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+        toast.error("Session expired. Please login again.");
+        handleSessionExpiry();
+        navigate('/login');
+        return;
+      }
       console.error("Error updating quantity:", err);
       toast.error("Failed to update quantity. Please try again.");
       // Revert optimistic update on error
@@ -79,33 +67,20 @@ function Cart() {
 
   const removeItem = async (itemId) => {
     try {
-      const response = await fetch(`${BASE_URL}/${itemId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          toast.error("Session expired. Please login again.");
-          handleSessionExpiry();
-          navigate('/login');
-          return;
-        }
-        throw new Error(`Failed to remove item: ${response.statusText}`);
-      }
-
+      await axiosInstance.delete(`/cart/${itemId}`);
       // Immediately update local state
       setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
-      
       // Also refresh from server to ensure consistency
       await getCart();
-      
       toast.success("Item removed from cart successfully!");
       console.log("Removed item successfully");
     } catch (err) {
+      if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+        toast.error("Session expired. Please login again.");
+        handleSessionExpiry();
+        navigate('/login');
+        return;
+      }
       console.error("Error removing item:", err);
       toast.error("Failed to remove item. Please try again.");
       // Refresh cart on error to ensure consistency
