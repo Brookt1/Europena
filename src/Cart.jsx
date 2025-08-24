@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { ShopContext } from "./context/ShopContext";
 import { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -6,8 +6,9 @@ import CartItem from "./CartItem"
 import { ClipLoader } from "react-spinners";
 
 function Cart() {
-  const { cart, setCart, getCart, loading, error, token } = useContext(ShopContext);
+  const { cart, setCart, getCart, loading, error, token, handleSessionExpiry } = useContext(ShopContext);
   const [product, setProduct] = useState([]);
+  const navigate = useNavigate();
 
   // const BASE_URL = "http://localhost:3000/api/cart";
   const BASE_URL = 'https://furniture-backend.biruk.tech/api/cart';
@@ -45,6 +46,12 @@ function Cart() {
       });
 
       if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          toast.error("Session expired. Please login again.");
+          handleSessionExpiry();
+          navigate('/login');
+          return;
+        }
         throw new Error(`Failed to update quantity: ${response.statusText}`);
       }
 
@@ -81,6 +88,12 @@ function Cart() {
       });
 
       if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          toast.error("Session expired. Please login again.");
+          handleSessionExpiry();
+          navigate('/login');
+          return;
+        }
         throw new Error(`Failed to remove item: ${response.statusText}`);
       }
 
@@ -112,72 +125,135 @@ function Cart() {
   if (!cart) return <p>No Producst in Cart</p>;
   return (
     <>
-      <section className="mt-4">
-        <h1 className="text-3xl text-left px-6 font-extralight">
-          Your <span className="text-green-950 font-bold">Cart</span>
-        </h1>
-        {cart.map((item) =>
-          <div className="m-4 flex flex-wrap items-center p-4 space-x-4 border-solid border-t-2 border-gray-300">
-
-            {/* Product Image */}
-            <div className="w-[200px]">
-              <img
-                src={item.furniture.images[0].url}
-                alt={item.furniture.name}
-                className="w-full h-auto"
-              />
+      <section className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-green-900 to-green-800 px-8 py-6">
+              <h1 className="text-3xl font-light text-white">
+                Your <span className="font-bold">Cart</span>
+              </h1>
             </div>
 
-            {/* Product Details */}
-            <div className="flex-1 space-y-2 min-w-[200px]">
-              <h1 className="text-2xl">{item.furniture.name}</h1>
-              <p>{item.furniture.description}</p>
-              <p className="text-2xl text-green-950">{item.furniture.price} ETB</p>
-            </div>
+            {/* Cart Content */}
+            <div className="p-8">
+              {cart.length === 0 ? (
+                <div className="text-center py-16">
+                  <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                    <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
+                    </svg>
+                  </div>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-2">Your cart is empty</h2>
+                  <p className="text-gray-500 mb-8">Start shopping to add items to your cart</p>
+                  <Link to="/shop">
+                    <button className="bg-green-900 hover:bg-green-800 text-white px-8 py-3 rounded-lg transition-colors duration-200 font-semibold">
+                      Continue Shopping
+                    </button>
+                  </Link>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-6">
+                    {cart.map((item, index) => (
+                      <div key={item.id} className={`bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 ${index !== cart.length - 1 ? 'border-b border-gray-100' : ''}`}>
+                        <div className="flex flex-col lg:flex-row gap-6">
+                          {/* Product Image */}
+                          <div className="w-full lg:w-48 h-48 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
+                            <img
+                              src={item.furniture.images[0].url}
+                              alt={item.furniture.name}
+                              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
 
-            {/* Quantity */}
-            <div className="min-w-[120px]">
-              Quantity: <input type="number"
-                min={1} defaultValue={item.quantity}
-                className='border max-w-10 sm:max-w-20 px-1 py-1'
-                onChange={(e) =>
-                  quantityChange(item.id, Number(e.target.value))
-                }
-              ></input>
-            </div>
+                          {/* Product Details */}
+                          <div className="flex-1 space-y-3">
+                            <div className="flex justify-between items-start">
+                              <h2 className="text-xl font-semibold text-gray-900 line-clamp-2">
+                                {item.furniture.name}
+                              </h2>
+                              <button 
+                                onClick={() => removeItem(item.id)}
+                                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                                title="Remove item"
+                              >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            </div>
+                            
+                            <p className="text-gray-600 text-sm line-clamp-2">
+                              {item.furniture.description}
+                            </p>
+                            
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                              <div className="flex items-center gap-4">
+                                <span className="text-sm font-medium text-gray-700">Quantity:</span>
+                                <div className="flex items-center border border-gray-300 rounded-lg">
+                                  <button 
+                                    onClick={() => quantityChange(item.id, Math.max(1, item.quantity - 1))}
+                                    className="p-2 hover:bg-gray-50 transition-colors duration-200"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                                    </svg>
+                                  </button>
+                                  <input 
+                                    type="number"
+                                    min={1} 
+                                    value={item.quantity}
+                                    className="w-16 text-center py-2 border-none focus:outline-none"
+                                    onChange={(e) => quantityChange(item.id, Number(e.target.value))}
+                                  />
+                                  <button 
+                                    onClick={() => quantityChange(item.id, item.quantity + 1)}
+                                    className="p-2 hover:bg-gray-50 transition-colors duration-200"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              </div>
+                              
+                              <div className="text-right">
+                                <p className="text-2xl font-bold text-green-900">
+                                  {item.furniture.price} <span className="text-lg font-medium">ETB</span>
+                                </p>
+                                <p className="text-sm text-gray-500">
+                                  Total: {(item.furniture.price * item.quantity).toFixed(2)} ETB
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
-            {/* Delete Button */}
-            <div className="ml-auto">
-              <button className="rounded-md p-2 text-white hover:bg-red-600"
-                onClick={() => removeItem(item.id)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="24px"
-                  viewBox="0 -960 960 960"
-                  width="24px"
-                  fill=""
-                >
-                  <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-                </svg>
-              </button>
+                  {/* Cart Summary */}
+                  <div className="mt-8 border-t border-gray-200 pt-8">
+                    <div className="flex justify-end">
+                      <div className="w-full sm:w-96">
+                        <CartItem />
+                        <div className="mt-6">
+                          <Link to='/order-page'>
+                            <button className="w-full bg-green-900 hover:bg-green-800 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-colors duration-200 shadow-lg hover:shadow-xl">
+                              PROCEED TO CHECKOUT
+                            </button>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
-        )}
-        {cart.length === 0 ? <h1 className="p-4">Your Cart Is Empty</h1> :
-          <div className="p-6 flex justify-end my-20">
-            <div className="w-full sm:w-[450px]">
-              <CartItem />
-              <div className="w-full text-end">
-                <Link to='/order-page'><button className="bg-green-800 p-2 mt-8 "><span className="font-semibold">PROCEED TO CHECKOUT</span></button></Link>
-              </div>
-            </div>
-          </div>
-        }
-
+        </div>
       </section>
-
-
     </>
   );
 }

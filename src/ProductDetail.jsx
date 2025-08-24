@@ -15,7 +15,7 @@ function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState("");
   const [reviews, setReviews] = useState([]);
-  const [CategoryName, setCategoryName] = useState();
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   // const fetchreviews = async (productId) => {
   //   try {
   //     const response = await axiosInstance.get(`/furniture/${productId}`);
@@ -32,11 +32,19 @@ function ProductDetail() {
   //   fetchreviews(productId);
   // }, [productId]);
 
-  const { getCart, getProductById, loading, error, BASE_URL, categories } = useContext(ShopContext);
+  const { getCart, getProductById, loading, error, BASE_URL, categories, token } = useContext(ShopContext);
   const [productData, setProduct] = useState(null);
 
 
   const addToCart = async (quantity) => {
+    // Check if user is logged in
+    if (!token) {
+      toast.error("Please login to add items to cart");
+      navigate('/login');
+      return;
+    }
+
+    setIsAddingToCart(true);
     try {
       console.log("Product ID:", productId);
       console.log("Quantity:", quantity);
@@ -54,7 +62,18 @@ function ProductDetail() {
       toast.success("Item added to cart successfully!");
     } catch (error) {
       console.error("Error adding item to cart:", error);
-      toast.error("Failed to add item to cart. Please try again.");
+      
+      // Check if error is due to session expiration
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        toast.error("Session expired. Please login again.");
+        // Clear the token and redirect to login
+        localStorage.removeItem("token");
+        navigate('/login');
+      } else {
+        toast.error("Failed to add item to cart. Please try again.");
+      }
+    } finally {
+      setIsAddingToCart(false);
     }
   };
 
@@ -73,20 +92,18 @@ function ProductDetail() {
     fetchProduct();
   }, [productId, getProductById]);
 
-  const getCategoryName = () => {
-    categories.forEach((category) => {
-      if (category.id === productData.categoryId) {
-        setCategoryName(category.name);
-        console.log("invoked", CategoryName)
-      }
-    });
-  };
+  if (productData && categories) {
+    categories.forEach(cat => console.log("Category id:", cat.id, typeof cat.id));
+  }
 
-  useEffect(() => {
-    if (productData) {
-      getCategoryName();
-    }
-  }, [productData, categories]);
+  let categoryName = "Loading...";
+  if (productData && categories && categories.length > 0 && productData.subCategoryId) {
+    const parentCategory = categories.find(cat =>
+      Array.isArray(cat.subCategories) &&
+      cat.subCategories.some(sub => String(sub.id) === String(productData.subCategoryId))
+    );
+    categoryName = parentCategory ? parentCategory.name : "Unknown";
+  }
 
 
 
@@ -238,7 +255,7 @@ function ProductDetail() {
           </p>
 
           <form
-            className="flex md:ml-12 gap-4 pt-4"
+            className="flex md:ml-12 gap-4 pt-4 items-center"
             onSubmit={(e) => {
               e.preventDefault();
 
@@ -247,7 +264,7 @@ function ProductDetail() {
           >
             <label>
               <input
-                className="max-w-[5rem] h-16 p-2 text-xl border-gray-600 border-solid border-[1px] rounded-md"
+                className="max-w-[5rem] h-12 p-2 text-xl border-gray-600 border-solid border-[1px] rounded-md"
                 type="number"
                 min="1"
                 placeholder="1"
@@ -255,40 +272,36 @@ function ProductDetail() {
                 onChange={(e) => setQuantity(Number(e.target.value))}
               />
             </label>
-            <button
-              className="flex gap-4 text-lg bg-green-950 text-white p-4 w-[500px] justify-center items-center rounded-md hover:bg-green-800 transition-colors duration-200"
+            <Button
               type="submit"
+              variant="primary"
+              size="medium"
+              className="flex gap-3 text-base bg-green-950 hover:bg-green-800 text-white px-6 py-3 h-12 justify-center items-center rounded-md transition-colors duration-200"
+              loading={isAddingToCart}
+              disabled={isAddingToCart}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                height="24px"
+                height="20px"
                 viewBox="0 -960 960 960"
-                width="24px"
+                width="20px"
                 fill="currentColor"
+                className={isAddingToCart ? "opacity-50" : ""}
               >
                 <path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z" />
               </svg>
-              <p>Add to cart</p>
-            </button>
+              <span className={isAddingToCart ? "opacity-50" : ""}>
+                {isAddingToCart ? "Adding..." : "Add to cart"}
+              </span>
+            </Button>
           </form>
 
-          <div className="md:ml-12 pt-6">
-            <Button
-              variant="primary"
-              size="medium"
-              onClick={() => navigate('/shop')}
-              className="bg-primary-600 hover:bg-primary-700 text-white"
-            >
-              Continue Shopping
-            </Button>
-          </div>
-
           <div className="md:ml-12 pt-6 flex gap-2">
-            <h1 className="">Catagory:</h1>
-            {/* Catagory of item here */}
-            <a href="" className="font-bold text-green-900">
-              {CategoryName}
-            </a>
+            <h1 className="">Category:</h1>
+            {/* Category of item here */}
+            <span className="font-bold text-green-900">
+              {categoryName}
+            </span>
           </div>
         </div>
       </section>

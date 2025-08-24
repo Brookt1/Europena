@@ -227,7 +227,15 @@ const ShopContextProvider = (props) => {
   const logout = () => {
     localStorage.removeItem('token')
     setToken('')
+    setUsername('')
+    setUserEmail('')
+    setCart([])
+    setCartSize(0)
+    toast.info("You have been logged out.")
+  }
 
+  const handleSessionExpiry = () => {
+    logout();
   }
 
 
@@ -254,7 +262,7 @@ const ShopContextProvider = (props) => {
         getCart, setCart, getCartSize, getOrders,
         checkout,
         setUsername,
-        setUserEmail, logout,
+        setUserEmail, logout, handleSessionExpiry,
       }}
     >
       {props.children}

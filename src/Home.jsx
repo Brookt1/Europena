@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Header from "./Header";
 import HomeCards from "./HomeCards";
 import Button from "./components/Button";
+import { HeroShimmer, TrendingProductsShimmer } from "./components/ShimmerLoader";
 import fridge from "./assets/Fridge.png";
 import sofa from "./assets/sofa.png";
 import light from "./assets/light.jpg";
@@ -14,7 +15,7 @@ import sink from "./assets/sink.png";
 import { ShopContext } from "./context/ShopContext.jsx";
 
 function Home() {
-  const { products, setSelectedCategory } = useContext(ShopContext);
+  const { products, setSelectedCategory, loading } = useContext(ShopContext);
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
 
@@ -39,6 +40,43 @@ function Home() {
   };
 
   const currentProduct = products[currentIndex];
+
+  // Show shimmer while loading
+  if (loading || !products.length) {
+    return (
+      <>
+        <HeroShimmer />
+        
+        {/* Featured Categories Section */}
+        <section className="py-20 px-6 md:px-16 bg-gradient-to-b from-white to-gray-50">
+          <div className="max-w-7xl mx-auto">
+            <div className="h-12 bg-gray-200 rounded w-96 mx-auto mb-4 animate-pulse"></div>
+            <div className="h-6 bg-gray-200 rounded w-64 mx-auto mb-12 animate-pulse"></div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[...Array(3)].map((_, index) => (
+                <div key={index} className="h-80 bg-gray-200 rounded-2xl animate-pulse"></div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <TrendingProductsShimmer />
+        
+        {/* Other sections with shimmer */}
+        <section className="py-16 px-6 md:px-16">
+          <div className="h-10 bg-gray-200 rounded w-80 mx-auto mb-8 animate-pulse"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="text-center">
+                <div className="h-6 bg-gray-200 rounded w-32 mx-auto mb-2 animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded w-48 mx-auto animate-pulse"></div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </>
+    );
+  }
 
   return (
     <>
@@ -68,11 +106,11 @@ function Home() {
 
           {/* Text Container */}
           <div className="landingText text-center mx-auto md:text-left md:pr-8 space-y-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide text-gray-900 animate-fade-in">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide text-gray-900 animate-fade-in">
               {currentProduct?.name}
             </h1>
-            <p className="mt-6 text-xl md:text-2xl text-gray-600 animate-fade-in">
-              <span className="text-3xl md:text-4xl font-bold text-primary-600">
+            <p className="mt-6 text-lg md:text-xl text-gray-600 animate-fade-in">
+              <span className="text-2xl md:text-3xl font-bold text-primary-600">
                 {currentProduct?.price?.toFixed(2)}
               </span>
               <span className="text-accent-gold font-medium ml-2">ETB</span>
@@ -91,12 +129,12 @@ function Home() {
 
           {/* Product Image with Enhanced Animation and Modern Styling */}
           <div className="relative md:ml-8 group">
-            <div className="w-full max-w-[750px] h-[550px] overflow-hidden rounded-2xl shadow-2xl bg-white flex items-center justify-center">
+            <div className="w-full max-w-[850px] h-[650px] overflow-hidden rounded-2xl shadow-2xl bg-white flex items-center justify-center">
               <img
                 key={currentIndex}
                 className={`${
                   currentIndex === 0 ? "animate-slide-down" : "animate-slide-left"
-                } transition-all duration-500 hover:scale-105 hover:rotate-1 object-contain max-w-full max-h-full`}
+                } transition-all duration-500 hover:scale-110 hover:rotate-1 object-contain scale-125 max-w-full max-h-full`}
                 src={products[currentIndex]?.images[0]?.url}
                 alt={products[currentIndex]?.name}
               />
@@ -172,13 +210,15 @@ function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.slice(0, 4).map((product, index) => (
             <div key={index} className="text-center">
-              <div className="relative h-96 w-full rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white group transition-transform duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
-                {/* Image with Hover Overlay */}
-                <img
-                  src={product?.images[0]?.url || "/default-image.jpg"}
-                  alt={product?.name}
-                  className="w-full h-full object-contain transition-transform duration-300 ease-in-out group-hover:scale-105"
-                />
+              <div className="relative h-[500px] w-full rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white group transition-transform duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2">
+                {/* Image with Hover Overlay and Zoom */}
+                <div className="w-full h-full flex items-center justify-center p-4">
+                  <img
+                    src={product?.images[0]?.url || "/default-image.jpg"}
+                    alt={product?.name}
+                    className="max-w-full max-h-full object-contain scale-125 transition-transform duration-300 ease-in-out group-hover:scale-150"
+                  />
+                </div>
                 {/* Subtle overlay effect */}
                 <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
               </div>
@@ -241,7 +281,7 @@ function Home() {
             <iframe
               width="100%"
               height="100%"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&mute=0"
+              src="https://www.youtube.com/embed/zNghhA2cnOw?autoplay=0&mute=0"
               title="European Luxury Lifestyle Video"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
