@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import axios from 'axios';
+import axiosInstance from '../axiosInstance';
 
 export const ShopContext = createContext();
 
@@ -52,19 +52,19 @@ const ShopContextProvider = (props) => {
   //   }
   // }, []);
 
+  // New fetchData using axiosInstance
   const fetchData = useCallback(async (url, setter, options = {}) => {
     setLoading(true);
     setError(null);
     console.log("Fetching data from:", url);
     try {
-      const response = await fetch(url, {
-        ...options, // Spread any additional options
+      const response = await axiosInstance({
+        url,
+        method: options.method || 'get',
+        headers: options.headers,
+        data: options.body,
       });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setter(data);
+      setter(response.data);
     } catch (err) {
       setError(err.message);
       console.error("Error fetching data:", err);
@@ -86,18 +86,11 @@ const ShopContextProvider = (props) => {
 
   const getCart = useCallback(async () => {
     let cart = null;
-    const token = localStorage.getItem("token");
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-
     await fetchData(`${BASE_URL}/cart`, (data) => {
       cart = data;
       setCart(data);
       setCartSize(getCartSize(data));
-      // setCartSize(cart.length);
-    }, { headers });
-
+    });
     return cart;
   }, [fetchData]);
 
@@ -127,16 +120,10 @@ const ShopContextProvider = (props) => {
 
   const getOrders = useCallback(async () => {
     let order = null;
-    const token = localStorage.getItem("token");
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-
     await fetchData(`${BASE_URL}/order`, (data) => {
       order = data;
       setOrders(data);
-    }, { headers });
-
+    });
     return order;
   }, [fetchData]);
 
@@ -199,20 +186,7 @@ const ShopContextProvider = (props) => {
     try {
       // Post to backend
       console.log(orderData)
-      const response = await fetch(`${BASE_URL}/order`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(orderData),
-      });
-
-      if (!response.ok) {
-        console.log(response.error)
-        throw new Error("Failed to process order");
-      }
-
+      await axiosInstance.post(`${BASE_URL}/order`, orderData);
       // Update orders and clear cart
       setOrders((prevOrders) => [...prevOrders, orderData]);
       setCart([]);

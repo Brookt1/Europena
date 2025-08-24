@@ -2,6 +2,7 @@
 import React, { useContext, useState } from "react";
 import { ShopContext } from "./context/ShopContext";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "./axiosInstance";
 
 function MyProfile() {
   const { username,userEmail, logout } = useContext(ShopContext); // Assume user and logout come from context
@@ -28,21 +29,13 @@ function MyProfile() {
   const handleSubmit = async () => {
     try {
       // Post the updated data to the backend (replace `/update-profile` with the actual endpoint)
-      const response = await fetch("/update-profile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        // Handle success
-        alert("Profile updated successfully!");
-        setShowEditPopup(false);
-      } else {
-        // Handle error
-        alert("Failed to update profile.");
-      }
+      await axiosInstance.post("/update-profile", formData);
+      // Handle success
+      alert("Profile updated successfully!");
+      setShowEditPopup(false);
     } catch (error) {
       console.error("Error updating profile:", error);
+      alert("Failed to update profile.");
     }
   };
 
