@@ -8,17 +8,20 @@ import OrderPage from "./OrderPage.jsx";
 import TrackOrder from "./TrackOrder.jsx";
 import Footer from "./Footer.jsx";
 import Login from "./Login.jsx";
+import MyProfile from "./MyProfile.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header.jsx";
 import SearchBar from "./SearchBar.jsx";
 import About from "./About.jsx";
+import ShopContextProvider from "./context/ShopContext.jsx";
 
 function Layout() {
   return (
     <>
       <Header />
       <SearchBar />
+      <div className="h-[110px]"></div>
       <Outlet /> {/* This renders the current route's element */}
       <Footer />
     </>
@@ -29,7 +32,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '',
-      element: <Layout />, // Wrap all routes with the Layout
+      element: <Layout />,
       errorElement: <NotFound />,
       children: [ // Nested routes
         { path: '', element: <Home /> },
@@ -40,14 +43,18 @@ function App() {
         { path: '/orders', element: <TrackOrder /> },
         { path: '/login', element: <Login /> },
         { path: '/about', element: <About /> },
+        { path: '/profile', element: <MyProfile /> },
       ],
     },
-  ]);
+  ],
+  );
 
   return (
     <>
-      <RouterProvider router={router} />
-      <ToastContainer />
+      <ShopContextProvider>
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </ShopContextProvider>
     </>
   );
 }

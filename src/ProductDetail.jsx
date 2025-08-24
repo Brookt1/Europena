@@ -6,29 +6,33 @@ import ReviewForm from "./ReviewForm";
 import RelatedProduct from "./RelatedProducts";
 import { toast } from "react-toastify";
 import axiosInstance from "./axiosInstance";
+import { ClipLoader } from "react-spinners";
 
 function ProductDetail() {
   const productId = useParams().productId;
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState("");
   const [reviews, setReviews] = useState([]);
+  const [CategoryName, setCategoryName] = useState();
+  // const fetchreviews = async (productId) => {
+  //   try {
+  //     const response = await axiosInstance.get(`/furniture/${productId}`);
+  //     if (!response.ok) throw new Error("Failed to fetch reviews");
+  //     const data = await response.json();
+  //     setReviews(data);
+  //   } catch (error) {
+  //     console.log(error)
+  //     toast.error("Error fetching reviews!");
+  //   }
+  // };
 
-  const fetchreviews = async (productId) => {
-    try {
-      const response = await fetch(
-        `https://furnitureapi-ykrq.onrender.com/api/furniture/${productId}/reviews`
-      );
-      if (!response.ok) throw new Error("Failed to fetch reviews");
-      const data = await response.json();
-      setReviews(data);
-    } catch (error) {
-      toast.error("Error fetching reviews!");
-    }
-  };
+  // useEffect(() => {
+  //   fetchreviews(productId);
+  // }, [productId]);
 
-  useEffect(() => {
-    fetchreviews(productId);
-  }, [productId]);
+  const { getCart, getProductById, loading, error, BASE_URL, categories } = useContext(ShopContext);
+  const [productData, setProduct] = useState(null);
+
 
   const addToCart = async (quantity) => {
     try {
@@ -41,6 +45,7 @@ function ProductDetail() {
       });
 
       console.log("Response:", response.data);
+      await getCart();
       toast.success("Item added to cart successfully!");
     } catch (error) {
       console.error("Error adding item to cart:", error);
@@ -48,8 +53,6 @@ function ProductDetail() {
     }
   };
 
-  const { getProductById, loading, error } = useContext(ShopContext);
-  const [productData, setProduct] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -65,12 +68,43 @@ function ProductDetail() {
     fetchProduct();
   }, [productId, getProductById]);
 
-  const [activeTab, setActiveTab] = useState("description");
+  const getCategoryName = () => {
+    categories.forEach((category) => {
+      if (category.id === productData.categoryId) {
+        setCategoryName(category.name);
+        console.log("invoked", CategoryName)
+      }
+    });
+  };
 
-  if (loading) return <p>Loading...</p>;
+  useEffect(() => {
+    if (productData) {
+      getCategoryName();
+    }
+  }, [productData, categories]);
+
+
+
+  // If the review Is returned with the product this should be enough right?
+
+  const [activeTab, setActiveTab] = useState("description");
+  useEffect(() => {
+    if (productData) {
+      setReviews(productData.reviews || []);
+
+      console.log(productData.reviews)
+    }
+  }, [productData]);
+
+  // if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader color="#4caf50" size={60} />
+      </div>
+    );
   if (error) return <p>Error: {error}</p>;
   if (!productData) return <p>No product found</p>;
-
   const tabContent = {
     description: (
       <div className="">
@@ -84,26 +118,18 @@ function ProductDetail() {
         </p>
       </div>
     ),
-    "additional-info": (
-      <ul className="text-gray-700 list-disc pl-6">
-        <li>Height: 10 inches</li>
-        <li>Width: 6 inches</li>
-        <li>Weight: 7 pounds</li>
-        {/* Add more details as needed */}
-      </ul>
-    ),
-    review: (
+        review: (
       <>
         <div>
           <div className="space-y-4 mb-4">
-            {reviews.length > 0 ? (
+            {reviews !== null && reviews.length > 0 ? (
               reviews.map((review) => (
                 <ReviewCard
                   key={review.id}
-                  userName={review.userName}
+                  userName={review.reviewBy}
                   date={new Date(review.createdAt).toLocaleDateString()}
                   rating={review.rating}
-                  reviewText={review.text}
+                  reviewText={review.content}
                 />
               ))
             ) : (
@@ -112,6 +138,7 @@ function ProductDetail() {
           </div>
           {/* <form className="space-y-4">
           <input
+          
             className="w-full p-2 border rounded"
             type="text"
             placeholder="Your Name"
@@ -143,6 +170,7 @@ function ProductDetail() {
     ),
   };
 
+
   return (
     <>
       <section className="grid grid-cols-1 gap-6 py-16 px-8 md:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1">
@@ -153,7 +181,7 @@ function ProductDetail() {
               <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
                 {productData.images.map((item, index) => (
                   <img
-                    onClick={() => setImage(item)}
+                    onClick={() => setImage(item.url)}
                     src={item.url}
                     key={index}
                     className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer"
@@ -202,11 +230,6 @@ function ProductDetail() {
 
           <p className="p-4 text-gray-500 lg:ml-8 sm:ml-0">
             {productData.description}
-            <br />A sleek, minimalist chair designed for contemporary spaces,
-            combining clean lines with ergonomic comfort. Crafted with a durable
-            metal frame and a soft, cushioned seat, it’s perfect for a modern
-            home office or dining area. Available in neutral tones to complement
-            any décor.
           </p>
 
           <form
@@ -230,7 +253,7 @@ function ProductDetail() {
             <button
               className="flex gap-4 text-lg bg-green-950 text-gray-400 p-4 w-[500px] justify-center"
               type="submit"
-              //   onClick={() => addToCart(quantity)}
+            //   onClick={() => addToCart(quantity)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -250,8 +273,8 @@ function ProductDetail() {
           <div className="md:ml-12 pt-6 flex gap-2">
             <h1 className="">Catagory:</h1>
             {/* Catagory of item here */}
-            <a href="" className="text-gray-400">
-              sofa
+            <a href="" className="font-bold text-green-900">
+              {CategoryName}
             </a>
           </div>
         </div>
@@ -260,21 +283,20 @@ function ProductDetail() {
       <section className="px-32 py-4">
         {/* Tab buttons with underline on active tab */}
         <div className="flex justify-center min-[500px]:space-x-8  pb-2">
-          {["description", "additional-info", "review"].map((tab) => (
+          {["description", "review"].map((tab) => (
             <button
               key={tab}
-              className={`tab-btn px-4 py-2 text-lg ${
-                activeTab === tab
-                  ? "font-semibold border-b-2 border-green-900"
-                  : ""
-              }`}
+              className={`tab-btn px-4 py-2 text-lg ${activeTab === tab
+                ? "font-semibold border-b-2 border-green-900"
+                : ""
+                }`}
               onClick={() => setActiveTab(tab)}
             >
               {tab === "description"
                 ? "Description"
                 : tab === "additional-info"
-                ? "Additional Information"
-                : "Review"}
+                  ? "Additional Information"
+                  : "Review"}
             </button>
           ))}
         </div>
@@ -282,7 +304,7 @@ function ProductDetail() {
         <div className="tab-content mt-4 w-72 min-[600px]:w-full min-[500px]:ml-0 ml-[-4rem] min-[]">
           {tabContent[activeTab]}
         </div>
-        <RelatedProduct category={productData.categoryId} />
+        <RelatedProduct subCategoryId={productData.subCategoryId} />
       </section>
     </>
   );

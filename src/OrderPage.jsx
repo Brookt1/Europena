@@ -1,13 +1,15 @@
 import CartItem from "./CartItem";
-import { useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { ShopContext } from "./context/ShopContext";
 import { toast } from "react-toastify";
+import axiosInstance from "./axiosInstance";
 
 function OrderPage() {
-  const {checkout} = useContext(ShopContext);
-  
+  const { setCart } = useContext(ShopContext);
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -25,16 +27,27 @@ function OrderPage() {
 
 
   const onSubmitHandler = async (event) => {
-    event.preventDefault(); //  prevent default behavior.
-
+    event.preventDefault(); // Prevent default behavior.
+    console.log(formData);
+  
     try {
-      await checkout(formData); // Call the checkout function with form data.
-      
+      const response = await axiosInstance.post("/order", formData); // Await the post request.
+      console.log(response);
+  
+      if (response.status === 200 || response.status === 201) {
+        // Order was successfully created
+        setCart([]); // Clear the cart
+        toast.success("Order placed successfully!");
+        navigate("/orders")
+      } else {
+        throw new Error("Unexpected response status");
+      }
     } catch (error) {
       console.error("Error during checkout:", error);
-      toast.error(error.message)
+      toast.error("Failed to place order. Please try again.");
     }
   };
+  
 
   return (
     <>
@@ -98,9 +111,9 @@ function OrderPage() {
         <div className="mt-4">
           <CartItem />
           <div className="w-full text-end">
-              <button type="submit" className="bg-green-800 p-2 mt-8 ">
-                <span className="font-semibold">ORDER NOW</span>
-              </button>
+            <button type="submit" className="bg-green-800 p-2 mt-8 ">
+              <span className="font-semibold">ORDER NOW</span>
+            </button>
           </div>
         </div>
       </form>
