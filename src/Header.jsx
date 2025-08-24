@@ -63,7 +63,18 @@ function Header() {
               }`
             }
           >
-            Home
+            {({ isActive }) => (
+              <>
+                Home
+                {isActive && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 rounded-full"
+                    layoutId="activeNavLine"
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  />
+                )}
+              </>
+            )}
           </NavLink>
           <NavLink 
             to="/shop"
@@ -73,7 +84,18 @@ function Header() {
               }`
             }
           >
-            Shop
+            {({ isActive }) => (
+              <>
+                Shop
+                {isActive && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 rounded-full"
+                    layoutId="activeNavLine"
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  />
+                )}
+              </>
+            )}
           </NavLink>
           <NavLink 
             to="/about"
@@ -83,7 +105,18 @@ function Header() {
               }`
             }
           >
-            About
+            {({ isActive }) => (
+              <>
+                About
+                {isActive && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 rounded-full"
+                    layoutId="activeNavLine"
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  />
+                )}
+              </>
+            )}
           </NavLink>
         </nav>
 
@@ -132,7 +165,16 @@ function Header() {
               </button>
               
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white shadow-xl rounded-lg py-2 border border-gray-100">
+                <motion.div 
+                  className="absolute right-0 mt-2 w-48 bg-white shadow-xl rounded-lg py-2 border border-gray-100 z-50"
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <p className="text-sm font-medium text-gray-900">Profile Menu</p>
+                  </div>
                   <button 
                     onClick={() => navigate("/profile")}
                     className="w-full text-left px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-200"
@@ -143,7 +185,7 @@ function Header() {
                     onClick={() => navigate("/orders")}
                     className="w-full text-left px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-200"
                   >
-                    Orders
+                    My Orders
                   </button>
                   <hr className="my-1 border-gray-100" />
                   <button 
@@ -152,7 +194,7 @@ function Header() {
                   >
                     Logout
                   </button>
-                </div>
+                </motion.div>
               )}
             </div>
           ) : (

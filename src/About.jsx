@@ -1,10 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "./components/Button";
 import logo from "./assets/logo.jpg";
 import rug from "./assets/rug.jpeg";
 import lamp from "./assets/lux lamp.jpeg";
 import chair from "./assets/about1.jpeg";
 
 const About = () => {
+  const navigate = useNavigate();
+
+  const handleShopNowClick = () => {
+    navigate('/shop');
+  };
+
   return (
     <div className="about-page">
       {/* Hero Section */}
@@ -20,9 +28,14 @@ const About = () => {
           <p className="text-lg md:text-2xl mt-4">
             Crafting timeless elegance and exclusivity.
           </p>
-          <button className="mt-6 px-6 py-3 font-bold text-orange-300 text-2xl  rounded-md hover:bg-opacity-80 hover:text-black">
+          <Button
+            variant="primary"
+            size="large"
+            onClick={handleShopNowClick}
+            className="mt-6 px-10 py-4 text-xl font-bold bg-amber-500 hover:bg-amber-600 text-black shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+          >
             Shop Now
-          </button>
+          </Button>
         </div>
       </section>
 
@@ -89,9 +102,14 @@ const About = () => {
               />
             </div>
             <p className="font-semibold mt-4">Luxury Chair</p>
-            <button className="mt-4 px-6 py-2 bg-green-900 text-black font-medium rounded-md hover:bg-opacity-80">
+            <Button
+              variant="primary"
+              size="medium"
+              onClick={handleShopNowClick}
+              className="mt-4 bg-green-900 hover:bg-green-800 text-white"
+            >
               View Collection
-            </button>
+            </Button>
           </div>
           <div className="text-center">
             <div className="w-full h-96 bg-white rounded-lg shadow-lg overflow-hidden">
@@ -102,9 +120,14 @@ const About = () => {
               />
             </div>
             <p className="font-semibold mt-4">Designer Lamp</p>
-            <button className="mt-4 px-6 py-2 bg-green-900 text-black font-medium rounded-md hover:bg-opacity-80">
+            <Button
+              variant="primary"
+              size="medium"
+              onClick={handleShopNowClick}
+              className="mt-4 bg-green-900 hover:bg-green-800 text-white"
+            >
               View Collection
-            </button>
+            </Button>
           </div>
           <div className="text-center">
             <div className="w-full h-96 bg-white rounded-lg shadow-lg overflow-hidden">
@@ -115,9 +138,14 @@ const About = () => {
               />
             </div>
             <p className="font-semibold mt-4">Luxury Rug</p>
-            <button className="mt-4 px-6 py-2 bg-green-900 text-black font-medium rounded-md hover:bg-opacity-80">
+            <Button
+              variant="primary"
+              size="medium"
+              onClick={handleShopNowClick}
+              className="mt-4 bg-green-900 hover:bg-green-800 text-white"
+            >
               View Collection
-            </button>
+            </Button>
           </div>
         </div>
       </section>
@@ -156,9 +184,14 @@ const About = () => {
         <h2 className="text-3xl md:text-4xl font-extralight mb-4">
           Experience the World of European <span className="text-green-950 font-bold">Luxury</span>
         </h2>
-        <button className="mt-4 px-6 text-xl py-3  text-green-800 hover:text-white font-semibold rounded-md hover:bg-opacity-80">
+        <Button
+          variant="primary"
+          size="large"
+          onClick={handleShopNowClick}
+          className="mt-4 px-10 py-4 text-xl font-semibold bg-green-800 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+        >
           Shop Now
-        </button>
+        </Button>
       </section>
     </div>
   );

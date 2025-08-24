@@ -15,6 +15,7 @@ function Login() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const {setUsername, setUserEmail} = useContext(ShopContext);
 
   const navigate = useNavigate();
@@ -34,19 +35,23 @@ function Login() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
 
     if (currentState === "Sign Up" && !validateName(name)) {
       toast.error("Name is required and cannot be empty.");
+      setIsLoading(false);
       return;
     }
 
     if (!validateEmail(email)) {
       toast.error("Please enter a valid email address.");
+      setIsLoading(false);
       return;
     }
 
     if (!validatePassword(password)) {
       toast.error("Password must be at least 8 characters long.");
+      setIsLoading(false);
       return;
     }
 
@@ -67,10 +72,9 @@ function Login() {
           setPassword("");
           setCurrentState("Login");
 
-          toast.success("Account Regiterd Successfully");
+          toast.success("Account Registered Successfully");
         } else {
-          toast.error(response.data.message);
-          toast.error("error");
+          toast.error(response.data.message || "Registration failed");
         }
       } else {
         const response = await axiosInstance.post("/auth/login", {
@@ -86,13 +90,17 @@ function Login() {
           localStorage.setItem("token", response.data.token);
           setUsername(response.data.name)
           setUserEmail(response.data.email)
+          toast.success("Login successful!");
         } else {
-          toast.error(response.data.message);
+          toast.error(response.data.message || "Login failed");
         }
       }
     } catch (error) {
       console.log(error);
-      toast.error(error);
+      const errorMessage = error.response?.data?.message || error.message || "An error occurred";
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -178,6 +186,8 @@ function Login() {
             variant="primary"
             size="large"
             className="w-full"
+            loading={isLoading}
+            disabled={isLoading}
           >
             {currentState === "Login" ? "Sign In" : "Create Account"}
           </Button>

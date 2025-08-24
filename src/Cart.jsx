@@ -10,7 +10,7 @@ function Cart() {
   const [product, setProduct] = useState([]);
 
   // const BASE_URL = "http://localhost:3000/api/cart";
-  const BASE_URL = 'https://furniture-backend.duckdns.org/api/cart';
+  const BASE_URL = 'https://furniture-backend.biruk.tech/api/cart';
 
   useEffect(() => {
     getCart();
@@ -32,6 +32,8 @@ function Cart() {
 
 
   const quantityChange = async (itemId, newQuantity) => {
+    if (newQuantity < 1) return; // Prevent invalid quantities
+    
     try {
       const response = await fetch(`${BASE_URL}/${itemId}`, {
         method: 'PUT',
@@ -46,7 +48,7 @@ function Cart() {
         throw new Error(`Failed to update quantity: ${response.statusText}`);
       }
 
-      // Optimistically update the UI
+      // Immediately update the local cart state for better UX
       setCart((prevCart) =>
         prevCart.map((item) =>
           item.id === itemId
@@ -55,9 +57,15 @@ function Cart() {
         )
       );
 
+      // Also refresh cart from server to ensure consistency
+      await getCart();
+      
       console.log("Quantity updated successfully");
     } catch (err) {
       console.error("Error updating quantity:", err);
+      toast.error("Failed to update quantity. Please try again.");
+      // Revert optimistic update on error
+      await getCart();
     }
   };
 
@@ -76,12 +84,19 @@ function Cart() {
         throw new Error(`Failed to remove item: ${response.statusText}`);
       }
 
-      // Optimistically update the UI
-      getCart();
-
+      // Immediately update local state
+      setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
+      
+      // Also refresh from server to ensure consistency
+      await getCart();
+      
+      toast.success("Item removed from cart successfully!");
       console.log("Removed item successfully");
     } catch (err) {
       console.error("Error removing item:", err);
+      toast.error("Failed to remove item. Please try again.");
+      // Refresh cart on error to ensure consistency
+      await getCart();
     }
   };
 

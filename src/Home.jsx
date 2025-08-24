@@ -45,6 +45,27 @@ function Home() {
       {/* Hero Section */}
       <div className="home-page pt-4">
         <section className="relative flex flex-col md:flex-row items-center justify-center pt-[120px] px-4 md:px-[200px] h-screen w-[95%] mx-auto bg-gradient-to-br from-gray-50 to-white z-0 rounded-2xl overflow-hidden shadow-lg">
+          
+          {/* Left Arrow - at screen edge */}
+          <button
+            onClick={handlePrevious}
+            className="absolute left-4 md:left-8 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 backdrop-blur-sm hover:bg-white border-2 border-primary-200 hover:border-primary-300 rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group"
+          >
+            <svg className="w-6 h-6 text-primary-600 group-hover:text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          {/* Right Arrow - at screen edge */}
+          <button
+            onClick={handleNext}
+            className="absolute right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 backdrop-blur-sm hover:bg-white border-2 border-primary-200 hover:border-primary-300 rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group"
+          >
+            <svg className="w-6 h-6 text-primary-600 group-hover:text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
           {/* Text Container */}
           <div className="landingText text-center mx-auto md:text-left md:pr-8 space-y-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide text-gray-900 animate-fade-in">
@@ -70,44 +91,20 @@ function Home() {
 
           {/* Product Image with Enhanced Animation and Modern Styling */}
           <div className="relative md:ml-8 group">
-            <img
-              key={currentIndex}
-              className={`${
-                currentIndex === 0 ? "animate-slide-down" : "animate-slide-left"
-              } rounded-2xl shadow-2xl transition-all duration-500 hover:scale-105 hover:rotate-1`}
-              style={{
-                objectFit: "contain",
-                width: "750px",
-                height: "550px",
-                maxWidth: "100%",
-              }}
-              src={products[currentIndex]?.images[0]?.url}
-              alt={products[currentIndex]?.name}
-            />
+            <div className="w-full max-w-[750px] h-[550px] overflow-hidden rounded-2xl shadow-2xl bg-white flex items-center justify-center">
+              <img
+                key={currentIndex}
+                className={`${
+                  currentIndex === 0 ? "animate-slide-down" : "animate-slide-left"
+                } transition-all duration-500 hover:scale-105 hover:rotate-1 object-contain max-w-full max-h-full`}
+                src={products[currentIndex]?.images[0]?.url}
+                alt={products[currentIndex]?.name}
+              />
+            </div>
             
             {/* Decorative Elements */}
             <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary-100 rounded-full opacity-50 animate-pulse"></div>
             <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-accent-gold/20 rounded-full opacity-60 animate-bounce"></div>
-          </div>
-
-          {/* Enhanced Navigation Buttons */}
-          <div className="absolute bottom-8 right-8 flex gap-4">
-            <Button
-              variant="secondary"
-              size="medium"
-              onClick={handlePrevious}
-              className="backdrop-blur-sm bg-white/80 border-2 border-primary-200 hover:bg-primary-50"
-            >
-              Previous
-            </Button>
-            <Button
-              variant="primary"
-              size="medium"
-              onClick={handleNext}
-              className="backdrop-blur-sm shadow-lg"
-            >
-              Next
-            </Button>
           </div>
         </section>
       </div>
@@ -234,23 +231,24 @@ function Home() {
       </section>
 
       {/* Video Section */}
-      <section className="py-16 bg-black text-white text-center">
+      <section className="py-16 bg-black text-white text-center px-6 md:px-16">
         <h2 className="text-3xl md:text-4xl font-light text-center mb-8 tracking-wide">
           Experience the Luxury{" "}
-          <span className="text-green-950 font-bold">Lifestyle</span>
+          <span className="text-accent-gold font-bold">Lifestyle</span>
         </h2>
         <div className="relative w-full max-w-4xl mx-auto">
-          <video
-            controls
-            className="rounded-lg shadow-lg w-full"
-            poster="/path-to-video-thumbnail.jpg"
-          >
-            <source
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              type="video/mp4"
+          <div className="aspect-video rounded-lg overflow-hidden shadow-2xl">
+            <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&mute=0"
+              title="European Luxury Lifestyle Video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
             />
-            Your browser does not support the video tag.
-          </video>
+          </div>
         </div>
       </section>
 
@@ -303,12 +301,14 @@ function Home() {
               placeholder="Your Message"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none"
             ></textarea>
-            <button
+            <Button
               type="submit"
-              className="px-6 py-3 bg-amber-500 text-black font-semibold rounded-md hover:bg-opacity-80"
+              variant="primary"
+              size="large"
+              className="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-black font-semibold"
             >
               Send Message
-            </button>
+            </Button>
           </form>
         </div>
       </section>
