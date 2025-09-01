@@ -5,6 +5,7 @@ import logo from "./assets/logo.jpg";
 import rug from "./assets/rug.jpeg";
 import lamp from "./assets/lux lamp.jpeg";
 import chair from "./assets/about1.jpeg";
+import servicePic from "./assets/servicePic.jpg";
 
 const About = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const About = () => {
       {/* Hero Section */}
       <section
         className="mt-4 md:mt-0 relative w-full h-screen flex items-center justify-center bg-cover bg-center"
-        style={{ backgroundImage: "url('/src/assets/servicePic.jpg')" }}
+        style={{ backgroundImage: `url(${servicePic})` }}
       >
         <div className="bg-green-950 bg-opacity-50 w-full h-full absolute top-0 left-0" />
         <div className="z-10 text-center text-white px-6">

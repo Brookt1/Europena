@@ -4,9 +4,16 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Button from './components/Button';
 
-function ItemCard({ image, name, price, onAddToCart, onQuickView, isWishlisted, onToggleWishlist }) {
+function ItemCard({ image, name, price, onAddToCart, onQuickView, isWishlisted, onToggleWishlist, onCardClick }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
+  const handleCardClick = (e) => {
+    const target = e.target;
+    if (!target.closest('button') && onCardClick) {
+      onCardClick();
+    }
+  };
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
@@ -41,6 +48,7 @@ function ItemCard({ image, name, price, onAddToCart, onQuickView, isWishlisted, 
       transition={{ duration: 0.3, ease: "easeOut" }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleCardClick}
     >
       {/* Image Container */}
       <div className="relative h-64 bg-gray-100 rounded-t-2xl overflow-hidden">
@@ -180,6 +188,7 @@ ItemCard.propTypes = {
   onQuickView: propTypes.func,
   isWishlisted: propTypes.bool,
   onToggleWishlist: propTypes.func,
+  onCardClick: propTypes.func,
 };
 
 ItemCard.defaultProps = {
@@ -187,6 +196,7 @@ ItemCard.defaultProps = {
   onQuickView: null,
   isWishlisted: false,
   onToggleWishlist: null,
+  onCardClick: null,
 };
 
 export default ItemCard;

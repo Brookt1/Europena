@@ -208,6 +208,39 @@ const ShopContextProvider = (props) => {
     toast.info("You have been logged out.")
   }
 
+  const addToCart = async (furnitureId, quantity = 1) => {
+    if (!token) {
+      toast.error("Please login to add items to cart");
+      return false;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post("/cart", {
+        furnitureId: furnitureId,
+        quantity: quantity,
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        await getCart();
+        toast.success("Item added to cart successfully!");
+        return true;
+      }
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+      if (error.response?.status === 401) {
+        handleSessionExpiry();
+      } else if (error.response?.status === 409) {
+        toast.warning("Item already exists in cart!");
+      } else {
+        toast.error("Failed to add item to cart. Please try again.");
+      }
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const handleSessionExpiry = () => {
     logout();
   }
@@ -234,7 +267,7 @@ const ShopContextProvider = (props) => {
         getCategories, setSelectedCategory,
         getProductsByCategory, setCategoryProducts,
         getCart, setCart, getCartSize, getOrders,
-        checkout,
+        checkout, addToCart,
         setUsername,
         setUserEmail, logout, handleSessionExpiry,
       }}

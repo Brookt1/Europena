@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ShopItemCard from "./ShopItemCard";
 import ShopItemSkeleton from "./ShopItemSkeleton"; // Import Skeleton Component
 import shophero from "./assets/shophero.jpg";
@@ -9,8 +9,8 @@ import ProductCategories from "./ProductCategories";
 function Shop() {
     const ITEMS_PER_PAGE = 8;
     const [showProducts, setShowProducts] = useState([]);
-
     const [currentPage, setCurrentPage] = useState(1);
+    const navigate = useNavigate();
 
     const {
         products,
@@ -24,6 +24,7 @@ function Shop() {
         getProductsByCategory,
         search,
         showSearch,
+        addToCart,
     } = useContext(ShopContext);
     // const [selectedCategory, setSelectedCategory] = useState(0);
 
@@ -79,6 +80,15 @@ function Shop() {
         currentPage,
     ]);
 
+
+    const handleAddToCart = async (product) => {
+        const success = await addToCart(product.id, 1);
+        return success;
+    };
+
+    const handleQuickView = (product) => {
+        console.log("Quick view:", product);
+    };
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
@@ -148,13 +158,15 @@ function Shop() {
                     ) : (
                         <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                             {showProducts.map((product) => (
-                                <Link key={product.id} to={`/product/${product.id}`}>
-                                    <ShopItemCard
-                                        image={product.images[0]?.url || "/default-image.jpg"}
-                                        name={product.name}
-                                        price={product.price}
-                                    />
-                                </Link>
+                                <ShopItemCard
+                                    key={product.id}
+                                    image={product.images[0]?.url || "/default-image.jpg"}
+                                    name={product.name}
+                                    price={product.price}
+                                    onAddToCart={() => handleAddToCart(product)}
+                                    onQuickView={() => handleQuickView(product)}
+                                    onCardClick={() => navigate(`/product/${product.id}`)}
+                                />
                             ))}
                         </div>
                     )}
