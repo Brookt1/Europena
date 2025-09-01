@@ -5,11 +5,23 @@ import { toast } from "react-toastify";
 import CartItem from "./CartItem"
 import { ClipLoader } from "react-spinners";
 import axiosInstance from "./axiosInstance";
+import LoginPrompt from "./components/LoginPrompt";
 
 function Cart() {
   const { cart, setCart, getCart, loading, error, token, handleSessionExpiry } = useContext(ShopContext);
   const [product, setProduct] = useState([]);
   const navigate = useNavigate();
+
+  // Check if user is authenticated
+  if (!token) {
+    return (
+      <LoginPrompt 
+        title="Sign In to View Cart"
+        message="Please log in to view and manage your shopping cart items. Your cart will be saved and ready when you return!"
+        icon="cart"
+      />
+    );
+  }
 
   // const BASE_URL = "http://localhost:3000/api/cart";
   const BASE_URL = 'https://furniture-backend.biruk.tech/api/cart';

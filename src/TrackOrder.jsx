@@ -3,9 +3,21 @@ import Footer from "./Footer";
 import { useContext, useEffect } from "react";
 import { ShopContext } from "./context/ShopContext";
 import { ClipLoader } from "react-spinners";
+import LoginPrompt from "./components/LoginPrompt";
 
 function TrackOrder() {
-  const { orders, getOrders, loading, error } = useContext(ShopContext);
+  const { orders, getOrders, loading, error, token } = useContext(ShopContext);
+
+  // Check if user is authenticated
+  if (!token) {
+    return (
+      <LoginPrompt 
+        title="Sign In to View Orders"
+        message="Please log in to track your orders and view order history. Your order information is securely saved to your account."
+        icon="orders"
+      />
+    );
+  }
 
   useEffect(() => {
     getOrders();

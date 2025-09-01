@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import axiosInstance from "./axiosInstance";
 import Button from "./components/Button";
 import Input from "./components/Input";
+import AuthGuard from "./components/AuthGuard";
 
 function OrderPage() {
   const { setCart } = useContext(ShopContext);
@@ -51,9 +52,14 @@ function OrderPage() {
   
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-        <form onSubmit={onSubmitHandler} className="grid lg:grid-cols-2 gap-12">
+    <AuthGuard 
+      title="Sign In to Checkout"
+      message="Please log in to place your order. We need your account information to process your purchase and send order confirmations."
+      icon="cart"
+    >
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+          <form onSubmit={onSubmitHandler} className="grid lg:grid-cols-2 gap-12">
           {/* Customer Information */}
           <div className="bg-white rounded-2xl shadow-lg p-8">
             <div className="mb-8">
@@ -144,6 +150,7 @@ function OrderPage() {
         </form>
       </div>
     </div>
+    </AuthGuard>
   );
 }
 

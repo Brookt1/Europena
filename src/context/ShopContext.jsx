@@ -66,6 +66,15 @@ const ShopContextProvider = (props) => {
       });
       setter(response.data);
     } catch (err) {
+      // Handle 401 errors more gracefully - don't set error state for auth issues
+      if (err.response?.status === 401) {
+        console.log("Authentication required for:", url);
+        // Don't set error state for auth issues, let components handle it
+        if (setter) setter([]); // Set empty data instead of showing error
+        return;
+      }
+      
+      // For other errors, set the error state
       setError(err.message);
       console.error("Error fetching data:", err);
     } finally {

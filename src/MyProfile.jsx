@@ -3,9 +3,10 @@ import React, { useContext, useState } from "react";
 import { ShopContext } from "./context/ShopContext";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "./axiosInstance";
+import LoginPrompt from "./components/LoginPrompt";
 
 function MyProfile() {
-  const { username,userEmail, logout } = useContext(ShopContext); // Assume user and logout come from context
+  const { username, userEmail, logout, token } = useContext(ShopContext); // Assume user and logout come from context
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [formData, setFormData] = useState({
     name: username || "",
@@ -15,6 +16,17 @@ function MyProfile() {
   });
 
   const navigate = useNavigate()
+
+  // Check if user is authenticated
+  if (!token) {
+    return (
+      <LoginPrompt 
+        title="Sign In to View Profile"
+        message="Please log in to access and manage your profile information. Keep your account details up to date for the best shopping experience."
+        icon="user"
+      />
+    );
+  }
 
   const handleLogout = () => {
     logout(); // Call logout function from context
