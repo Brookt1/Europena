@@ -24,7 +24,7 @@ function Cart() {
   }
 
   // const BASE_URL = "http://localhost:3000/api/cart";
-  const BASE_URL = 'https://furniture-backend.biruk.tech/api/cart';
+  const BASE_URL = 'https://furniture-backend.biruktesfaye.com/api/cart';
 
   useEffect(() => {
     getCart();
